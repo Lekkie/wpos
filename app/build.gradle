@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '25.0.0'
+    defaultConfig {
+        applicationId "com.avantir.wpos"//"sdktest.weipass.com.sdktest"
+        minSdkVersion 22
+        targetSdkVersion 23
+        versionCode 5
+        versionName "2.2.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:design:23.0.0'
+
+
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+    compile group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5'
+    //compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.3'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile files('libs/SDK4BaseBinderV2.1.jar')
+    compile files('libs/SDK4EmvBinderV2.1.jar')
+    compile files('libs/SDK4KeyManagerBinderV2.1.jar')
+    //compile files('libs/poslib.jar')
+    compile files('libs/bcprov-jdk16-1.45.jar')
+    compile files('libs/j8583-1.13.1.jar')
+    compile files('libs/orm.jar')
+    compile files('libs/ormdroid.jar')
+
+    testCompile 'junit:junit:4.12'
+}

@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">WPOS</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="click_and_try">Retry</string>
+
+    <!--
+    <string name="confirm">OK</string>
+    <string name="cancel">cancel</string>-->
+    <string name="clear">clear</string>
+    <string name="delete">delete</string>
+
+
+    <!--Supervisor password-->
+
+    <!--checkout counter-->
+
+    <string name="activity_swing_card_4plug_normal_tip">Credit/Swing/Insert Card！</string>
+    <string name="activity_swing_card_4plug_icc_tip">In progress, waiting please...</string>
+    <string name="tip_swing_card_only_nfc_pos3">This is IC card, you have to wave or insert card.</string>
+    <string name="tip_swing_card_pos2">Swing/Insert Card！</string>
+    <string name="tip_swing_card_pos3">Credit/Swing/Insert Card！</string>
+    <string name="tip">Tip</string>
+    <string name="tip_swing_card_cancel">Cancel</string>
+
+    <!--Transaction Record-->
+    <string name="trade_success">Successful</string>
+    <string name="trade_order_num">Transaction No：</string>
+    <string name="trade_time">Transaction Time：</string>
+    <string name="trade_operator">Operator：</string>
+
+    <string name="receipt_type">Type：</string>
+
+    <!--Pre-authorization-->
+
+    <string name="cancel">Cancel</string>
+    <string name="baco">back</string>
+
+
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_app">#F5F5F5</color>
+    <color name="black">#13252e</color>
+    <color name="blue">#0000FF</color>
+    <color name="text_gray">#aeafaf</color>
+    <color name="text_blue">#0185d0</color>
+
+    <color name="red">#ff0000</color>
+
+    <color name="white">#ffffff</color>
+
+    <color name="color_transparent">#e0aeafaf</color>
+
+    <!--Cash register interface -->
+    <color name="input_num">#464646</color>
+    <color name="btn_num_normal">#ffffff</color>
+    <color name="btn_num_press">#2594E0</color>
+
+    <color name="line_color">#a0a0a0</color>
+    <color name="translucent">#50000011</color>
+    <color name="green">#ff32ba1a</color>
+    <drawable name="background_green">#29ACFF</drawable>
+    <drawable name="background_white">@android:color/white</drawable>
+
+    <drawable name="background_button_enable">#2594E0</drawable>
+    <drawable name="background_button_unable">#B7B9BA</drawable>
+
+
+    <!--通联方提供字体颜色-->
+    <color name="allinpay_title_and_line_text">#666666</color>
+    <color name="allinpay_text_green">#55BAFF</color>
+    <color name="allinpay_text_gray">#DFDEDE</color>
+
+    <color name="allinpay_edit_black">#292929</color>
+    <color name="allinpay_edit_left_text">#767676</color>
+
+    <color name="allinpay_bg_app">#F2F2F2</color>
+
+
+    ///
+
+</resources>

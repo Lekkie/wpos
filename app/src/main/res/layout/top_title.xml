@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/title_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/title_high"
+                android:background="@color/white"
+        >
+
+    <TextView
+            android:id="@+id/titleNameText"
+            android:textSize="28sp"
+            android:textColor="@color/allinpay_title_and_line_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="ArcaPOS"/>
+
+    <ImageView android:id="@+id/operText"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:layout_alignParentRight="true"
+               android:layout_marginRight="10dp"
+               android:src="@drawable/selector_oper"
+               android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_alignParentRight="true"
+              android:paddingRight="@dimen/layout_margin_left_right_10"
+              android:paddingLeft="@dimen/layout_margin_left_right_10"
+              android:text="Swipe for return"
+              android:gravity="center"
+              android:textSize="@dimen/text_normal_size"
+              android:textColor="@color/allinpay_title_and_line_text"
+              android:background="@drawable/selector_scan_refund"
+              android:visibility="gone"/>
+
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_alignParentBottom="true"
+               android:src="@drawable/line_bold"/>
+
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+               android:id="@+id/titleBackImage"
+               android:src="@drawable/selector_return"
+               android:paddingLeft="20dp"
+               android:paddingRight="20dp"
+        android:layout_alignParentTop="true"
+        />
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="fill_parent"
+               android:id="@+id/titleSettingsImage"
+               android:src="@drawable/settings"
+               android:paddingLeft="20dp"
+               android:paddingRight="20dp"
+               android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

@@ -1,0 +1,28 @@
+<resources>
+
+    <dimen name="layout_margin_left_right_20">20dip</dimen>
+    <dimen name="layout_margin_top_botton_20">20dip</dimen>
+
+    <dimen name="layout_margin_left_right_10">10dip</dimen>
+
+    <dimen name="title_high">72dp</dimen>
+    <dimen name="edit_text_high">60dp</dimen>
+    <dimen name="button_high">68dip</dimen>
+
+    <dimen name="button_text_size">24sp</dimen>
+
+    <dimen name="text_medium_size">20sp</dimen>
+    <dimen name="text_normal_size">24sp</dimen>
+
+    <dimen name="divider_height">0.9dip</dimen>
+    <dimen name="input_num_text_size">25sp</dimen>
+
+    <dimen name="swing_card_4_plug_tip">36dp</dimen>
+    <dimen name="font_normal_text">24sp</dimen>
+
+    <dimen name="normal_table_row_left">120dip</dimen>
+
+    <dimen name="text_large_size">27sp</dimen>
+    <dimen name="text_xlarge_size">30sp</dimen>
+
+</resources>

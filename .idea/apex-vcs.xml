@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ApexVcsIndex">
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/AssetUtils.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/AssetUtils.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/StringUtil.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/StringUtil.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/NumberUtil.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/NumberUtil.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/MoneyUtil.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/MoneyUtil.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/SystemProperties.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/SystemProperties.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/Utils.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/Utils.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/listener/OnCommonListener.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/interfaces/OnCommonListener.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/BytesUtil.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/BytesUtil.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/util/PrefUtil.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/utils/PrefUtil.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/app/src/main/java/com/avantir/wpos/interface/OnTraditionListener.java" />
+      <option name="path" value="/app/src/main/java/com/avantir/wpos/interfaces/OnTraditionListener.java" />
+    </index-move-record>
+  </component>
+</project>
