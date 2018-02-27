@@ -33,11 +33,11 @@ public class EMVManager {
     }
 
 
-    public static int PBOC_Simple(ICallbackListener iCallbackListener) throws RemoteException {
+    public static int PBOC_Simple(TransInfo transInfo, ICallbackListener iCallbackListener) throws RemoteException {
         byte[] outData = new byte[1024];
         int[] outStaus = {1024};
         int result = -1;
-        TransInfo transInfo = TransInfo.getInstance();
+        //TransInfo transInfo = TransInfo.getInstance();
         if (transInfo.getPosInputType().startsWith(ConstantUtils.PICC_CARD_TYPE)) { // contactless card
             /*
             if (TransInfo.getInstance().getTradeType() == TransInfo.Type_KaQuanQuery) {
@@ -79,7 +79,7 @@ public class EMVManager {
         }
         // serial number
         int ser = Integer.parseInt(transInfo.getStan());
-        int cardType = getCardType();
+        int cardType = getCardType(transInfo);
         Log.v("emvCore simple", "appSel.cardType==" + cardType + "： appSel.serial==" + ser+"\niCallbackListener = "+iCallbackListener);
         result = emv.appSel(cardType, ser, iCallbackListener);
         Log.i("PBOC_Simple", "end emvCore.appSel(), result = " + result);
@@ -87,22 +87,22 @@ public class EMVManager {
             Log.i("PBOC_Simple", "fail==" + result);
             return result;
         }
-        result = setEMVConfig();
+        result = setEMVConfig(transInfo);
         if (result != 0)
             return result;
         result = emv.readAppData(iCallbackListener);
         Log.i("PBOC_Simple", "start emvCore.readAppData(), result = " + result);
-        result = getEMVTransInfo();
+        result = getEMVTransInfo(transInfo);
         return result;
     }
 
 
-    public static int EMV_OnlineProc(final byte[] callBackData, final int[] callBackLen, final CountDownLatch countDownLatch, Handler handler) throws RemoteException {
+    public static int EMV_OnlineProc(final byte[] callBackData, final int[] callBackLen, final CountDownLatch countDownLatch, Handler handler, TransInfo transInfo) throws RemoteException {
         Log.d("EMV_OnlineProc", "start" + 1);
         byte[] icData = new byte[512];
         int[] icDataLen = new int[1];
-        setField55Dara(icData, 512);
-        TransInfo transInfo = TransInfo.getInstance();
+        setField55Dara(transInfo, icData, 512);
+        //TransInfo transInfo = TransInfo.getInstance();
         try {
             JSONObject json = new JSONObject();
             json.put("tradeType", transInfo.getTradeType());
@@ -196,8 +196,8 @@ public class EMVManager {
         Log.d("tc55result2_b", ByteUtil.bytes2HexString(outData));
     }
 
-    private static int getCardType() {
-        if (TransInfo.getInstance().getPosInputType().startsWith(ConstantUtils.ICC_CARD_TYPE))
+    private static int getCardType(TransInfo transInfo) {
+        if (transInfo.getPosInputType().startsWith(ConstantUtils.ICC_CARD_TYPE))
             return ConstantUtils.EMV_CARD_TYPE_ICC;
         else
             return ConstantUtils.EMV_CARD_TYPE_OTHER;
@@ -208,12 +208,12 @@ public class EMVManager {
      *
      * @return
      */
-    public static int EMV_TransProcess(ICallbackListener iCallbackListener) throws RemoteException {
+    public static int EMV_TransProcess(TransInfo transInfo, ICallbackListener iCallbackListener) throws RemoteException {
         boolean reversalFlag = false;
         int result = 0;
-        int type = TransInfo.getInstance().getTradeType();
-        Log.i("EMV_TransProcess", "EMV_TransProcess.type.===" + type);
-        switch (type) {
+        int tradeType = transInfo.getTradeType();
+        Log.i("EMV_TransProcess", "EMV_TransProcess.type.===" + tradeType);
+        switch (tradeType) {
             case ConstantUtils.Type_Sale:
             case ConstantUtils.Type_CoilingSale:
             case ConstantUtils.Type_QueryBalance:
@@ -237,15 +237,15 @@ public class EMVManager {
                     //QPBOC sets TVR | TSI all zero
                     emv.setTLV(0x95, new byte[]{0x00,0x00,0x00,0x00,0x00});
                     emv.setTLV(0x9B, new byte[]{0x00,0x00});
-                    getEMVTransResult();
+                    getEMVTransResult(transInfo);
                 }
             } else {
                 Log.i("EMV_TransProcess", "start emvCore.procTrans()");
                 resProc = emv.procTrans(iCallbackListener);
                 if (resProc == ConstantUtils.EMV_OPERATION_SUCCESS) {
-                    getEMVTransResult();
+                    getEMVTransResult(transInfo);
                     saveScriptResult();
-                    saveEMVTransInfo();
+                    saveEMVTransInfo(transInfo);
                 }
             }
             Log.i("EMV_TransProcess", "resProc.result==" + resProc);
@@ -257,7 +257,7 @@ public class EMVManager {
     /**
      * get IC Card (ICC) data
      */
-    private static void setField55Dara(byte[] field55Data, int length) throws RemoteException {
+    private static void setField55Dara(TransInfo transInfo, byte[] field55Data, int length) throws RemoteException {
         byte[] outData = new byte[6];
         int[] outDataLen = new int[1];
 
@@ -268,7 +268,7 @@ public class EMVManager {
             emv.setTLV(0x9F03, tlv);
         }
         outData = Arrays.copyOf(outData, outDataLen[0]);
-        TransInfo transInfo = TransInfo.getInstance();
+        //TransInfo transInfo = TransInfo.getInstance();
         byte[] crypt = transInfo.getAppCrypt();
         if (TextUtils.isEmpty(Arrays.toString(crypt)) && Arrays.toString(crypt).startsWith("000000")) {
             outData = new byte[8];
@@ -355,14 +355,14 @@ public class EMVManager {
     }
 
 
-    public static int QPBOC_PreProcess(ICallbackListener iCallbackListener) throws RemoteException {
+    public static int QPBOC_PreProcess(TransInfo transInfo, ICallbackListener iCallbackListener) throws RemoteException {
         byte[] outData = new byte[1024];
         int[] outStaus = new int[1];
         emv.getParam(outData, outStaus);
         EmvParam emvParam = new EmvParam(context);
         emvParam.parseByteArray(outData);
 
-        TransInfo transInfo = TransInfo.getInstance();
+        //TransInfo transInfo = TransInfo.getInstance();
         Log.v("QPBOC_PreProcess", "QPBOC_PreProcess.TradeInfo.toString()= " + transInfo.toString());
         /*
         emvParam.setTransType(transInfo.getTradeType());
@@ -378,7 +378,7 @@ public class EMVManager {
     }
 
 
-    private static int setEMVConfig() throws RemoteException {
+    private static int setEMVConfig(TransInfo transInfo) throws RemoteException {
         byte[] aid = new byte[17];
         int[] aidLen = new int[1];
         int result = emv.getTLV(0x4F, aid, aidLen);
@@ -386,7 +386,7 @@ public class EMVManager {
         if (result != 0)
             return -1;
 
-        TransInfo transInfo = TransInfo.getInstance();
+        //TransInfo transInfo = TransInfo.getInstance();
         transInfo.setAid(aid);
         transInfo.setAidLen(aidLen[0]);
         byte[] byteParam = new byte[1024];
@@ -401,7 +401,7 @@ public class EMVManager {
     /**
      * get card information
      */
-    private static int getEMVTransInfo() throws RemoteException {
+    private static int getEMVTransInfo(TransInfo transInfo) throws RemoteException {
         byte[] outData = new byte[100];
         int[] outDataLen = new int[1];
         emv.getTLV(0x5A, outData, outDataLen);
@@ -409,7 +409,7 @@ public class EMVManager {
         if (cardNo.endsWith("F"))
             cardNo = cardNo.replace("F", "");
 
-        TransInfo transInfo = TransInfo.getInstance();
+        //TransInfo transInfo = TransInfo.getInstance();
         transInfo.setCardNo(cardNo);
         //卡序列号
         outData = new byte[100];
@@ -458,12 +458,12 @@ public class EMVManager {
     /**
      * 获取 emvCore 执行结果
      */
-    private static void getEMVTransResult() throws RemoteException {
+    private static void getEMVTransResult(TransInfo transInfo) throws RemoteException {
         byte[] outByteData = new byte[2];
         int[] outDataLen = new int[1];
         emv.getTLV(0x8A,outByteData,outDataLen);
         String _0x8A = ByteUtil.fromBytes(outByteData);
-        TransInfo transInfo = TransInfo.getInstance();
+        //TransInfo transInfo = TransInfo.getInstance();
         if(outByteData[0]>0){
             if (_0x8A.equals(ConstantUtils.ARC_OFFLINEAPPROVED))
                 transInfo.setICResult(ConstantUtils.OFFLINEAPPROVED);//脱机成功
@@ -509,9 +509,9 @@ public class EMVManager {
     /**
      * emvCore 交易是否成功，并保存交易信息
      */
-    private static int saveEMVTransInfo() throws RemoteException {
+    private static int saveEMVTransInfo(TransInfo transInfo) throws RemoteException {
         int EmvAppResult = ConstantUtils.EMV_OPERATION_SUCCESS;
-        TransInfo transInfo = TransInfo.getInstance();
+        //TransInfo transInfo = TransInfo.getInstance();
         if(transInfo.getICResult()== ConstantUtils.OFFLINEDECLINED || transInfo.getICResult()== ConstantUtils.UNABLEONLINE_OFFLINEAPPROVED){
             if(transInfo.getTradeType()== ConstantUtils.Type_QueryBalance){
 
@@ -546,7 +546,7 @@ public class EMVManager {
                 break;
             case ConstantUtils.OFFLINEAPPROVED:
                 byte[] field55Data = new byte[10]; // 需要改
-                setField55Dara(field55Data,field55Data.length);
+                setField55Dara(transInfo, field55Data,field55Data.length);
                 EmvAppResult= ConstantUtils.EMV_OPERATION_SUCCESS;
                 break;
             default:

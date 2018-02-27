@@ -8,9 +8,7 @@ import com.avantir.wpos.dao.TransInfoDao;
 import com.avantir.wpos.model.ReversalInfo;
 import com.avantir.wpos.model.TransInfo;
 import com.avantir.wpos.services.TcpComms;
-import com.avantir.wpos.utils.GlobalData;
-import com.avantir.wpos.utils.IsoMessageUtil;
-import com.avantir.wpos.utils.NIBSSRequests;
+import com.avantir.wpos.utils.*;
 import com.solab.iso8583.IsoMessage;
 import wangpos.sdk4.libkeymanagerbinder.Key;
 
@@ -49,9 +47,36 @@ public class ReversalTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
 
-        // Fetch all open reversal
+        // Fetch all open transaction
         try{
+            //List<TransInfo> transInfoList1 = transInfoDao.findAll();
+            List<TransInfo> transInfoList = transInfoDao.findAllOpenTransaction();
+            if(transInfoList != null){
+                for(TransInfo transInfo: transInfoList){
+                    try{
+                        long now = System.currentTimeMillis();
+                        long diff = now - transInfo.getCreatedOn();
+                        if(diff > (60 * 60 * 1000)){ // set this to about 1hr
+                            ReversalInfo reversalInfo = reversalInfoDao.findByRetRefNo(transInfo.getRetRefNo());
+                            if(reversalInfo == null){
+                                reversalInfo = IsoMessageUtil.createReversalInfo(transInfo, ConstantUtils.MSG_REASON_CODE_TIMEOUT_WAITING_FOR_RESPONSE);
+                                reversalInfo.setCreatedOn(System.currentTimeMillis());
+                                reversalInfoDao.create(reversalInfo);
+                            }
+                            transInfoDao.updateCompletionStatusByRetRefNo(transInfo.getRetRefNo(), 1);
+                        }
+                    }
+                    catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }
+
+
+            // Fetch all open reversal
+            //List<ReversalInfo> reversalInfoList1 = reversalInfoDao.findAll();
             List<ReversalInfo> reversalInfoList = reversalInfoDao.findAllOpenTransaction();
+            //System.out.println("Is terminal idle: " );
             if(reversalInfoList != null){
                 for(ReversalInfo reversalInfo: reversalInfoList){
                     try{
@@ -62,9 +87,11 @@ public class ReversalTask extends AsyncTask<Void, Void, Boolean> {
                         retry++;
                         String retRefNo = reversalInfo.getRetRefNo();
                         reversalInfoDao.updateRetryByRetRefNo(retRefNo, retry);
-                        String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfoDao, reversalInfo, isRepeat);
-                        if("00".equalsIgnoreCase(responseCode))
-                            transInfoDao.updateReversalStatusByRetRefNo(retRefNo, true);
+                        String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo, isRepeat);
+                        reversalInfo.setStatus(StringUtil.isEmpty(responseCode) ? "" : responseCode);
+                        reversalInfo.setCompleted(1);
+                        reversalInfoDao.updateStatusCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getStatus(), reversalInfo.getCompleted());
+                        transInfoDao.updateReversalCompletionStatusByRetRefNo(retRefNo, 1, 1);
                     }
                     catch(Exception ex){
                         ex.printStackTrace();

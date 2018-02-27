@@ -12,9 +12,9 @@ import java.io.Serializable;
 @DatabaseTable(tableName="tbl_trans_info")
 public class TransInfo implements Serializable {
 
-    private static TransInfo transInfo = null;
+    //private static TransInfo transInfo = null;
 
-    @DatabaseField(id=true, columnName = "id",generatedId = true, canBeNull = false)
+    @DatabaseField(generatedId = true, columnName = "id", canBeNull = false)
     private long id;
     @DatabaseField(unique=false, canBeNull = false,  columnName = "msg_type")
     private String msgType;
@@ -52,7 +52,7 @@ public class TransInfo implements Serializable {
     private String fwdInstId;
     @DatabaseField(unique=true, canBeNull = false, index = true, columnName = "ret_ref_no")
     private String retRefNo;
-    @DatabaseField(unique=true, canBeNull = true)
+    @DatabaseField(unique=false, canBeNull = true)
     private String track2;
     @DatabaseField(unique=false, canBeNull = true)
     private String serviceRestrictionCode;
@@ -66,7 +66,7 @@ public class TransInfo implements Serializable {
     private String merchantLoc;
     @DatabaseField(unique=false, canBeNull = false)
     private String currencyCode;
-    @DatabaseField(unique=false, canBeNull = false)
+    @DatabaseField(unique=false, canBeNull = true)
     private String pinData;
     private String iccData;
     private String msgReasonCode;
@@ -77,7 +77,11 @@ public class TransInfo implements Serializable {
     @DatabaseField(unique=false, canBeNull = true, columnName = "auth_num")
     private String authNum;
     @DatabaseField(unique=false, canBeNull = false)
-    private boolean reversed;
+    private int reversed = 0;
+    @DatabaseField(unique=false, canBeNull = false)
+    private int completed = 0;
+    @DatabaseField(unique=false, canBeNull = false, columnName = "created_on")
+    private long createdOn = 0;
 
 
 
@@ -115,13 +119,16 @@ public class TransInfo implements Serializable {
 
 
 
+    /*
     public static TransInfo getInstance(){
         if (transInfo == null) {
             transInfo = new TransInfo();
         }
         return transInfo;
     }
+    */
 
+    /*
     public void init(){
         this.msgType = null;
         this.isOnLine = false;
@@ -165,7 +172,10 @@ public class TransInfo implements Serializable {
         this.authNum = null;
         this.status = null;
         this.deviceSerialNo = null;
+        this.completed = false;
+        this.reversed = false;
     }
+    */
 
 
     public String getMsgType() {
@@ -592,19 +602,35 @@ public class TransInfo implements Serializable {
         this.maskedPan = maskedPan;
     }
 
-    public boolean isReversed() {
-        return reversed;
-    }
-
-    public void setReversed(boolean reversed) {
-        this.reversed = reversed;
-    }
-
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getReversed() {
+        return reversed;
+    }
+
+    public void setReversed(int reversed) {
+        this.reversed = reversed;
+    }
+
+    public int getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(int completed) {
+        this.completed = completed;
+    }
+
+    public long getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(long createdOn) {
+        this.createdOn = createdOn;
     }
 }

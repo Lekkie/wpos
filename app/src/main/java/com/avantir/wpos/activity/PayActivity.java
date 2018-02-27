@@ -104,11 +104,16 @@ public class PayActivity extends BaseActivity {
         tranTypeFlag = bundle.getInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
         paymentInstrumentFlag = bundle.getInt(ConstantUtils.PAYMENT_INSTRUMENT, ConstantUtils.BANK_CARD);
         orderAmount = bundle.getInt(ConstantUtils.TRAN_AMT, 0);
-        transInfo = TransInfo.getInstance();
-        transInfo.init();
-        globalData = GlobalData.getInstance();
+
+
         transInfoDao = new TransInfoDao(WPOSApplication.app);
         reversalInfoDao = new ReversalInfoDao(WPOSApplication.app);
+        //transInfo = TransInfo.getInstance();
+        //transInfo.init();
+        transInfo = new TransInfo();
+        reversalInfo = new ReversalInfo();
+        globalData = GlobalData.getInstance();
+
 
         new Thread(new Runnable() {
             @Override
@@ -136,7 +141,6 @@ public class PayActivity extends BaseActivity {
                     transInfo.setRetRefNo(StringUtil.leftPad(String.valueOf(retRef), 12, '0'));
                     transInfo.setAmt(String.valueOf(orderAmount));
                     transInfo.setOnLine(true);// Default is online transaction
-                    transInfo.setPosConditionCode(ConstantUtils.NORMAL_PRESENTMENT_POS_CONDITION_CODE);
                 }
                 catch(Exception ex){
                     ex.printStackTrace();
@@ -160,19 +164,6 @@ public class PayActivity extends BaseActivity {
                 break;
 
         }
-    }
-
-    //The plug-in to display the status of transaction
-    private void setTransactionStatusActionTip(String info) {
-        tranStatusText.setText(info);
-    }
-
-    private void setInfoActionTip(String tip) {
-        infoText.setText(tip);
-    }
-
-    private void hideTransactionStatusActionTip() {
-        tranStatusText.setText("");
     }
 
 
@@ -219,7 +210,7 @@ public class PayActivity extends BaseActivity {
                 break;
             case MSG_START_PRINT:
                 // Print Receipt
-                new PrintThread(mPrinter, baseHandler, transInfo, true).start();
+                //new PrintThread(mPrinter, baseHandler, transInfo, true).start();
                 break;
             case MSG_FINISH_PRINT:
                 // go to main page
@@ -229,8 +220,6 @@ public class PayActivity extends BaseActivity {
     }
 
     private void startTransaction() {
-        //strTxt = "waiting read card...";
-        //baseHandler.sendEmptyMessage(0);
         baseHandler.obtainMessage(MSG_PROGRESS, "waiting read card...").sendToTarget();
 
         try {
@@ -242,35 +231,30 @@ public class PayActivity extends BaseActivity {
             if (result == 0) {
                 Log.d("outData", ByteUtil.bytes2HexString(outData));
                 switch (outData[0]) {
-                    //case 0x00://磁条卡成功(read card success,type MAG) -- not supported
-                    // baseHandler.obtainMessage(MSG_PROGRESS, "Magstripe card detected").sendToTarget();
-                    //    mCore.buzzer();
-                    //    readCardInfo(ConstantUtils.MAG_CARD_TYPE);
-                    //    break;
                     case 0x01:
-                        //读卡失败(read card failed)
+                        //Read card failed
                         baseHandler.obtainMessage(MSG_ERROR, "Failed to read card").sendToTarget();
                         break;
                     case 0x02:
-                        //刷磁条卡成功，加密处理失败(read card success,but encryption processing failed)
+                        //Read card success,but encryption processing failed
                         baseHandler.obtainMessage(MSG_ERROR, "Readcard, but encryption processing failed").sendToTarget();
                         break;
                     case 0x03:
-                        //刷卡超时(read card timeout)
+                        //Read card timeout
                         baseHandler.obtainMessage(MSG_ERROR, "Timeout reading card").sendToTarget();
                         break;
                     case 0x04:
-                        //取消读卡(cancel read card)
+                        //Cancel read card
                         baseHandler.obtainMessage(MSG_ERROR, "Cancelled while reading card").sendToTarget();
                         break;
                     case 0x05:
-                        //IC成功(read card success,type ICC)
+                        //Read card success,type ICC
                         baseHandler.obtainMessage(MSG_PROGRESS, "Chip (IC) card detected").sendToTarget();
                         mCore.buzzer();
                         readCardInfo(ConstantUtils.ICC_CARD_TYPE);
                         break;
                     //case 0x07:
-                    //PICC成功(read card success,type PICC)
+                    //Read card success,type PICC
                     // baseHandler.obtainMessage(MSG_PROGRESS, "Contactless card detected").sendToTarget();
                     //   mCore.buzzer();
                     //   readCardInfo(ConstantUtils.PICC_CARD_TYPE);
@@ -285,16 +269,11 @@ public class PayActivity extends BaseActivity {
 
     private void readCardInfo(String s) {
         isOffLine = false;
-        //strTxt = "read card success ..." + s;
-        //baseHandler.sendEmptyMessage(0);
         baseHandler.obtainMessage(MSG_PROGRESS, "read card success ..." + s).sendToTarget();
         transInfo.setPosInputType(s);
 
         EMVManager.setEMVManager(context,baseHandler,emvCore);
         switch (s) {
-            case ConstantUtils.MAG_CARD_TYPE:
-                displayPinPad(ConstantUtils.MAG_CARD_TYPE);
-                break;
             case ConstantUtils.ICC_CARD_TYPE:
                 readEMVCardInfo();
                 break;
@@ -307,26 +286,22 @@ public class PayActivity extends BaseActivity {
 
     private void readEMVCardInfo(){
         try {
-            //strTxt = "EMV-Process waiting…";
-            //baseHandler.sendEmptyMessage(0);
             baseHandler.obtainMessage(MSG_PROGRESS, ConstantUtils.WAITING_MSG).sendToTarget();
 
-            int result = EMVManager.PBOC_Simple(iCallBackListener);
+            int result = EMVManager.PBOC_Simple(transInfo, iCallBackListener);
+
             if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
-                //strTxt = "EMV-Process fail==" + result;
-                //baseHandler.sendEmptyMessage(0);
                 baseHandler.obtainMessage(MSG_ERROR, "EMV-Process fail==" + result).sendToTarget();
-            } else {
+            }
+            else {
                 int transType = transInfo.getTradeType();
                 //Log.v(TAG, "PBOC_Simple。transType==" + transType);
                 if (transType == ConstantUtils.Type_QueryBalance || transType == ConstantUtils.Type_Sale
-                        || transType == ConstantUtils.Type_Auth || transType == ConstantUtils.Type_CoilingSale) {//EMV core clump
+                        || transType == ConstantUtils.Type_Auth || transType == ConstantUtils.Type_CoilingSale) {
                     // TODO: 2017/10/11 Blocking method, return the transaction result
-                    int transResult = EMVManager.EMV_TransProcess(iCallBackListener);
+                    int transResult = EMVManager.EMV_TransProcess(transInfo, iCallBackListener);
                     //Log.d(TAG,"checkResult=="+transResult);
                     if (transResult != -8) {
-                        //strTxt = "EMV-Process fail";
-                        //baseHandler.sendEmptyMessage(0);
                         baseHandler.obtainMessage(MSG_ERROR, "EMV-Process fail").sendToTarget();
                     }
                 } else {
@@ -341,19 +316,15 @@ public class PayActivity extends BaseActivity {
 
     private void readContactlessCardInfo(){
         try {
-            //strTxt = "EMV-Process waiting…";
-            //baseHandler.sendEmptyMessage(0);
             baseHandler.obtainMessage(MSG_PROGRESS, ConstantUtils.WAITING_MSG).sendToTarget();
-            int result = EMVManager.QPBOC_PreProcess(iCallBackListener);
+            int result = EMVManager.QPBOC_PreProcess(transInfo, iCallBackListener);
             if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
                 //Log.d(TAG, "QPBOC_PreProcess fail，result==" + result);
             } else {
-                result = EMVManager.PBOC_Simple(iCallBackListener);
+                result = EMVManager.PBOC_Simple(transInfo, iCallBackListener);
                 if (result == ConstantUtils.EMV_OPERATION_SUCCESS) {
                     displayPinPad(ConstantUtils.PICC_CARD_TYPE);
                 } else {
-                    //strTxt = "PBOC fail result==" + result;
-                    //baseHandler.sendEmptyMessage(0);
                     baseHandler.obtainMessage(MSG_ERROR, "PBOC fail result==" + result).sendToTarget();
                     //Log.d(TAG, "PBOC_Simple fail，result==" + result);
                 }
@@ -367,13 +338,11 @@ public class PayActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String cardNo = TransInfo.getInstance().getCardNo();
-                KeyPadDialog.getInstance().showDialog((Activity) context, cardNo, new PINPadListener(baseHandler, iCallBackListener, tradeType));
+                String cardNo = transInfo.getCardNo();
+                KeyPadDialog.getInstance().showDialog((Activity) context, cardNo, new PINPadListener(baseHandler, iCallBackListener, transInfo, tradeType));
             }
         });
     }
-
-
 
 
 
@@ -399,7 +368,7 @@ public class PayActivity extends BaseActivity {
                     //strTxt = "getCardInformation …";
                     //baseHandler.sendEmptyMessage(0);
                     baseHandler.obtainMessage(MSG_PROGRESS, "Sending transaction online").sendToTarget();
-                    int ret = EMVManager.EMV_OnlineProc(result, resultlen,countDownLatch,baseHandler);
+                    int ret = EMVManager.EMV_OnlineProc(result, resultlen,countDownLatch,baseHandler, transInfo);
                     Log.i("iCallbackListener", "Core.CALLBACK_ONLINE, ret = " + ret);
                     break;
                 case 2823:
@@ -449,12 +418,15 @@ public class PayActivity extends BaseActivity {
             transInfo.setMerchType(globalData.getMerchantCategoryCode());
             String cardSeqNo = transInfo.getCardSequenceNo();
             transInfo.setCardSequenceNo(StringUtil.leftPadding("0", 3, cardSeqNo));
-            transInfo.setPosEntryMode(transInfo.getPosInputType() + ConstantUtils.ACCEPT_PIN_MODE_CAPABILITY);
+            transInfo.setPosConditionCode(ConstantUtils.NORMAL_PRESENTMENT_POS_CONDITION_CODE);
             transInfo.setPosPinCaptureCode(StringUtil.leftPadding("0", 2, String.valueOf(ConstantUtils.MAX_PIN_LENGTH)));
+            transInfo.setPosEntryMode(transInfo.getPosInputType() + ConstantUtils.ACCEPT_PIN_MODE_CAPABILITY);
             transInfo.setSurcharge("C" + StringUtil.leftPadding("0", 7, globalData.getPurchaseSurcharge()));
             transInfo.setAcqInstId(globalData.getAcquirerId());
             transInfo.setMerchantLoc(IsoMessageUtil.getIso8583MerchantLoc(globalData.getMerchantLoc()));
             transInfo.setCurrencyCode(globalData.getCurrencyCode().substring(1));
+            transInfo.setPosDataCode(globalData.getPOSDataCode());
+            transInfo.setCreatedOn(System.currentTimeMillis());
             transInfoDao.create(transInfo);
             //transInfo = transInfoDao.findByRetRefNo(transInfo.getRetRefNo()); // get database ID
 
@@ -485,11 +457,6 @@ public class PayActivity extends BaseActivity {
     private void  processFailedResponse(int commsErrorCode, Bundle bundle){
         int reqType = bundle.getInt(ConstantUtils.NETWORK_REQ_TYPE);
         if(reqType == ConstantUtils.NETWORK_PURCHASE_REQ_TYPE) {
-            transInfo.setStatus("91");
-            // log failed purchase response to database
-            //transInfoDao.createOrUpdate(transInfo);
-            transInfoDao.updateStatusByRetRefNo("91", transInfo.getRetRefNo());
-
             // 1  - connect error
             // 2  - sending error (error occuring during sending)
             // 3, 4, 5 - receiving error
@@ -499,11 +466,44 @@ public class PayActivity extends BaseActivity {
                     @Override
                     public void run() {
                         try{
+                            // Request may have got to server, do reversal
                             String msgReasonCode = ConstantUtils.MSG_REASON_CODE_TIMEOUT_WAITING_FOR_RESPONSE;
-                            reversalInfo = IsoMessageUtil.createReversalInfo(transInfo, msgReasonCode);
-                            String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfoDao, reversalInfo,  false);
-                            if("00".equalsIgnoreCase(responseCode))
-                                transInfoDao.updateReversalStatusByRetRefNo(reversalInfo.getRetRefNo(), true);
+                            String retRefNo = transInfo.getRetRefNo();
+                            reversalInfo = reversalInfoDao.findByRetRefNo(retRefNo);
+                            boolean isRepeat = false;
+                            if(reversalInfo == null) {
+                                reversalInfo = IsoMessageUtil.createReversalInfo(transInfo, msgReasonCode);
+                                reversalInfo.setCreatedOn(System.currentTimeMillis());
+                                reversalInfoDao.create(reversalInfo);
+                            }
+                            else{
+                                int retryNo = reversalInfo.getRetryNo();
+                                if(retryNo > 0)
+                                    isRepeat = true;
+                                reversalInfoDao.updateRetryByRetRefNo(retRefNo, retryNo);
+                            }
+                            transInfoDao.updateCompletionStatusByRetRefNo(retRefNo, 1);
+                            String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo,  isRepeat);
+                            reversalInfo.setStatus(StringUtil.isEmpty(responseCode) ? "" : responseCode);
+                            reversalInfo.setCompleted(1);
+                            reversalInfoDao.updateStatusCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getStatus(), reversalInfo.getCompleted());
+                            transInfo.setReversed(1);
+                            transInfo.setCompleted(1);
+                            transInfoDao.updateReversalCompletionStatusByRetRefNo(transInfo.getRetRefNo(), transInfo.getReversed(), transInfo.getCompleted());
+                        }
+                        catch(Exception ex){
+                            ex.printStackTrace();
+                        }
+                    }
+                }).start();
+            }else{
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            // Request never got to server, mark transaction as complete
+                            transInfo.setCompleted(1);
+                            transInfoDao.updateCompletionStatusByRetRefNo(transInfo.getRetRefNo(), transInfo.getCompleted());
                         }
                         catch(Exception ex){
                             ex.printStackTrace();
@@ -522,9 +522,8 @@ public class PayActivity extends BaseActivity {
             transInfo.setStatus(StringUtil.isEmpty(responseCode) ? "96" : responseCode);
             String authNum = isoMsgResponse.getObjectValue(38);
             transInfo.setAuthNum(StringUtil.isEmpty(authNum) ? "" : authNum);
-
-            //transInfoDao.createOrUpdate(transInfo);
-            transInfoDao.updateStatusAuthNumByRetRefNo(transInfo.getRetRefNo(), transInfo.getStatus(), transInfo.getAuthNum());
+            transInfo.setCompleted(1);
+            transInfoDao.updateStatusAuthNumCompletedByRetRefNo(transInfo.getRetRefNo(), transInfo.getStatus(), transInfo.getAuthNum(), transInfo.getCompleted());
             baseHandler.sendEmptyMessage(MSG_START_PRINT);
         }
         catch(Exception ex){
@@ -534,9 +533,18 @@ public class PayActivity extends BaseActivity {
 
 
 
+    //The plug-in to display the status of transaction
+    private void setTransactionStatusActionTip(String info) {
+        tranStatusText.setText(info);
+    }
 
+    private void setInfoActionTip(String tip) {
+        infoText.setText(tip);
+    }
 
-
+    private void hideTransactionStatusActionTip() {
+        tranStatusText.setText("");
+    }
 
     //@Override
     /*protected void onBack() {

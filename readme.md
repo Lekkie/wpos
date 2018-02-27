@@ -13,9 +13,9 @@ Printer
 Reversal - done  
 Ensure call home works - done  
 ensure periodic key download tsk decryption works - done  
-log transaction, log reversal - done, to be tested  
-do background job to send unclosed reversal - done, to be tested  
-do background job to reverse unclosed transaction  
+log transaction, log reversal - done  
+do background job to send unclosed reversal - done  
+do background job to reverse unclosed transaction  - done  
 change param set up such that when new terminal, it downloads all need settings b/4 start up  
 Do end of day  
 put android code on github  

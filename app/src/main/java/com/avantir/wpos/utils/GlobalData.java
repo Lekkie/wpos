@@ -334,6 +334,14 @@ public class GlobalData {
         return mPrefs.getInt(ConstantUtils.CALL_HOME_TIME_IN_MINS, 60);
     }
 
+    public void setResendReversalPeriodInMin(int resendReversal) {
+        mEditor.putInt(ConstantUtils.RESEND_REVERSAL_TIME_IN_MINS, resendReversal);
+        mEditor.commit();
+    }
+    public int getResendReversalPeriodInMin() {
+        return mPrefs.getInt(ConstantUtils.RESEND_REVERSAL_TIME_IN_MINS, 60);
+    }
+
     public void setCtmk(String ctmk) {
         mEditor.putString(ConstantUtils.CTMK, ctmk);
         mEditor.commit();

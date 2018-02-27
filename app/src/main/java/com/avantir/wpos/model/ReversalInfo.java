@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class ReversalInfo implements Serializable {
 
 
-    @DatabaseField(id=true, columnName = "id",generatedId = true, canBeNull = false)
+    @DatabaseField(generatedId = true, columnName = "id",canBeNull = false)
     private long id;
     @DatabaseField(unique=false, canBeNull = false)
     private String msgType;
@@ -71,8 +71,12 @@ public class ReversalInfo implements Serializable {
     private String posDataCode;
     @DatabaseField(unique=false, canBeNull = true)
     private String status;
+    @DatabaseField(unique=false, canBeNull = false, defaultValue = "0", columnName = "retry_no")
+    private int retryNo = 0;
     @DatabaseField(unique=false, canBeNull = false, defaultValue = "0")
-    private int retryNo;
+    private int completed = 0;
+    @DatabaseField(unique=false, canBeNull = false, columnName = "created_on")
+    private long createdOn = 0;
 
     public String getMsgType() {
         return msgType;
@@ -304,5 +308,29 @@ public class ReversalInfo implements Serializable {
 
     public void setRetryNo(int retryNo) {
         this.retryNo = retryNo;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(int completed) {
+        this.completed = completed;
+    }
+
+    public long getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(long createdOn) {
+        this.createdOn = createdOn;
     }
 }

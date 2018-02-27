@@ -22,19 +22,8 @@ import java.util.List;
  */
 public class WPOSApplication extends Application { //LitePalApplication
 
-
-
-
     public static List<Activity> activityList = new ArrayList<Activity>();
-
-    public static int responseSuccessCode = 0;
     public static WPOSApplication app;
-
-    public static String vName;
-    private EmvCore emvCore;
-
-    //Consumer payment success ID, used to reset the value input interface value
-    public static boolean consumePaySuccess = false;
 
     @Override
     public void onCreate() {
@@ -51,14 +40,14 @@ public class WPOSApplication extends Application { //LitePalApplication
 
         int keydownloadTimeInMill = globalData.getCheckKeyDownloadIntervalInMin() * 60 * 1000;
         int callHomeTimeInMill = globalData.getCallHomePeriodInMin() * 60 * 1000;
-        int reversalTimeInMill = globalData.getCallHomePeriodInMin() * 60 * 1000;
+        int reversalTimeInMill = globalData.getResendReversalPeriodInMin() * 60 * 1000;
 
         JobScheduler jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
 
         ComponentName downloadKeysComponent = new ComponentName(getPackageName(), DownloadKeysJobService.class.getName());
         //ComponentName downloadKeysComponent = new ComponentName(getApplicationContext(), DownloadKeysJobService.class);
         JobInfo.Builder downloadKeysBuilder = new JobInfo.Builder(ConstantUtils.DOWNLOAD_KEYS_JOB_ID, downloadKeysComponent);
-        downloadKeysBuilder = downloadKeysBuilder.setRequiresDeviceIdle(false);
+        downloadKeysBuilder = downloadKeysBuilder.setRequiresDeviceIdle(true);
         JobInfo downloadKeysJobInfo =  downloadKeysBuilder.setPeriodic(keydownloadTimeInMill) //every 12 hours (43200000)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 //.setPersisted(true)
@@ -81,18 +70,14 @@ public class WPOSApplication extends Application { //LitePalApplication
 
         ComponentName reversalComponent = new ComponentName(getPackageName(), ReversalJobService.class.getName());
         JobInfo.Builder reversalBuilder = new JobInfo.Builder(ConstantUtils.REVERSAL_JOB_ID, reversalComponent);
-        reversalBuilder = reversalBuilder.setRequiresDeviceIdle(false);
-        JobInfo reversalJobInfo =  reversalBuilder.setPeriodic(reversalTimeInMill) //every 12 hours (43200000)
+        reversalBuilder = reversalBuilder.setRequiresDeviceIdle(false); // set to true
+        JobInfo reversalJobInfo =  reversalBuilder.setPeriodic(reversalTimeInMill)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 //.setPersisted(true)
                 //.setMinimumLatency(1000)
                 //.setRequiresCharging(true)
                 .build();
         jobScheduler.schedule(reversalJobInfo);
-    }
-
-    public EmvCore getEmvCore() {
-        return emvCore;
     }
 
 }

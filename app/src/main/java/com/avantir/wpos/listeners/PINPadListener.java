@@ -3,6 +3,7 @@ package com.avantir.wpos.listeners;
 import android.os.Handler;
 import android.os.RemoteException;
 import com.avantir.wpos.interfaces.OnPinPadListener;
+import com.avantir.wpos.model.TransInfo;
 import com.avantir.wpos.services.EMVManager;
 import wangpos.sdk4.emv.ICallbackListener;
 
@@ -14,11 +15,13 @@ public class PINPadListener implements OnPinPadListener {
     Handler handler;
     ICallbackListener iCallBackListener;
     String tradeType;
+    TransInfo transInfo;
 
-    public PINPadListener(Handler handler, ICallbackListener iCallBackListener, String tradeType){
+    public PINPadListener(Handler handler, ICallbackListener iCallBackListener, TransInfo transInfo, String tradeType){
         this.handler = handler;
         this.iCallBackListener = iCallBackListener;
         this.tradeType = tradeType;
+        this.transInfo = transInfo;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class PINPadListener implements OnPinPadListener {
         handler.obtainMessage(0, "ByPass").sendToTarget();
         if ("07".equals(tradeType)) {
             try {
-                int result = EMVManager.EMV_TransProcess(iCallBackListener);
+                int result = EMVManager.EMV_TransProcess(transInfo, iCallBackListener);
                 //Log.d(TAG, "result==" + result);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -54,7 +57,7 @@ public class PINPadListener implements OnPinPadListener {
         //Log.d(TAG, "Pin==" + pin);
         if ("07".equals(tradeType)) {
             try {
-                int result = EMVManager.EMV_TransProcess(iCallBackListener);
+                int result = EMVManager.EMV_TransProcess(transInfo, iCallBackListener);
                 //Log.d(TAG, "result==" + result);
             } catch (RemoteException e) {
                 e.printStackTrace();

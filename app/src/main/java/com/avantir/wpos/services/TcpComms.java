@@ -62,8 +62,8 @@ public class TcpComms {
                     this.notifyStatus(0, (byte[])null);
                     this.socket.init(context, host, port, timeout);
                 } catch (Exception var6) {
-                    this.notifyErrorCode(2, var6.getMessage());
-                    return null;
+                    //this.notifyErrorCode(2, var6.getMessage());
+                    throw var6;
                 }
 
                 this.dataCommuSocketBlocking(senddata);
@@ -76,8 +76,8 @@ public class TcpComms {
                     this.notifyStatus(0, (byte[])null);
                     sslSocket.init(context, host, port, timeout, cer);
                 } catch (Exception var5) {
-                    this.notifyErrorCode(2, var5.getMessage());
-                    return null;
+                    //this.notifyErrorCode(2, var5.getMessage());
+                    throw var5;
                 }
 
                 this.dataCommuSocketSSLBlocking(senddata);

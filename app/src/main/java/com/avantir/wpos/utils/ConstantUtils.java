@@ -124,6 +124,7 @@ public class ConstantUtils {
     public static final String KEY_DOWNLOAD_TIME_IN_MINS = "KEY_DOWNLOAD_TIME_IN_MINS";
     public static final String CHECK_KEY_DOWNLOAD_INTERVAL_IN_MINS = "CHECK_KEY_DOWNLOAD_INTERVAL_IN_MINS";
     public static final String CALL_HOME_TIME_IN_MINS = "CALL_HOME_TIME_IN_MINS";
+    public static final String RESEND_REVERSAL_TIME_IN_MINS =  "RESEND_REVERSAL_TIME_IN_MINS";
     public static final String CTMK = "CTMK";
     public static final String TMK = "TMK";
     public static final String TSK = "TSK";

@@ -42,7 +42,7 @@ public class BaseDao<T, ID> {
 	public boolean isExists(ID id) {
 		try {
 			return this.dao.idExists(id);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -51,7 +51,7 @@ public class BaseDao<T, ID> {
 	public T findById(ID id) {
 		try {
 			return this.dao.queryForId(id);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -60,7 +60,7 @@ public class BaseDao<T, ID> {
 	public List<T> list() {
 		try {
 			return this.dao.queryForAll();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -69,18 +69,19 @@ public class BaseDao<T, ID> {
 	public List<T> findAllByField(String fieldName, Object value) {
 		try {
 			return this.dao.queryForEq(fieldName, value);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	public List<T> findBySQL(String sql) {
-		GenericRawResults<Object[]> results = null;
+		GenericRawResults<T> results = null;
 		try {
-			results = this.dao.queryRaw(sql, types);
+			//results = this.dao.queryRaw(sql, types);
+			results = this.dao.queryRaw(sql, this.dao.getRawRowMapper());
 			return (List<T>) results.getResults();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -91,7 +92,7 @@ public class BaseDao<T, ID> {
 		try {
 			results = this.dao.queryRawValue(sql);
 			return results;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
@@ -103,7 +104,7 @@ public class BaseDao<T, ID> {
 		try {
 			results = this.dao.queryRaw(sql);
 			return (List<String[]>) results.getResults();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -118,7 +119,7 @@ public class BaseDao<T, ID> {
 	public boolean create(T object) {
 		try {
 			return (this.dao.create(object) == 1);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -127,7 +128,7 @@ public class BaseDao<T, ID> {
 	public boolean createIfNotExist(T object) {
 		try {
 			return (this.dao.createIfNotExists(object).equals(object));
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -137,7 +138,7 @@ public class BaseDao<T, ID> {
 		Dao.CreateOrUpdateStatus result = null;
 		try {
 			result = this.dao.createOrUpdate(object);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if (result.isCreated() || result.isUpdated()) {
@@ -158,7 +159,7 @@ public class BaseDao<T, ID> {
 		}
 		try {
 			return (this.dao.update(object) == 1);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -170,7 +171,7 @@ public class BaseDao<T, ID> {
 		}
 		try {
 			return (this.dao.updateId(object, id) == 1);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -182,7 +183,7 @@ public class BaseDao<T, ID> {
 		}
 		try {
 			return (this.dao.refresh(object) == 1);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -198,7 +199,7 @@ public class BaseDao<T, ID> {
 		}
 		try {
 			return (this.dao.delete(object) == 1);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -210,7 +211,7 @@ public class BaseDao<T, ID> {
 		}
 		try {
 			return (this.dao.delete(objects) == objects.size());
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -219,7 +220,7 @@ public class BaseDao<T, ID> {
 	public boolean deleteById(ID id) {
 		try {
 			return (this.dao.deleteById(id) == 1);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -231,7 +232,7 @@ public class BaseDao<T, ID> {
 		}
 		try {
 			return (this.dao.deleteIds(ids) == ids.size());
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -245,7 +246,7 @@ public class BaseDao<T, ID> {
 		try {
 			this.dao.executeRawNoArgs(sql);
 			return true;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -261,7 +262,7 @@ public class BaseDao<T, ID> {
 		try {
 			this.dao.setAutoCommit(isAutoCommit);
 			return true;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -277,7 +278,7 @@ public class BaseDao<T, ID> {
 		public void rollback() {
 			try {
 				this.dao.rollBack(helper.getConnectionSource().getReadWriteConnection());
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -292,7 +293,7 @@ public class BaseDao<T, ID> {
 			public void commit() {
 				try {
 					this.dao.commit(helper.getConnectionSource().getReadWriteConnection());
-				} catch (SQLException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

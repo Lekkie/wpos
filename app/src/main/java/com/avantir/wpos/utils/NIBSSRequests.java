@@ -3,9 +3,11 @@ package com.avantir.wpos.utils;
 import android.os.Handler;
 import com.avantir.wpos.WPOSApplication;
 import com.avantir.wpos.dao.ReversalInfoDao;
+import com.avantir.wpos.dao.TransInfoDao;
 import com.avantir.wpos.interfaces.ICommsListener;
 import com.avantir.wpos.listeners.CommsListener;
 import com.avantir.wpos.model.ReversalInfo;
+import com.avantir.wpos.model.TransInfo;
 import com.avantir.wpos.services.TcpComms;
 import com.solab.iso8583.IsoMessage;
 
@@ -59,8 +61,7 @@ public class NIBSSRequests {
         comms.dataCommu(WPOSApplication.app, tmkReqBytes, commsListener);
     }
 
-    public static String doPurchaseReversal(ReversalInfoDao reversalInfoDao, ReversalInfo reversalInfo, boolean isRepeat) throws Exception{
-        reversalInfoDao.createIfNotExist(reversalInfo);
+    public static String doPurchaseReversal(ReversalInfo reversalInfo, boolean isRepeat) throws Exception{
         byte[] data = IsoMessageUtil.createPurchaseReversal(reversalInfo, isRepeat);
         GlobalData globalData = GlobalData.getInstance();
         TcpComms comms = new TcpComms(globalData.getCTMSHost(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
@@ -68,9 +69,6 @@ public class NIBSSRequests {
         IsoMessage isoMsgResponse = IsoMessageUtil.getInstance().decode(respData);
         System.out.println(isoMsgResponse.debugString());
         String responseCode = isoMsgResponse.getObjectValue(39);
-
-        reversalInfo.setStatus(StringUtil.isEmpty(responseCode) ? "96" : responseCode);
-        reversalInfoDao.updateStatusByRetRefNo(reversalInfo.getStatus(), reversalInfo.getRetRefNo());
         return  responseCode;
     }
 

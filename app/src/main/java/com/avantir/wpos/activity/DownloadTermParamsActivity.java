@@ -348,6 +348,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 globalData.setCurrencyCode(parameter.getTransCurr());
                 globalData.setPOSDataCode(posDataCode);
                 globalData.setICCData(iccData);
+                globalData.setResendReversalPeriodInMin(60); // get from remote
 
                 byte[] outData = new byte[1024];
                 int[] outStatus = new int[1];
@@ -798,10 +799,6 @@ public class DownloadTermParamsActivity extends BaseActivity {
         }
     }
 
-
-
-
-
     private boolean isIsoRequest(int req){
         return req == ConstantUtils.NETWORK_TMK_DOWNLOAD_REQ_TYPE ||
                 req == ConstantUtils.NETWORK_TPK_DOWNLOAD_REQ_TYPE ||
@@ -816,17 +813,3 @@ public class DownloadTermParamsActivity extends BaseActivity {
 
 }
 
-    /*
-    Download from Mgt Server...done
-    CTMK Loaded
-    CBDK Loaded
-    Terminal Parameter Loaded
-
-    Download from NIBSS CTMS ...done
-    TMK Loaded
-    TPK Loaded
-    TSK Loaded
-    AID Loaded
-    CAPK Loaded
-    EMV Param Loaded
-*/
