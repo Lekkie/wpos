@@ -202,6 +202,7 @@ public class PayActivity extends BaseActivity {
             case  MSG_FINISH_ERROR_COMMS:
                 // end comms with error
                 processFailedResponse(Integer.parseInt(msg.obj.toString()), msg.getData());
+                baseHandler.obtainMessage(MSG_PROGRESS, "Failed").sendToTarget();
                 baseHandler.obtainMessage(MSG_INFO, "Please remove card").sendToTarget();
                 break;
             case MSG_INFO:
@@ -519,6 +520,8 @@ public class PayActivity extends BaseActivity {
             IsoMessage isoMsgResponse = IsoMessageUtil.getInstance().decode(respData);
             System.out.println(isoMsgResponse.debugString());
             String responseCode = isoMsgResponse.getObjectValue(39);
+            String responseMsg = "00".equalsIgnoreCase(responseCode) ? "Approved" : "Declined";
+            baseHandler.obtainMessage(MSG_PROGRESS, responseMsg).sendToTarget();
             transInfo.setStatus(StringUtil.isEmpty(responseCode) ? "96" : responseCode);
             String authNum = isoMsgResponse.getObjectValue(38);
             transInfo.setAuthNum(StringUtil.isEmpty(authNum) ? "" : authNum);
