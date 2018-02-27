@@ -272,7 +272,7 @@ public class GlobalData {
         mEditor.commit();
     }
     public String getTMSHost() {
-        return mPrefs.getString(ConstantUtils.TMS_HOST, "");
+        return mPrefs.getString(ConstantUtils.TMS_HOST, "52.56.159.171");
     }
 
     public void setTMSPort(int tmsPort) {
@@ -280,7 +280,7 @@ public class GlobalData {
         mEditor.commit();
     }
     public int getTMSPort() {
-        return mPrefs.getInt(ConstantUtils.TMS_PORT, 0);
+        return mPrefs.getInt(ConstantUtils.TMS_PORT, 80);
     }
 
     public void setTMSTimeout(int tmsTimeout) {

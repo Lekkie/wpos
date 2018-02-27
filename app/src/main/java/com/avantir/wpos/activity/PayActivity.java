@@ -210,7 +210,7 @@ public class PayActivity extends BaseActivity {
                 break;
             case MSG_START_PRINT:
                 // Print Receipt
-                //new PrintThread(mPrinter, baseHandler, transInfo, true).start();
+                new PrintThread(mPrinter, baseHandler, transInfo, true).start();
                 break;
             case MSG_FINISH_PRINT:
                 // go to main page
