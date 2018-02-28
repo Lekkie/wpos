@@ -1,11 +1,14 @@
 package com.avantir.wpos.activity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.avantir.wpos.R;
@@ -64,6 +67,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
     private String capkTextMsg;
     private String emvParamTextMsg;
     private String downloadStatusTextMsg;
+    private Button doneButton;
+    private Button retryButton;
 
     //String ctmk;
     private String tmkData;
@@ -84,16 +89,30 @@ public class DownloadTermParamsActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_term_params_download);
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+        doneButton = ((Button) findViewById(R.id.done_btn));
+        doneButton.setEnabled(false);
+        retryButton = ((Button) findViewById(R.id.retry_btn));
+        retryButton.setEnabled(false);
         super.onCreate(savedInstanceState);
     }
 
     //@Override
     protected void initView() {
-        //Top title bar
-        ImageView titleBackImage = (ImageView) findViewById(R.id.titleBackImage);
-        titleBackImage.setOnClickListener(this);
+        /*
+        if(GlobalData.getInstance().getIfFirstLaunch()) {
+            findViewById(R.id.titleBackImage).setVisibility(View.GONE);
+        }
+        else{
+            ImageView titleBackImage = (ImageView) findViewById(R.id.titleBackImage);
+            titleBackImage.setOnClickListener(this);
+        }
+        */
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         TextView titleNameText = (TextView) findViewById(R.id.titleNameText);
         titleNameText.setText("Download Term Params");
+
+        doneButton.setOnClickListener(this);
+        retryButton.setOnClickListener(this);
 
         ctmkText = (TextView) findViewById(R.id.ctmkText);
         cbdkText = (TextView) findViewById(R.id.cbdkText);
@@ -131,6 +150,11 @@ public class DownloadTermParamsActivity extends BaseActivity {
         termParamTextMsg = termParamText.getText().toString();
         //downloadStatusTextMsg = downloadStatusText.getText().toString();
 
+
+        TextView devSerialNoText = ((TextView) findViewById(R.id.deviceSerialNo));
+        String msg = devSerialNoText.getText().toString() + Build.SERIAL;
+        devSerialNoText.setText(msg);
+        setAllDownloadStatus("pending");
         /*
         ctmkText.setText(ctmkTextMsg + "pending");
         cbdkText.setText(cbdkTextMsg + "pending");
@@ -142,7 +166,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
         capkText.setText(capkTextMsg + "pending");
         termParamText.setText(termParamTextMsg + "pending");
         */
-        setAllDownloadStatus("pending");
+
 
         globalData = GlobalData.getInstance();
         httpComms = HttpComms.getInstance(globalData.getTMSHost(), globalData.getTMSPort(), globalData.getTMSTimeout(), globalData.getIfTMSSSL(), null);
@@ -159,11 +183,40 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 finish();
                 skipActivityAnim(-1);
                 break;
+            case R.id.done_btn:
+                goBack();
+                break;
+            case R.id.retry_btn:
+                baseHandler.sendEmptyMessage(MSG_DOWNLOAD_FROM_MGT_SERVER);
+                doneButton.setEnabled(false);
+                retryButton.setEnabled(false);
+                break;
             default:
                 break;
 
         }
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        goBack();
+    }
+
+
+    private void goBack(){
+        if(globalData.getIfFirstLaunch()){
+            globalData.setIfFirstLaunch(false);
+            startActivity(new Intent(this, MainMenuActivity.class));
+            finish();
+        }
+        else{
+            finish();
+            skipActivityAnim(-1);
+        }
+    }
+
 
     @Override
     protected void handleMessage(Message msg) {
@@ -205,6 +258,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 //Bundle bundleFail = msg.getData(); //display which one is not successful
                 //processFailedResponse(bundleFail);
                 showToast("Comms error!");
+                doneButton.setEnabled(true);
+                retryButton.setEnabled(true);
                 break;
         }
     }
@@ -224,6 +279,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     showToast("Failed to download Terminal Parameter from TMS!");
+                    doneButton.setEnabled(true);
+                    retryButton.setEnabled(true);
                 }
             }
         };
@@ -266,11 +323,15 @@ public class DownloadTermParamsActivity extends BaseActivity {
             }
             else{
                 showToast("Unknown request type!");
+                doneButton.setEnabled(true);
+                retryButton.setEnabled(true);
             }
         }
         catch(Exception ex){
             ex.printStackTrace();
             showToast("Error!");
+            doneButton.setEnabled(true);
+            retryButton.setEnabled(true);
         }
     }
 
@@ -377,6 +438,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 else{
                     downloadStatusText.setText("Failed to download params from mgt server...");
                 }
+                doneButton.setEnabled(true);
+                retryButton.setEnabled(true);
             }
         }
         catch(Exception ex){
@@ -393,6 +456,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             setTermParamStatus("Stopped");
             setCapkStatus("Stopped");
             setAidStatus("Stopped");
+            doneButton.setEnabled(true);
+            retryButton.setEnabled(true);
         }
     }
 
@@ -417,7 +482,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     baseHandler.obtainMessage(ShowToastFlag, "Failed to download TMK!").sendToTarget();
-                    //showToast("");
+                    doneButton.setEnabled(true);
+                    retryButton.setEnabled(true);
                 }
             }
         };
@@ -436,7 +502,6 @@ public class DownloadTermParamsActivity extends BaseActivity {
             tmkData = keyData;
             System.out.println("TMK: " + keyData);
             downloadStatusText.setText("Processing TMK response from NIBSS ...");
-
             baseHandler.sendEmptyMessage(MSG_DOWNLOAD_TPK);
         }
         catch(Exception ex){
@@ -449,6 +514,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             setTermParamStatus("Stopped");
             setCapkStatus("Stopped");
             setAidStatus("Stopped");
+            doneButton.setEnabled(true);
+            retryButton.setEnabled(true);
         }
     }
 
@@ -463,6 +530,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                     ex.printStackTrace();
                     //showToast("Failed to download TPK!");
                     baseHandler.obtainMessage(ShowToastFlag, "Failed to download TPK!").sendToTarget();
+                    doneButton.setEnabled(true);
+                    retryButton.setEnabled(true);
                 }
             }
         };
@@ -491,6 +560,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             setTermParamStatus("Stopped");
             setCapkStatus("Stopped");
             setAidStatus("Stopped");
+            doneButton.setEnabled(true);
+            retryButton.setEnabled(true);
         }
     }
 
@@ -506,6 +577,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                     ex.printStackTrace();
                     //showToast("Failed to download TSK!");
                     baseHandler.obtainMessage(ShowToastFlag, "Failed to download TSK!").sendToTarget();
+                    doneButton.setEnabled(true);
+                    retryButton.setEnabled(true);
                 }
             }
         };
@@ -568,6 +641,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             setTermParamStatus("Stopped");
             setCapkStatus("Stopped");
             setAidStatus("Stopped");
+            doneButton.setEnabled(true);
+            retryButton.setEnabled(true);
         }
     }
 
@@ -582,7 +657,9 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     //showToast("Failed to download Terminal Parameter from NIBSS CTMS!");
-                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download TErm Param form NIBSS!").sendToTarget();
+                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download Term Param form NIBSS!").sendToTarget();
+                    doneButton.setEnabled(true);
+                    retryButton.setEnabled(true);
                 }
             }
         };
@@ -677,6 +754,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             setTermParamStatus("Failed");
             setCapkStatus("Stopped");
             setAidStatus("Stopped");
+            doneButton.setEnabled(true);
+            retryButton.setEnabled(true);
         }
     }
 
@@ -693,6 +772,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                     ex.printStackTrace();
                     //showToast("Failed to download CAPK!");
                     baseHandler.obtainMessage(ShowToastFlag, "Failed to download CAPK!").sendToTarget();
+                    doneButton.setEnabled(true);
+                    retryButton.setEnabled(true);
                 }
             }
         };
@@ -743,8 +824,6 @@ public class DownloadTermParamsActivity extends BaseActivity {
 
                 baseHandler.sendEmptyMessage(MSG_DOWNLOAD_AID);
             }
-
-
         }
         catch(Exception ex){
             ex.printStackTrace();
@@ -753,6 +832,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             downloadStatusText.setText("CAPK download failed ...");
             setCapkStatus("Failed");
             setAidStatus("Stopped");
+            doneButton.setEnabled(true);
+            retryButton.setEnabled(true);
         }
     }
 
@@ -769,6 +850,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                     ex.printStackTrace();
                     //showToast("Failed to download AID!");
                     baseHandler.obtainMessage(ShowToastFlag, "Failed to download AID!").sendToTarget();
+                    doneButton.setEnabled(true);
+                    retryButton.setEnabled(true);
                 }
             }
         };
@@ -825,7 +908,6 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 globalData.setAIDLoadedFlag(true);
                 aidText.setText(aidTextMsg + "done (loaded)");
                 downloadStatusText.setText("Terminal Parameter downloaded ...");
-
                 globalData.setLogin(true);
             }
         }
@@ -836,6 +918,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             downloadStatusText.setText("AID download failed ...");
             setAidStatus("Failed");
         }
+        doneButton.setEnabled(true);
+        retryButton.setEnabled(true);
     }
 
     private boolean isIsoRequest(int req){

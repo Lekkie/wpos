@@ -368,6 +368,13 @@ public class GlobalData {
 
 
 
+    public void setIfFirstLaunch(boolean ifFirstLaunch) {
+        mEditor.putBoolean(ConstantUtils.FIRST_LAUNCH, ifFirstLaunch);
+        mEditor.commit();
+    }
+    public boolean getIfFirstLaunch() {
+        return mPrefs.getBoolean(ConstantUtils.FIRST_LAUNCH, true);
+    }
 
 
 

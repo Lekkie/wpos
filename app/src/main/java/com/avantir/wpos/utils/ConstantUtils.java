@@ -132,6 +132,7 @@ public class ConstantUtils {
     public static final String CTMK = "CTMK";
     public static final String TMK = "TMK";
     public static final String TSK = "TSK";
+    public static final String FIRST_LAUNCH = "FIRST_LAUNCH";
 
     public static final String STATUS = "STATUS";
     public static final String APP_LABEL = "APP_LABEL";

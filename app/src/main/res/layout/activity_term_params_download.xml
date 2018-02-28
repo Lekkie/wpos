@@ -12,25 +12,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#DDDDDD"
-            android:weightSum="4"
+            android:weightSum="5"
             android:orientation="vertical">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="horizontal" android:layout_weight="3" android:weightSum="1">
+                android:orientation="horizontal" android:layout_weight="4" android:weightSum="1">
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#DDDDDD"
-                    android:weightSum="11"
+                    android:weightSum="13"
                     android:orientation="vertical">
 
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+                        android:orientation="horizontal" android:layout_weight="2" android:weightSum="1">
                     <TextView
                             android:id="@+id/downloadStatusText"
                             android:layout_width="match_parent"
@@ -41,13 +41,29 @@
                             android:textStyle="bold|italic"
                             android:gravity="center"
                             android:text=""
-                            android:textSize="15sp"/>
+                            android:textSize="20sp"/>
                 </LinearLayout>
 
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:orientation="horizontal" android:layout_weight="1" android:weightSum="1"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+                    <TextView
+                            android:id="@+id/deviceSerialNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/black"
+                            android:gravity="left"
+                            android:text="Device Serial No: "
+                            android:textSize="15sp"/>
+                </LinearLayout>
 
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -61,8 +77,8 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="Clear Terminal Master Key (CTMK) ..."
-                            android:textSize="10sp"/>
+                            android:text="CTMK ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -77,8 +93,8 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="Clear Base Derivation Key (CBDK) ..."
-                            android:textSize="10sp"/>
+                            android:text="BDK ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,7 +110,7 @@
                             android:textColor="@color/black"
                             android:gravity="left"
                             android:text="EMV Param ..."
-                            android:textSize="10sp"/>
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -109,8 +125,8 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="Terminal Master Key (TMK) ..."
-                            android:textSize="10sp"/>
+                            android:text="TMK ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -125,8 +141,8 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="Terminal PIN Key (TPK) ..."
-                            android:textSize="10sp"/>
+                            android:text="TPK ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -141,8 +157,8 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="Terminal Session Key (TSK) ..."
-                            android:textSize="10sp"/>
+                            android:text="TSK ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -158,8 +174,8 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="Terminal Parameter ..."
-                            android:textSize="10sp"/>
+                            android:text="Terminal Parameters ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
 
@@ -175,8 +191,8 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="EMV Certificate Authority Public Key (CAPK) ..."
-                            android:textSize="10sp"/>
+                            android:text="EMV CAPK ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -191,30 +207,79 @@
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="EMV Application Identifier (AID) ..."
-                            android:textSize="10sp"/>
+                            android:text="EMV AID ..."
+                            android:textSize="15sp"/>
                 </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
 
+
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="horizontal" android:layout_weight="0.98" android:weightSum="1">
+                android:layout_height="20dp"
+                android:orientation="horizontal" android:layout_weight="1">
 
-            <TextView
-                    android:id="@+id/status"
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:textColor="@color/black"
-                    android:gravity="bottom"
-                    android:text=""
-                    android:textStyle="bold|italic"
-                    android:textSize="10sp"/>
+                    android:background="#DDDDDD"
+                    android:weightSum="3"
+                    android:orientation="vertical">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal" android:layout_weight="1" android:weightSum="1"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal" android:layout_weight="1" android:weightSum="1"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+
+                    <RelativeLayout android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:orientation="horizontal">
+
+                            <Button
+                                    android:id="@+id/retry_btn"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center"
+                                    android:textSize="25sp"
+                                    android:layout_gravity="center"
+                                    android:textStyle="bold|italic"
+                                    android:text="Retry"/>
+
+                            <Button
+                                    android:id="@+id/done_btn"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentTop="false"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center"
+                                    android:textSize="25sp"
+                                    android:layout_gravity="center"
+                                    android:textStyle="bold|italic"
+                                    android:text="Done"/>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
