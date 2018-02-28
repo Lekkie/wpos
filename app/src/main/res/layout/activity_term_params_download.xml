@@ -149,17 +149,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+
                     <TextView
-                            android:id="@+id/aidText"
+                            android:id="@+id/termParamText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="0dp"
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="EMV Application Identifier (AID) ..."
+                            android:text="Terminal Parameter ..."
                             android:textSize="10sp"/>
                 </LinearLayout>
+
 
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -181,25 +183,39 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
-
                     <TextView
-                            android:id="@+id/termParamText"
+                            android:id="@+id/aidText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="0dp"
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/black"
                             android:gravity="left"
-                            android:text="Terminal Parameter ..."
+                            android:text="EMV Application Identifier (AID) ..."
                             android:textSize="10sp"/>
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+                android:orientation="horizontal" android:layout_weight="0.98" android:weightSum="1">
+
+            <TextView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="bottom"
+                    android:text=""
+                    android:textStyle="bold|italic"
+                    android:textSize="10sp"/>
+
         </LinearLayout>
     </LinearLayout>
 

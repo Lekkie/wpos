@@ -2,6 +2,7 @@ package com.avantir.wpos.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
@@ -54,6 +55,7 @@ public class PayActivity extends BaseActivity {
     private boolean isOffLine = false;
     //order amount
     private int orderAmount;
+    private String accountType;
     //Transaction type flag
     private int tranTypeFlag = ConstantUtils.PURCHASE;
     private int paymentInstrumentFlag = ConstantUtils.BANK_CARD;
@@ -88,6 +90,7 @@ public class PayActivity extends BaseActivity {
         TextView titleNameText = (TextView) findViewById(R.id.titleNameText);
         titleNameText.setText("Cashier");
 
+        WPOSApplication.activityList.add(this);
         tranStatusText = (TextView) findViewById(R.id.transactionStatusText);
         infoText = (TextView) findViewById(R.id.infoText);
     }
@@ -104,6 +107,7 @@ public class PayActivity extends BaseActivity {
         tranTypeFlag = bundle.getInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
         paymentInstrumentFlag = bundle.getInt(ConstantUtils.PAYMENT_INSTRUMENT, ConstantUtils.BANK_CARD);
         orderAmount = bundle.getInt(ConstantUtils.TRAN_AMT, 0);
+        accountType = bundle.getString(ConstantUtils.ACCT_TYPE, "00");
 
 
         transInfoDao = new TransInfoDao(WPOSApplication.app);
@@ -140,6 +144,7 @@ public class PayActivity extends BaseActivity {
                     globalData.setRetrievalRef(retRef);
                     transInfo.setRetRefNo(StringUtil.leftPad(String.valueOf(retRef), 12, '0'));
                     transInfo.setAmt(String.valueOf(orderAmount));
+                    transInfo.setAccountType(accountType);
                     transInfo.setOnLine(true);// Default is online transaction
                 }
                 catch(Exception ex){
@@ -408,7 +413,7 @@ public class PayActivity extends BaseActivity {
         byte[] data = null;
         try{
             transInfo.setMsgType(ConstantUtils._0200);
-            transInfo.setProcCode(ConstantUtils.PURCHASE_PROC_CODE);
+            transInfo.setProcCode(ConstantUtils.PURCHASE_PROC_CODE + accountType +  "00");
             Date now = new Date(System.currentTimeMillis());
             String transmissionDatetime = TimeUtil.getDateTimeMMddhhmmss(now);
             String localTime = TimeUtil.getTimehhmmss(now);
@@ -554,6 +559,14 @@ public class PayActivity extends BaseActivity {
         finishAndReturnMainActivity();
     }
     */
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(PayActivity.this, MainActivity.class));
+        finish();
+    }
 
     private void finishAndReturnMainActivity() {
         finishAppActivity();

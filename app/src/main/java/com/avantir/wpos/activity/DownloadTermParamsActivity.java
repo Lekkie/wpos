@@ -9,6 +9,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.avantir.wpos.R;
+import com.avantir.wpos.model.Error;
+import com.avantir.wpos.model.Errors;
 import com.avantir.wpos.model.NibssTLV;
 import com.avantir.wpos.model.Parameter;
 import com.avantir.wpos.services.HttpComms;
@@ -50,6 +52,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
     private TextView capkText;
     private TextView emvParamText;
     private TextView downloadStatusText;
+    //private TextView status;
 
     private String ctmkTextMsg;
     private String cbdkTextMsg;
@@ -60,7 +63,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
     private String aidTextMsg;
     private String capkTextMsg;
     private String emvParamTextMsg;
-    //private String downloadStatusTextMsg;
+    private String downloadStatusTextMsg;
 
     //String ctmk;
     private String tmkData;
@@ -102,6 +105,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
         capkText = (TextView) findViewById(R.id.capkText);
         emvParamText = (TextView) findViewById(R.id.emvParamText);
         downloadStatusText = (TextView) findViewById(R.id.downloadStatusText);
+
+        //status = (TextView) findViewById(R.id.status);
     }
 
     @Override
@@ -126,6 +131,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
         termParamTextMsg = termParamText.getText().toString();
         //downloadStatusTextMsg = downloadStatusText.getText().toString();
 
+        /*
         ctmkText.setText(ctmkTextMsg + "pending");
         cbdkText.setText(cbdkTextMsg + "pending");
         emvParamText.setText(emvParamTextMsg + "pending");
@@ -135,6 +141,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
         aidText.setText(aidTextMsg + "pending");
         capkText.setText(capkTextMsg + "pending");
         termParamText.setText(termParamTextMsg + "pending");
+        */
+        setAllDownloadStatus("pending");
 
         globalData = GlobalData.getInstance();
         httpComms = HttpComms.getInstance(globalData.getTMSHost(), globalData.getTMSPort(), globalData.getTMSTimeout(), globalData.getIfTMSSSL(), null);
@@ -224,27 +232,6 @@ public class DownloadTermParamsActivity extends BaseActivity {
     }
 
 
-    /*
-    private void processFailedResponse(Bundle bundle){
-        int reqType = bundle.getInt(ConstantUtils.NETWORK_REQ_TYPE);
-        // Hack to handle these until NIBSS is working
-        if(reqType == ConstantUtils.NETWORK_AID_DOWNLOAD_REQ_TYPE) {
-            processAIDResponse(null);
-        }
-        else if(reqType == ConstantUtils.NETWORK_CAPK_DOWNLOAD_REQ_TYPE) {
-            processCAPKResponse(null);
-        }
-        else if(reqType == ConstantUtils.NETWORK_NIBSS_TERM_PARAM_DOWNLOAD_REQ_TYPE) {
-            processTermParamResponseFromNIBSS(null);
-        }
-        else{
-            showToast("Comms error!");
-        }
-    }
-    */
-
-
-
     private void processResponse(Bundle bundle, byte[] receiveData){
         try{
             int reqType = bundle.getInt(ConstantUtils.NETWORK_REQ_TYPE);
@@ -301,20 +288,21 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 String encryptedBase64Ctmk = parameter.getCtmk();
                 String ctmk = KeyUtils.decryptBase64StringWithRSA(encryptedBase64Ctmk);
                 if (ctmk == null){
-                    ctmkText.setText(ctmkTextMsg + "failed");
+                    //ctmkText.setText(ctmkTextMsg + "failed");
+                    setCtmkStatus("failed");
                     throw new Exception("Unable able to decrypt CTMK");
                 }
                 String ctmkKcv = parameter.getCtmkChkDigit();
                 int ret = KeyUtils.saveCTMK(mKey, ctmk, ctmkKcv, encryptedBase64Ctmk);
-                if(ret == 0){
-                    globalData.setLocalMasterKeyLoadedFlag(true);
-                    ctmkText.setText(ctmkTextMsg + "done");
-                }
-                else{
-                    ctmkText.setText(ctmkTextMsg + "failed");
-                }
+                if(ret != 0)
+                    throw new Exception("Unable able to save CTMK");
 
-                cbdkText.setText(cbdkTextMsg + "skipped");
+                globalData.setLocalMasterKeyLoadedFlag(true);
+                //ctmkText.setText(ctmkTextMsg + "done");
+                setCtmkStatus("done");
+
+                //cbdkText.setText(cbdkTextMsg + "skipped");
+                setBdkStatus("skipped");
 
 
                 String merchantName = parameter.getMerchantName();
@@ -373,19 +361,38 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 emvParam.setGetDataPIN(getDataPin);
                 emvCore.setParam(emvParam.toByteArray());
 
-                emvParamText.setText(emvParamTextMsg + "in progress");
+                //emvParamText.setText(emvParamTextMsg + "in progress");
+                setEmvParamStatus("in progress");
 
                 downloadKeys();
             }
             else{
                 showToast("Failed to download Terminal Parameters!");
-                /// set all status to fail
+                setAllDownloadStatus("failed");
+                Errors errors = gson.fromJson(response, Errors.class);
+                if(errors != null && errors.getErrors() != null && errors.getErrors()[0].getCode() != null){
+                    Error error = errors.getErrors()[0];
+                    downloadStatusText.setText("Failed: " + error.getMessage());
+                }
+                else{
+                    downloadStatusText.setText("Failed to download params from mgt server...");
+                }
             }
         }
         catch(Exception ex){
             ex.printStackTrace();
-            showToast("Failed to download Terminal Parameters!");
+            showToast("Failed to download Terminal Parameters from mgt server!");
+            downloadStatusText.setText("Failed to download params from mgt server...");
             /// set all status thats not done to fail
+            setCtmkStatus("Failed");
+            setBdkStatus("Failed");
+            setEmvParamStatus("Failed");
+            setTmkStatus("Stopped");
+            setTpkStatus("Stopped");
+            setTskStatus("Stopped");
+            setTermParamStatus("Stopped");
+            setCapkStatus("Stopped");
+            setAidStatus("Stopped");
         }
     }
 
@@ -422,7 +429,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
     private void processTMKResponse(IsoMessage isoMessage){
         try{
             downloadStatusText.setText("Downloaded TMK from NIBSS ...");
-            tmkText.setText(tmkTextMsg + "downloaded");
+            //tmkText.setText(tmkTextMsg + "downloaded");
+            setTmkStatus("downloaded");
             byte[] keyDataBytes = isoMessage == null ? null : (byte[]) isoMessage.getField(53).getValue();
             String keyData = keyDataBytes == null ? null : HexCodec.hexEncode(keyDataBytes, 0, keyDataBytes.length);
             tmkData = keyData;
@@ -433,8 +441,14 @@ public class DownloadTermParamsActivity extends BaseActivity {
         }
         catch(Exception ex){
             ex.printStackTrace();
-            //showToast("Failed to download TMK!");
+            downloadStatusText.setText("TMK Key download failed ...");
             baseHandler.obtainMessage(ShowToastFlag, "Failed to download TMK!").sendToTarget();
+            setTmkStatus("Failed");
+            setTpkStatus("Stopped");
+            setTskStatus("Stopped");
+            setTermParamStatus("Stopped");
+            setCapkStatus("Stopped");
+            setAidStatus("Stopped");
         }
     }
 
@@ -459,7 +473,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
     private void processTPKResponse(IsoMessage isoMessage){
         try{
             downloadStatusText.setText("Downloaded TPK from NIBSS ...");
-            tpkText.setText(tpkTextMsg + "downloaded");
+            //tpkText.setText(tpkTextMsg + "downloaded");
+            setTpkStatus("downloaded");
             byte[] keyDataBytes = isoMessage == null ? null : (byte[]) isoMessage.getField(53).getValue();
             String keyData = keyDataBytes == null ? null : HexCodec.hexEncode(keyDataBytes, 0, keyDataBytes.length);
             tpkData = keyData;
@@ -470,6 +485,12 @@ public class DownloadTermParamsActivity extends BaseActivity {
         catch(Exception ex){
             ex.printStackTrace();
             showToast("Failed to download TPK!");
+            downloadStatusText.setText("TPK Key download failed ...");
+            setTpkStatus("Failed");
+            setTskStatus("Stopped");
+            setTermParamStatus("Stopped");
+            setCapkStatus("Stopped");
+            setAidStatus("Stopped");
         }
     }
 
@@ -514,9 +535,6 @@ public class DownloadTermParamsActivity extends BaseActivity {
 
             KeyUtils.saveTMK(mKey, tmk, tmkKcv);
             globalData.setTMKKeyFlag(true);
-            //String clearTmkFromNIBSS = KeyUtils.decryptWithDES(ctmk, tmk);
-            //ctmk = null;
-            //String clearTsk = KeyUtils.decryptWithDES(clearTmkFromNIBSS, tsk);
             KeyUtils.saveTSK(mKey, tsk, tskKcv);
             globalData.setMacKeyFlag(true);
             KeyUtils.saveTPK(mKey, tpk, tpkKcv);
@@ -527,9 +545,14 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 globalData.setKeysLoadedFlag(true);
             globalData.setLastKeyDownloadDate(System.currentTimeMillis());
 
-            tmkText.setText(tmkTextMsg + "done (loaded)");
+            /*
+            tmkText.setText(tmkTextMsg + "");
             tpkText.setText(tpkTextMsg + "done (loaded)");
             tskText.setText(tskTextMsg + "done (loaded)");
+            */
+            setTmkStatus("done (loaded)");
+            setTpkStatus("done (loaded)");
+            setTskStatus("done (loaded)");
             //showToast("Keys (TMK, TSK, TPK, IPEK Track 2, IPEK EMV) loaded");
 
             baseHandler.sendEmptyMessage(MSG_DOWNLOAD_NIBSS_TERM_PARAM);
@@ -538,6 +561,13 @@ public class DownloadTermParamsActivity extends BaseActivity {
             ex.printStackTrace();
             //showToast("Failed to download TSK!");
             baseHandler.obtainMessage(ShowToastFlag, "Failed to download TSK!").sendToTarget();
+            downloadStatusText.setText("TSK Key download failed ...");
+            setTmkStatus("downloaded (not loaded)");
+            setTpkStatus("downloaded (not loaded)");
+            setTskStatus("Failed");
+            setTermParamStatus("Stopped");
+            setCapkStatus("Stopped");
+            setAidStatus("Stopped");
         }
     }
 
@@ -643,6 +673,10 @@ public class DownloadTermParamsActivity extends BaseActivity {
         catch(Exception ex){
             ex.printStackTrace();
             showToast("Failed to download Terminal Param!");
+            downloadStatusText.setText("Terminal Param download failed ...");
+            setTermParamStatus("Failed");
+            setCapkStatus("Stopped");
+            setAidStatus("Stopped");
         }
     }
 
@@ -716,6 +750,9 @@ public class DownloadTermParamsActivity extends BaseActivity {
             ex.printStackTrace();
             //showToast("Failed to download CAPK!");
             baseHandler.obtainMessage(ShowToastFlag, "Failed to download CAPK!").sendToTarget();
+            downloadStatusText.setText("CAPK download failed ...");
+            setCapkStatus("Failed");
+            setAidStatus("Stopped");
         }
     }
 
@@ -796,6 +833,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
             ex.printStackTrace();
             //showToast("Failed to download AID!");
             baseHandler.obtainMessage(ShowToastFlag, "Failed to download AID!").sendToTarget();
+            downloadStatusText.setText("AID download failed ...");
+            setAidStatus("Failed");
         }
     }
 
@@ -808,6 +847,55 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 req == ConstantUtils.NETWORK_NIBSS_TERM_PARAM_DOWNLOAD_REQ_TYPE ||
                 req == ConstantUtils.NETWORK_IPEK_TRACK2_DOWNLOAD_REQ_TYPE ||
                 req == ConstantUtils.NETWORK_IPEK_EMV_DOWNLOAD_REQ_TYPE;
+    }
+
+
+    private void setAllDownloadStatus(String status){
+        ctmkText.setText(ctmkTextMsg + status);
+        cbdkText.setText(cbdkTextMsg + status);
+        emvParamText.setText(emvParamTextMsg + status);
+        tmkText.setText(tmkTextMsg + status);
+        tpkText.setText(tpkTextMsg + status);
+        tskText.setText(tskTextMsg + status);
+        aidText.setText(aidTextMsg + status);
+        capkText.setText(capkTextMsg + status);
+        termParamText.setText(termParamTextMsg + status);
+    }
+
+    private void setCtmkStatus(String status){
+        ctmkText.setText(ctmkTextMsg + status);
+    }
+
+    private void setBdkStatus(String status){
+        cbdkText.setText(cbdkTextMsg + status);
+    }
+
+    private void setEmvParamStatus(String status){
+        emvParamText.setText(emvParamTextMsg + status);
+    }
+
+    private void setTmkStatus(String status){
+        tmkText.setText(tmkTextMsg + status);
+    }
+
+    private void setTpkStatus(String status){
+        tpkText.setText(tpkTextMsg + status);
+    }
+
+    private void setTskStatus(String status){
+        tskText.setText(tskTextMsg + status);
+    }
+
+    private void setAidStatus(String status){
+        aidText.setText(aidTextMsg + status);
+    }
+
+    private void setCapkStatus(String status){
+        capkText.setText(capkTextMsg + status);
+    }
+
+    private void setTermParamStatus(String status){
+        termParamText.setText(termParamTextMsg + status);
     }
 
 

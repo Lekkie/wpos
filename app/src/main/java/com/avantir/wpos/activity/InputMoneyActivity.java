@@ -142,7 +142,7 @@ public class InputMoneyActivity extends BaseActivity {
 
             if(tranTypeFlag == ConstantUtils.PURCHASE) {
                 bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
-                intent.setClass(this, PayActivity.class);
+                intent.setClass(this, AccountTypeActivity.class);
             }
 
             intent.putExtras(bundle);
@@ -151,7 +151,7 @@ public class InputMoneyActivity extends BaseActivity {
             skipActivityAnim(1);
         }
         else {
-            showToast("Please enter ！");
+            showToast("Please enter amount！");
         }
     }
 

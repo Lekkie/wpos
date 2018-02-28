@@ -34,6 +34,7 @@
         </activity>
 
         <activity android:name=".activity.InputMoneyActivity" />
+        <activity android:name=".activity.AccountTypeActivity" />
         <activity android:name=".activity.PayActivity" />
         <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.HostConfigActivity" />

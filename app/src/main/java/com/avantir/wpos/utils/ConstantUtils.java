@@ -23,6 +23,10 @@ public class ConstantUtils {
     public static final String TRAN_AMT = "orderAmount";
     public static final int BANK_CARD = 1;
     public static final String PAYMENT_INSTRUMENT = "paymentInstrument";
+    public static final String ACCT_TYPE = "ACCT_TYPE";
+    public static final String SAVINGS_ACCT_TYPE = "10";
+    public static final String CURRENT_ACCT_TYPE = "20";
+    public static final String CREDIT_ACCT_TYPE = "30";
 
     public static final String ISO8583_APPROVED = "00";
 
@@ -55,7 +59,7 @@ public class ConstantUtils {
     public static final String TPK_DOWNLOAD_PROC_CODE = "9G0000";
     public static final String IPEK_TRACK2_DOWNLOAD_PROC_CODE = "9I0000";
     public static final String IPEK_EMV_DOWNLOAD_PROC_CODE = "9J0000";
-    public static final String PURCHASE_PROC_CODE = "000000";
+    public static final String PURCHASE_PROC_CODE = "00";
     public static final String ACCEPT_PIN_MODE_CAPABILITY = "1";
     public static final String NORMAL_PRESENTMENT_POS_CONDITION_CODE = "00";
 
