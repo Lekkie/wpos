@@ -72,8 +72,8 @@ public class TransInfo implements Serializable {
     private String msgReasonCode;
     @DatabaseField(unique=false, canBeNull = false)
     private String posDataCode;
-    @DatabaseField(unique=false, canBeNull = true)
-    private String status;
+    @DatabaseField(unique=false, canBeNull = true, columnName = "response_code")
+    private String responseCode;
     @DatabaseField(unique=false, canBeNull = true, columnName = "auth_num")
     private String authNum;
     @DatabaseField(unique=false, canBeNull = false)
@@ -82,14 +82,23 @@ public class TransInfo implements Serializable {
     private int completed = 0;
     @DatabaseField(unique=false, canBeNull = false, columnName = "created_on")
     private long createdOn = 0;
-
-
-
-    private String track3;//磁道3数据
-    private String cardTypeName;
-    private String cardHolderName;
+    @DatabaseField(unique=false, canBeNull = false, columnName = "masked_pan")
     private String maskedPan;
+    @DatabaseField(unique=false, canBeNull = false, columnName = "card_holder_name")
+    private String cardHolderName;
+    @DatabaseField(unique=false, canBeNull = false, columnName = "card_type_name")
+    private String cardTypeName;
+    @DatabaseField(unique=false, canBeNull = false, columnName = "account_type")
     private String accountType;
+    @DatabaseField(unique=false, canBeNull = false, columnName = "authentication_method")
+    private String authenticationMethod;
+
+
+
+    private String issuerCountry;
+    private String track3;//磁道3数据
+
+
     private int cardType;//卡类型
     private String posInputType;//卡输入方式.
     int tradeType;
@@ -530,12 +539,12 @@ public class TransInfo implements Serializable {
         this.authNum = authNum;
     }
 
-    public String getStatus() {
-        return status;
+    public String getResponseCode() {
+        return responseCode;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
     }
 
     public String getDeviceSerialNo() {
@@ -632,5 +641,21 @@ public class TransInfo implements Serializable {
 
     public void setCreatedOn(long createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public String getAuthenticationMethod() {
+        return authenticationMethod;
+    }
+
+    public void setAuthenticationMethod(String authenticationMethod) {
+        this.authenticationMethod = authenticationMethod;
+    }
+
+    public String getIssuerCountry() {
+        return issuerCountry;
+    }
+
+    public void setIssuerCountry(String issuerCountry) {
+        this.issuerCountry = issuerCountry;
     }
 }

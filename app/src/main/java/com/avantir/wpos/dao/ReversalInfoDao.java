@@ -21,8 +21,8 @@ public class ReversalInfoDao extends BaseDao<ReversalInfo, String> {
         return (reversalInfoList == null || reversalInfoList.size() < 1) ? null : reversalInfoList.get(0);
     }
 
-    public List<ReversalInfo>  findByStatus(String status) {
-        List<ReversalInfo> reversalInfoList = this.findBySQL("select * from " + TABLE_NAME + " where status = '" + status + "'");
+    public List<ReversalInfo>  findByResponseCode(String responseCode) {
+        List<ReversalInfo> reversalInfoList = this.findBySQL("select * from " + TABLE_NAME + " where response_code = '" + responseCode + "'");
         return reversalInfoList;
     }
 
@@ -41,8 +41,8 @@ public class ReversalInfoDao extends BaseDao<ReversalInfo, String> {
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
 
-    public void  updateStatusCompletionByRetRefNo(String retRefNo, String status, int completed) {
-        this.execute("update " + TABLE_NAME + " set status = '" + status + "', completed = " + completed
+    public void  updateResponseCodeCompletionByRetRefNo(String retRefNo, String responseCode, int completed) {
+        this.execute("update " + TABLE_NAME + " set response_code = '" + responseCode + "', completed = " + completed
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
 }

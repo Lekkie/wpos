@@ -18,6 +18,13 @@
             android:orientation="vertical">
 
 
+        <Button
+                android:id="@+id/default_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Default Account"/>
+
 
         <Button
                 android:id="@+id/savings_btn"

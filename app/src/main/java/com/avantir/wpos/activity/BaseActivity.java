@@ -1,7 +1,9 @@
 package com.avantir.wpos.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import com.avantir.wpos.R;
 import com.avantir.wpos.WPOSApplication;
 import com.avantir.wpos.interfaces.OnTraditionListener;
+import com.avantir.wpos.utils.ConstantUtils;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
@@ -23,18 +26,6 @@ import java.lang.reflect.Method;
  */
 public abstract class BaseActivity extends Activity implements View.OnClickListener, OnTraditionListener{
     private static final String TAG = "BaseActivity";
-    /**
-     * show logs
-     */
-    private static final int SHOWLOG = 1;
-    public static final int ShowToastFlag = 106;//Pop up Toast message
-    public static final int Hide_Progress = 10001;//New thread hidden progress bar
-    public static final int MSG_BACK = 0x1000, MSG_PROGRESS = MSG_BACK + 1,
-            MSG_ERROR = MSG_BACK + 2, MSG_RESULT = MSG_BACK + 3, MSG_CARD = MSG_BACK + 4,
-            MSG_SWIPE = MSG_BACK + 5, MSG_INFO = MSG_BACK + 6, MSG_START_COMMS = MSG_BACK + 7,
-            MSG_FINISH_COMMS = MSG_BACK + 8, MSG_FINISH_ERROR_COMMS = MSG_BACK + 9, MSG_START_PRINT = MSG_BACK + 10,
-            MSG_FINISH_PRINT = MSG_BACK + 11;
-    //INIT_COMMU,CONNECTING, SENDING, RECVING, FINISH
 
 
     protected BaseHandler baseHandler = new BaseHandler(this);
@@ -129,27 +120,40 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
         });
     }
 
+    protected void displayDialog(String msg) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                return;
+                            }
+                        });
+        builder.show();
+    }
 
     @Override
     public void onProgress(String progress) {
-        baseHandler.obtainMessage(MSG_PROGRESS, progress).sendToTarget();
+        baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, progress).sendToTarget();
     }
 
     /**
      * Hide the progress bar
      */
     public void hideProgress() {
-        baseHandler.obtainMessage(Hide_Progress).sendToTarget();
+        baseHandler.obtainMessage(ConstantUtils.Hide_Progress).sendToTarget();
     }
 
     @Override
     public void onError(int errorCode, String errorMsg) {
-        baseHandler.obtainMessage(MSG_ERROR, errorMsg).sendToTarget();
+        baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, errorMsg).sendToTarget();
     }
 
     @Override
     protected void onStop() {
-        baseHandler.removeMessages(MSG_BACK);
+        baseHandler.removeMessages(ConstantUtils.MSG_BACK);
         super.onStop();
     }
 
@@ -206,7 +210,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
      */
     public void LOGD(String msg) {
         Message message = new Message();
-        message.what = SHOWLOG;
+        message.what = ConstantUtils.SHOWLOG;
         message.obj = msg;
         baseHandler.sendMessage(message);
     }
@@ -244,13 +248,13 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
             Log.i(TAG, "handleMessage: what" + msg.what);
 
             switch (msg.what) {
-                case MSG_BACK:
+                case ConstantUtils.MSG_BACK:
                     onBack();
                     break;
-                case ShowToastFlag:
+                case ConstantUtils.ShowToastFlag:
                     showToast(theActivity, msg.obj.toString());
                     break;
-                case SHOWLOG:
+                case ConstantUtils.SHOWLOG:
                     sb.append(msg.obj + "\n");
                     Log.i(TAG, "handleMessage: getMessage - " + sb);
                     break;

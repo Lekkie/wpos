@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bg_app"
+>
+
+    <include layout="@layout/top_title"/>
+
+
+    <LinearLayout
+            android:id="@+id/printConfigLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#DDDDDD"
+            android:weightSum="10"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal" android:layout_weight="2">
+            <TextView
+                    android:id="@+id/printConfigHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold|italic"
+                    android:gravity="center"
+                    android:text="Print Config"
+                    android:textSize="20sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal" android:layout_weight="7" android:weightSum="1"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal" android:layout_weight="2" android:weightSum="1">
+
+            <TextView
+                    android:id="@+id/printConfigStatusText"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:textStyle="bold|italic"
+                    android:text="Printing..."
+                    android:textSize="20sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+

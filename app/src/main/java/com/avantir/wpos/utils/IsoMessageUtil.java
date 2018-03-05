@@ -452,7 +452,46 @@ public class IsoMessageUtil {
         return message.writeData();
     }
 
-    public static byte[] createPurchase(TransInfo transInfo) throws Exception{
+
+    public byte[] createDailyTransactionReportDownloadRequest() throws Exception{
+        GlobalData globalData = GlobalData.getInstance();
+        Date now = new Date(System.currentTimeMillis());
+        String transmissionDatetime = TimeUtil.getDateTimeMMddhhmmss(now);
+        int stan = globalData.getStan() + 1;
+        globalData.setStan(stan);
+        String formattedStan = StringUtil.leftPadding('0', 6, String.valueOf(stan));
+        String localTime = TimeUtil.getTimehhmmss(now);
+        String localDate = TimeUtil.getDateMMdd(now);
+        String tid  = globalData.getTerminalId();
+        String tidLen = StringUtil.leftPad(String.valueOf(tid.length()), 3, '0');
+        String mgtData2 = "01" + tidLen + tid; // 0100820390059
+
+        int type = Integer.parseInt(ConstantUtils._0800, 16);
+        IsoMessage message = messageFactory.newMessage(type);
+        IsoMessage templ = messageFactory.getMessageTemplate(type);
+        message.setValue(3, ConstantUtils.DAILY_REPORT_DOWNLOAD_PROC_CODE, templ.getField(3).getType(), templ.getField(3).getLength()); // LLVAR
+        message.setValue(7, transmissionDatetime, templ.getField(7).getType(), templ.getField(7).getLength());
+        message.setValue(11, formattedStan, templ.getField(11).getType(), templ.getField(11).getLength());
+        message.setValue(12, localTime, templ.getField(12).getType(), templ.getField(12).getLength());
+        message.setValue(13, localDate, templ.getField(13).getType(), templ.getField(13).getLength());
+        message.setValue(41, tid, templ.getField(41).getType(), templ.getField(41).getLength());
+        message.setValue(63, mgtData2, templ.getField(63).getType(), mgtData2.length());
+        message.setValue(64, new String(new byte[] { 0x0 }), templ.getField(64).getType(), templ.getField(64).getLength());
+        byte[] bytes = message.writeData();
+        int length = bytes.length;
+        byte[] temp = new byte[length - 64];
+        if (length >= 64) {
+            System.arraycopy(bytes, 0, temp, 0, length - 64);
+        }
+        String hashValue = KeyUtils.getMac(clearTsk, temp); //SHA256
+        message.setValue(64, hashValue, templ.getField(64).getType(), templ.getField(64).getLength());
+
+        System.out.println(message.debugString());
+        return message.writeData();
+    }
+
+
+    public static byte[] createRequest(TransInfo transInfo) throws Exception{
 
         String pan = transInfo.getCardNo();
         String amt = StringUtil.leftPad(transInfo.getAmt(), 12, '0');
@@ -592,7 +631,6 @@ public class IsoMessageUtil {
         return message.writeData();
     }
 
-
     public static byte[] createPinChange(TransInfo transInfo) throws Exception{
         return null;
     }
@@ -687,5 +725,18 @@ public class IsoMessageUtil {
 
     public static void setSessionKeyInit(boolean sessionKeyInit) {
         IsoMessageUtil.sessionKeyInit = sessionKeyInit;
+    }
+
+
+    public static String getAccountTypeName(String acctType){
+        if("00".equalsIgnoreCase(acctType))
+            return "DEFAULT";
+        if("10".equalsIgnoreCase(acctType))
+            return "SAVINGS";
+        else if("20".equalsIgnoreCase(acctType))
+            return "CURRENT";
+        else if("30".equalsIgnoreCase(acctType))
+            return "CREDIT";
+        return "DEFAULT";
     }
 }

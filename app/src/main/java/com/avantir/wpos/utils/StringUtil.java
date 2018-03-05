@@ -189,8 +189,12 @@ public class StringUtil {
         String lastPart = pan.substring(len - 4, len);
 
         //take the middle part (******)
-        int middlePartLength = len - 10;
-        String middleLastPart = leftPad(lastPart, middlePartLength + 4, '*');
+        //int middlePartLength = len - 10;
+        //String middleLastPart = leftPad(lastPart, middlePartLength + 4, '*');
+
+        int middlePartLength = len - 6;
+        String middleLastPart = leftPad("", middlePartLength, '*');
+
         return firstPart + middleLastPart;
     }
 

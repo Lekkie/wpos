@@ -6,6 +6,7 @@ import android.os.RemoteException;
 import android.view.View;
 import android.widget.Toast;
 import com.avantir.wpos.R;
+import com.avantir.wpos.dialog.SupervisorPINPadDialog;
 import com.avantir.wpos.utils.ConstantUtils;
 import com.avantir.wpos.utils.GlobalData;
 import wangpos.sdk4.libbasebinder.Printer;
@@ -22,7 +23,7 @@ public class MainMenuActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_menu);
         initView();
         setActionBar();
 
@@ -37,6 +38,11 @@ public class MainMenuActivity extends BaseActivity {
 
         findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         this.findViewById(R.id.purchase_btn).setOnClickListener(this);
+        this.findViewById(R.id.balance_btn).setOnClickListener(this);
+        this.findViewById(R.id.refund_btn).setOnClickListener(this);
+        this.findViewById(R.id.reprint_btn).setOnClickListener(this);
+        this.findViewById(R.id.end_of_day_btn).setOnClickListener(this);
+        this.findViewById(R.id.admin_btn).setOnClickListener(this);
         this.findViewById(R.id.titleSettingsImage).setOnClickListener(this);
     }
 
@@ -50,17 +56,54 @@ public class MainMenuActivity extends BaseActivity {
 
         switch (v.getId()) {
             case R.id.titleSettingsImage:
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                Intent settingsIntent = new Intent(this, AdminActivity.class);
                 startActivity(settingsIntent);
                 break;
             case R.id.purchase_btn:
                 if(performTransactionChecks()){
-                    Intent purchaseIntent = new Intent(this, InputMoneyActivity.class);
+                    Intent intent = new Intent(this, InsertCardActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
-                    purchaseIntent.putExtras(bundle);
-                    startActivity(purchaseIntent);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
+                break;
+            case R.id.balance_btn:
+                if(performTransactionChecks()){
+                    Intent intent = new Intent(this, InsertCardActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.BALANCE);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.refund_btn:
+                if(performTransactionChecks()){
+                    SupervisorPINPadDialog.getInstance().showDialog(this);
+                    /*
+                    Intent intent = new Intent(this, InsertCardActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.REFUND);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    */
+                }
+                break;
+            case R.id.reprint_btn:
+                if(performPrinterChecks()){
+                    Intent reprintIntent = new Intent(this, ReprintActivity.class);
+                    startActivity(reprintIntent);
+                }
+                break;
+            case R.id.end_of_day_btn:
+                if(performPrinterChecks()){
+                    Intent intent = new Intent(this, EoDActivity.class);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.admin_btn:
+                Intent adminIntent = new Intent(this, AdminActivity.class);
+                startActivity(adminIntent);
                 break;
         }
     }
@@ -75,72 +118,99 @@ public class MainMenuActivity extends BaseActivity {
     private boolean performTransactionChecks(){
         try{
             GlobalData globalData = GlobalData.getInstance();
-            // if keys are loaded (CTMK, TMK, TSK, TPK, IPEK Track 2, IPEK EMV)
-            int ret = -1;
-            try {
-                ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_TLK);
-                if (ret != 0 || !globalData.getLocalMasterKeyLoadedFlag()) {
-                    Toast.makeText(this, "Ensure TLK is loaded", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_TMK);
-                if (ret != 0 || !globalData.getTMKKeyFlag()) {
-                    Toast.makeText(this, "Ensure TMK is loaded", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_MAK);
-                if (ret != 0 || !globalData.getMacKeyFlag()) {
-                    Toast.makeText(this, "Ensure MAK is loaded", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_PEK);
-                if (ret != 0 || !globalData.getPinKeyFlag()) {
-                    Toast.makeText(this, "Ensure PEK is loaded", Toast.LENGTH_LONG).show();
-                    return false;
-                }
+            boolean success = performKeyChecks(globalData);
+            if(!success)
+                return success;
 
-                if(!(globalData.getKeysLoadedFlag())){
-                    Toast.makeText(this, "Ensure all Keys are loaded", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Error while checking loaded keys", Toast.LENGTH_LONG).show();
-                return false;
-            }
+            success = performEMVParamChecks(globalData);
+            if(!success)
+                return success;
 
-
-            // if EMV params are laoded (AID, CAPK, EMV, Term Params)
-            if(!(globalData.getLogin() && globalData.getAIDLoadedFlag()
-                    && globalData.getCAPKLoadedFlag() && globalData.getEMVParamsLoadedFlag()
-                    && globalData.getTerminalParamsLoadedFlag())){
-                Toast.makeText(this, "Ensure Terminal Parameters are loaded", Toast.LENGTH_LONG).show();
-                return false;
-            }
-
-
-            // if there is paper in printer
-            int[] status = new int[1];
-            ret = -1;
-            try {
-                ret = mPrinter.getPrinterStatus(status);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            if(ret != 0 || status[0] != 0){
-                Toast.makeText(this, "Check Printer (paper)", Toast.LENGTH_LONG).show();
-                return false;
-            }
+            return  performPrinterChecks();
         }
         catch(Exception ex){
             ex.printStackTrace();
             return false;
         }
-
-        return true;
     }
 
 
+    private boolean performKeyChecks(GlobalData globalData) {
+        int ret = -1;
+        try {
+            // if keys are loaded (CTMK, TMK, TSK, TPK, IPEK Track 2, IPEK EMV)
+            ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_TLK);
+            if (ret != 0 || !globalData.getLocalMasterKeyLoadedFlag()) {
+                Toast.makeText(this, "Ensure TLK is loaded", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_TMK);
+            if (ret != 0 || !globalData.getTMKKeyFlag()) {
+                Toast.makeText(this, "Ensure TMK is loaded", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_MAK);
+            if (ret != 0 || !globalData.getMacKeyFlag()) {
+                Toast.makeText(this, "Ensure MAK is loaded", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_PEK);
+            if (ret != 0 || !globalData.getPinKeyFlag()) {
+                Toast.makeText(this, "Ensure PEK is loaded", Toast.LENGTH_LONG).show();
+                return false;
+            }
 
+            if(!(globalData.getKeysLoadedFlag())){
+                Toast.makeText(this, "Ensure all Keys are loaded", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error while checking loaded keys", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean performEMVParamChecks(GlobalData globalData){
+        int ret = -1;
+        // if EMV params are laoded (AID, CAPK, EMV, Term Params)
+        if(!(globalData.getLogin() && globalData.getAIDLoadedFlag()
+                && globalData.getCAPKLoadedFlag() && globalData.getEMVParamsLoadedFlag()
+                && globalData.getTerminalParamsLoadedFlag())){
+            //Toast.makeText(this, "Ensure Terminal Parameters are loaded", Toast.LENGTH_LONG).show();
+            displayDialog("Ensure Terminal Parameters are loaded");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean performPrinterChecks(){
+
+        int ret = -1;
+        // if there is paper in printer
+        int[] status = new int[1];
+        ret = -1;
+        try {
+            ret = mPrinter.getPrinterStatus(status);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        if(ret != 0 || status[0] != 0){
+            //Toast.makeText(this, "Check Printer (paper)", Toast.LENGTH_LONG).show();
+            displayDialog("Printer not ready");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
 
 }

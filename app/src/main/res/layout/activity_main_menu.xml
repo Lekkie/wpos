@@ -3,67 +3,64 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:fitsSystemWindows="true">
+              android:fitsSystemWindows="true"
+              tools:context="com.avantir.wpos.activity.MainMenuActivity">
 
 
     <include
-            layout="@layout/top_title"/>
+            layout="@layout/top_title"
+    />
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="4"
+            android:layout_weight="6"
             android:orientation="vertical">
 
 
-        <!--
         <Button
-                android:id="@+id/load_ctmk_btn"
+                android:id="@+id/purchase_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Load CTMK"/>
+                android:text="Purchase"/>
+
         <Button
-                android:id="@+id/load_bdk_btn"
+                android:id="@+id/balance_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Load BDK"/>
+                android:text="Balance"/>
 
         <Button
-                android:id="@+id/term_settings_btn"
+                android:id="@+id/refund_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Download Terminal Settings"/>
+                android:text="Refund"/>
 
         <Button
-                android:id="@+id/download_key_btn"
+                android:id="@+id/reprint_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Download Keys"/>
-        -->
+                android:text="Reprint"/>
 
         <Button
-                android:id="@+id/setup_mgt_host_btn"
+                android:id="@+id/end_of_day_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Setup Mgt Host"/>
+                android:text="End of Day"/>
 
         <Button
-                android:id="@+id/download_terminal_params_btn"
+                android:id="@+id/admin_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Download Terminal Params"/>
-
-
-
-
+                android:text="Admin"/>
 
     </LinearLayout>
 

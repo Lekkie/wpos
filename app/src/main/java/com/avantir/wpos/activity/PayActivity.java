@@ -7,31 +7,31 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.avantir.wpos.R;
 import com.avantir.wpos.WPOSApplication;
 import com.avantir.wpos.dao.ReversalInfoDao;
 import com.avantir.wpos.dao.TransInfoDao;
 import com.avantir.wpos.dialog.KeyPadDialog;
-import com.avantir.wpos.interfaces.ICommsListener;
 import com.avantir.wpos.model.ReversalInfo;
+import com.avantir.wpos.printer.PrintTransactionThread;
 import com.avantir.wpos.utils.IsoMessageUtil;
-import com.avantir.wpos.listeners.CommsListener;
 import com.avantir.wpos.listeners.PINPadListener;
 import com.avantir.wpos.listeners.EMVPINPadListener;
 import com.avantir.wpos.model.TransInfo;
 import com.avantir.wpos.services.TcpComms;
 import com.avantir.wpos.services.EMVManager;
-import com.avantir.wpos.threads.PrintThread;
 import com.avantir.wpos.utils.*;
 import com.solab.iso8583.IsoMessage;
 import sdk4.wangpos.libemvbinder.EmvCore;
 import wangpos.sdk4.emv.ICallbackListener;
-import wangpos.sdk4.libbasebinder.BankCard;
 import wangpos.sdk4.libbasebinder.Core;
 import wangpos.sdk4.libbasebinder.Printer;
 
@@ -47,14 +47,12 @@ public class PayActivity extends BaseActivity {
 
     private TextView tranStatusText;
     private TextView infoText;
-    //private String strTxt = "";
-    public static final int MSG_START_TRANS = 0x2000;
 
     private Bundle bundle;
 
     private boolean isOffLine = false;
     //order amount
-    private int orderAmount;
+    private long orderAmount;
     private String accountType;
     //Transaction type flag
     private int tranTypeFlag = ConstantUtils.PURCHASE;
@@ -64,13 +62,19 @@ public class PayActivity extends BaseActivity {
     private Context context;
     private Core mCore;
     private EmvCore emvCore;
-    private BankCard mBankCard;
+
+
     TransInfo transInfo;
     ReversalInfo reversalInfo;
     private Printer mPrinter;
 
     TransInfoDao transInfoDao;
     ReversalInfoDao reversalInfoDao;
+    boolean transactionInProgress = true;
+    boolean printingInProgress = false;
+    boolean customerReceiptPrinted = false;
+    boolean merchantReceiptPrinted = false;
+
 
 
     @Override
@@ -87,12 +91,15 @@ public class PayActivity extends BaseActivity {
         //Top title bar
         ImageView titleBackImage = (ImageView) findViewById(R.id.titleBackImage);
         titleBackImage.setOnClickListener(this);
-        TextView titleNameText = (TextView) findViewById(R.id.titleNameText);
-        titleNameText.setText("Cashier");
-
-        WPOSApplication.activityList.add(this);
         tranStatusText = (TextView) findViewById(R.id.transactionStatusText);
         infoText = (TextView) findViewById(R.id.infoText);
+
+        tranStatusText.setOnClickListener(this);
+        infoText.setOnClickListener(this);
+        ((LinearLayout) findViewById(R.id.payDummy)).setOnClickListener(this);
+
+        WPOSApplication.activityList.add(this);
+
     }
 
     @Override
@@ -106,17 +113,17 @@ public class PayActivity extends BaseActivity {
         }
         tranTypeFlag = bundle.getInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
         paymentInstrumentFlag = bundle.getInt(ConstantUtils.PAYMENT_INSTRUMENT, ConstantUtils.BANK_CARD);
-        orderAmount = bundle.getInt(ConstantUtils.TRAN_AMT, 0);
+        orderAmount = bundle.getLong(ConstantUtils.TRAN_AMT, 0);
+        ((TextView) findViewById(R.id.titleNameText)).setText("Amount: ₦" + MoneyUtil.kobo2Naira(orderAmount));
         accountType = bundle.getString(ConstantUtils.ACCT_TYPE, "00");
-
 
         transInfoDao = new TransInfoDao(WPOSApplication.app);
         reversalInfoDao = new ReversalInfoDao(WPOSApplication.app);
-        //transInfo = TransInfo.getInstance();
-        //transInfo.init();
         transInfo = new TransInfo();
         reversalInfo = new ReversalInfo();
         globalData = GlobalData.getInstance();
+        KeyPadDialog.getInstance().clearPinRetries();
+
 
 
         new Thread(new Runnable() {
@@ -124,7 +131,7 @@ public class PayActivity extends BaseActivity {
             public void run() {
                 emvCore = new EmvCore(getApplicationContext());
                 mCore = new Core(getApplicationContext());
-                mBankCard = new BankCard(getApplicationContext());
+                //mBankCard = new BankCard(getApplicationContext());
                 mPrinter = new Printer(getApplicationContext());
 
                 try{
@@ -151,7 +158,8 @@ public class PayActivity extends BaseActivity {
                     ex.printStackTrace();
                 }
 
-                startTransaction();
+                String cardType = bundle.getString(ConstantUtils.CARD_TYPE, ConstantUtils.ICC_CARD_TYPE);
+                readCardInfo(cardType);
 
             }
         }).start();
@@ -162,8 +170,15 @@ public class PayActivity extends BaseActivity {
         switch (v.getId())
         {
             case R.id.titleBackImage:
-                finish();
-                skipActivityAnim(-1);
+                back();
+                break;
+            case R.id.transactionStatusText:
+            case R.id.infoText:
+            case R.id.payDummy:
+                if(customerReceiptPrinted && transactionInProgress && !printingInProgress && !merchantReceiptPrinted) {
+                    printingInProgress = true;
+                    print(false);
+                }
                 break;
             default:
                 break;
@@ -176,108 +191,74 @@ public class PayActivity extends BaseActivity {
     protected void handleMessage(Message msg) {
         Log.i(PayActivity.class.getSimpleName(), "handleMessage: "+msg.what);
         switch (msg.what) {
-            case 2:
-                setTransactionStatusActionTip("get card information success,start trading ,pls connect your services ...");
-                break;
-            case MSG_ERROR:
+            //case 2:
+            //    setTransactionStatusActionTip("get card information success,start trading ,pls connect your services ...");
+            //    break;
+            case ConstantUtils.MSG_ERROR:
                 //myHandler.sendMessage(myHandler.obtainMessage(WhetherRetryVisiableTrue, msg.obj));
                 setTransactionStatusActionTip(msg.obj + "");
                 break;
-            case MSG_PROGRESS:
+            case ConstantUtils.MSG_PROGRESS:
                 //myHandler.sendMessage(myHandler.obtainMessage(WhetherRetryVisiableFlase, msg.obj));
                 setTransactionStatusActionTip(msg.obj + "");
                 break;
-            case Hide_Progress:
+            case ConstantUtils.Hide_Progress:
                // Hide the progress
                 hideTransactionStatusActionTip();
                 break;
-            case MSG_START_TRANS:
+            case ConstantUtils.MSG_START_TRANS:
                 // start processing card things
                 break;
-            case MSG_START_COMMS:
+            case ConstantUtils.MSG_START_COMMS:
                 // start processing transaction online
                 doPurchase();
                 break;
-            case MSG_FINISH_COMMS:
+            case ConstantUtils.MSG_FINISH_COMMS:
                 // end comms
                 byte[] receiveData = (byte[])msg.obj;
                 processResponse(msg.getData(), receiveData);
-                baseHandler.obtainMessage(MSG_INFO, "Please remove card").sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                 break;
-            case  MSG_FINISH_ERROR_COMMS:
+            case  ConstantUtils.MSG_FINISH_ERROR_COMMS:
                 // end comms with error
                 processFailedResponse(Integer.parseInt(msg.obj.toString()), msg.getData());
-                baseHandler.obtainMessage(MSG_PROGRESS, "Failed").sendToTarget();
-                baseHandler.obtainMessage(MSG_INFO, "Please remove card").sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                 break;
-            case MSG_INFO:
+            case ConstantUtils.MSG_INFO:
                 // Hide the progress
                 setInfoActionTip(msg.obj.toString());
                 break;
-            case MSG_START_PRINT:
+            case ConstantUtils.MSG_START_PRINT:
                 // Print Receipt
-                new PrintThread(mPrinter, baseHandler, transInfo, true).start();
+                printingInProgress = true;
+                print(true);
                 break;
-            case MSG_FINISH_PRINT:
+            case ConstantUtils.MSG_FINISH_PRINT:
                 // go to main page
-                finishAndReturnMainActivity();
-                break;
-        }
-    }
-
-    private void startTransaction() {
-        baseHandler.obtainMessage(MSG_PROGRESS, "waiting read card...").sendToTarget();
-
-        try {
-            mBankCard.breakOffCommand();//结束上一笔交易的命令(Order to close the previous transaction)
-            byte[] outData = new byte[512];
-            int[] outDataLen = new int[1];
-            int result = mBankCard.readCard(BankCard.CARD_TYPE_NORMAL, BankCard.CARD_MODE_PICC|BankCard.CARD_MODE_ICC|BankCard.CARD_MODE_MAG,0x60,outData,outDataLen,"app1");
-            baseHandler.obtainMessage(MSG_INFO, "Please do not remove card").sendToTarget();
-            if (result == 0) {
-                Log.d("outData", ByteUtil.bytes2HexString(outData));
-                switch (outData[0]) {
-                    case 0x01:
-                        //Read card failed
-                        baseHandler.obtainMessage(MSG_ERROR, "Failed to read card").sendToTarget();
-                        break;
-                    case 0x02:
-                        //Read card success,but encryption processing failed
-                        baseHandler.obtainMessage(MSG_ERROR, "Readcard, but encryption processing failed").sendToTarget();
-                        break;
-                    case 0x03:
-                        //Read card timeout
-                        baseHandler.obtainMessage(MSG_ERROR, "Timeout reading card").sendToTarget();
-                        break;
-                    case 0x04:
-                        //Cancel read card
-                        baseHandler.obtainMessage(MSG_ERROR, "Cancelled while reading card").sendToTarget();
-                        break;
-                    case 0x05:
-                        //Read card success,type ICC
-                        baseHandler.obtainMessage(MSG_PROGRESS, "Chip (IC) card detected").sendToTarget();
-                        mCore.buzzer();
-                        readCardInfo(ConstantUtils.ICC_CARD_TYPE);
-                        break;
-                    //case 0x07:
-                    //Read card success,type PICC
-                    // baseHandler.obtainMessage(MSG_PROGRESS, "Contactless card detected").sendToTarget();
-                    //   mCore.buzzer();
-                    //   readCardInfo(ConstantUtils.PICC_CARD_TYPE);
-                    //   break;
+                boolean customerCopy = Boolean.parseBoolean(msg.obj.toString());
+                if(customerCopy) {
+                    // wait for key press to print merchant copy
+                    customerReceiptPrinted = true;
+                    printingInProgress = false;
+                    // press back key or any key,to initiate merchant print
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.PRESS_PRINT_MERCHANT_COPY).sendToTarget();
                 }
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
+                else {
+                    merchantReceiptPrinted = true;
+                    printingInProgress = false;
+                    transactionInProgress = false;
+                    finishAndReturnMainActivity();
+                }
+                break;
         }
     }
 
 
     private void readCardInfo(String s) {
         isOffLine = false;
-        baseHandler.obtainMessage(MSG_PROGRESS, "read card success ..." + s).sendToTarget();
+        //baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "read card success ..." + s).sendToTarget();
         transInfo.setPosInputType(s);
-
         EMVManager.setEMVManager(context,baseHandler,emvCore);
         switch (s) {
             case ConstantUtils.ICC_CARD_TYPE:
@@ -292,23 +273,54 @@ public class PayActivity extends BaseActivity {
 
     private void readEMVCardInfo(){
         try {
-            baseHandler.obtainMessage(MSG_PROGRESS, ConstantUtils.WAITING_MSG).sendToTarget();
+            baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, ConstantUtils.WAITING_MSG).sendToTarget();
 
             int result = EMVManager.PBOC_Simple(transInfo, iCallBackListener);
 
-            if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
-                baseHandler.obtainMessage(MSG_ERROR, "EMV-Process fail==" + result).sendToTarget();
+            if(TimeUtil.hasExpired(transInfo.getExpDate())){
+                baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.INVALID_CARD).sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
+                transactionInProgress = false;
+            }
+            else if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
+                if (result == -20){
+                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.CARD_REMOVED).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.INSERT_CARD).sendToTarget();
+                    transactionInProgress = false;
+                }
+                else
+                {
+                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED + result).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
+                    transactionInProgress = false;
+                }
             }
             else {
                 int transType = transInfo.getTradeType();
+
                 //Log.v(TAG, "PBOC_Simple。transType==" + transType);
                 if (transType == ConstantUtils.Type_QueryBalance || transType == ConstantUtils.Type_Sale
                         || transType == ConstantUtils.Type_Auth || transType == ConstantUtils.Type_CoilingSale) {
-                    // TODO: 2017/10/11 Blocking method, return the transaction result
+
                     int transResult = EMVManager.EMV_TransProcess(transInfo, iCallBackListener);
                     //Log.d(TAG,"checkResult=="+transResult);
                     if (transResult != -8) {
-                        baseHandler.obtainMessage(MSG_ERROR, "EMV-Process fail").sendToTarget();
+                        if(transResult == -4){
+                            // User canceled
+                            onBack();
+                        }
+                        else if(transResult == 5){ // timeout
+                            // Timeout, go to main menu or display error with decline or timeout msg?
+                            KeyPadDialog.getInstance().dismissDialog();
+                            baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                            baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
+                        }
+                        else{
+                            KeyPadDialog.getInstance().dismissDialog();
+                            baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                            baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
+                        }
+                        transactionInProgress = false;
                     }
                 } else {
                     displayPinPad(ConstantUtils.PICC_CARD_TYPE);
@@ -322,16 +334,21 @@ public class PayActivity extends BaseActivity {
 
     private void readContactlessCardInfo(){
         try {
-            baseHandler.obtainMessage(MSG_PROGRESS, ConstantUtils.WAITING_MSG).sendToTarget();
+            baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, ConstantUtils.WAITING_MSG).sendToTarget();
             int result = EMVManager.QPBOC_PreProcess(transInfo, iCallBackListener);
             if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
                 //Log.d(TAG, "QPBOC_PreProcess fail，result==" + result);
+                baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "").sendToTarget();
+                transactionInProgress = false;
             } else {
                 result = EMVManager.PBOC_Simple(transInfo, iCallBackListener);
                 if (result == ConstantUtils.EMV_OPERATION_SUCCESS) {
                     displayPinPad(ConstantUtils.PICC_CARD_TYPE);
                 } else {
-                    baseHandler.obtainMessage(MSG_ERROR, "PBOC fail result==" + result).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "").sendToTarget();
+                    transactionInProgress = false;
                     //Log.d(TAG, "PBOC_Simple fail，result==" + result);
                 }
             }
@@ -351,13 +368,12 @@ public class PayActivity extends BaseActivity {
     }
 
 
-
-
     private CountDownLatch countDownLatch = null;
     private ICallbackListener iCallBackListener = new ICallbackListener.Stub() {
         @Override
         public int emvCoreCallback(final int command, final byte[] data, final byte[] result, final int[] resultlen) throws RemoteException {
             countDownLatch = new CountDownLatch(1);
+            final KeyPadDialog keyPadDialog = KeyPadDialog.getInstance();
             //Log.d(TAG, "emvCoreCallback。command==" + command);
             switch (command) {
                 case 2818: //Core.CALLBACK_PIN
@@ -365,22 +381,30 @@ public class PayActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            KeyPadDialog.getInstance().showDialog((Activity) context, command, data, result, resultlen, new EMVPINPadListener(baseHandler, countDownLatch));
+                            keyPadDialog.showDialog((Activity) context, command, data, result, resultlen, transInfo.getCardNo(), new EMVPINPadListener(baseHandler, countDownLatch));
+                            transInfo.setAuthenticationMethod("PIN");
                         }
                     });
                     break;
                 case 2821://Core.CALLBACK_ONLINE
                     Log.i("iCallbackListener", "Core.CALLBACK_ONLINE");
-                    //strTxt = "getCardInformation …";
-                    //baseHandler.sendEmptyMessage(0);
-                    baseHandler.obtainMessage(MSG_PROGRESS, "Sending transaction online").sendToTarget();
-                    int ret = EMVManager.EMV_OnlineProc(result, resultlen,countDownLatch,baseHandler, transInfo);
-                    Log.i("iCallbackListener", "Core.CALLBACK_ONLINE, ret = " + ret);
+                    int pinRetry = keyPadDialog.getCurrentPinRetry();
+                    if(pinRetry >= keyPadDialog.getMaxPinRetry()){
+                        KeyPadDialog.getInstance().dismissDialog();
+                        baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.WRONG_PIN).sendToTarget();
+                        baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
+                        transactionInProgress = false;
+                    }
+                    else{
+                        baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "Sending transaction online").sendToTarget();
+                        int ret = EMVManager.EMV_OnlineProc(result, resultlen,countDownLatch,baseHandler, transInfo);
+                        Log.i("iCallbackListener", "Core.CALLBACK_ONLINE, ret = " + ret);
+                    }
                     break;
                 case 2823:
                     //strTxt = "OffLine pin check success";
                     //baseHandler.sendEmptyMessage(0);
-                    baseHandler.obtainMessage(MSG_PROGRESS, "PIN Check succesfull").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "Correct PIN").sendToTarget();
                     countDownLatch.countDown();
                     break;
                 case 2817://Core.CALLBACK_NOTIFY
@@ -427,24 +451,22 @@ public class PayActivity extends BaseActivity {
             transInfo.setPosConditionCode(ConstantUtils.NORMAL_PRESENTMENT_POS_CONDITION_CODE);
             transInfo.setPosPinCaptureCode(StringUtil.leftPadding("0", 2, String.valueOf(ConstantUtils.MAX_PIN_LENGTH)));
             transInfo.setPosEntryMode(transInfo.getPosInputType() + ConstantUtils.ACCEPT_PIN_MODE_CAPABILITY);
-            transInfo.setSurcharge("C" + StringUtil.leftPadding("0", 7, globalData.getPurchaseSurcharge()));
+            transInfo.setSurcharge("C" + StringUtil.leftPadding("0", 8, globalData.getPurchaseSurcharge()));
             transInfo.setAcqInstId(globalData.getAcquirerId());
             transInfo.setMerchantLoc(IsoMessageUtil.getIso8583MerchantLoc(globalData.getMerchantLoc()));
             transInfo.setCurrencyCode(globalData.getCurrencyCode().substring(1));
             transInfo.setPosDataCode(globalData.getPOSDataCode());
-            transInfo.setCreatedOn(System.currentTimeMillis());
+            transInfo.setCreatedOn(TimeUtil.getTimeInEpoch(new Date(System.currentTimeMillis())));
             transInfoDao.create(transInfo);
             //transInfo = transInfoDao.findByRetRefNo(transInfo.getRetRefNo()); // get database ID
 
-            data = IsoMessageUtil.createPurchase(transInfo);
-            GlobalData globalData = GlobalData.getInstance();
-            TcpComms comms = new TcpComms(globalData.getCTMSHost(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
-            ICommsListener commsListener = new CommsListener(baseHandler, ConstantUtils.NETWORK_PURCHASE_REQ_TYPE);
-            comms.dataCommu(this, data, commsListener);
+            TcpComms comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+            NIBSSRequests.doPurchase(transInfo, comms, baseHandler);
         }
         catch(Exception ex){
             ex.printStackTrace();
-            baseHandler.obtainMessage(MSG_ERROR, "Error while trying to ").sendToTarget();
+            baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Error while trying to ").sendToTarget();
+            transactionInProgress = false;
             return;
         }
     }
@@ -479,7 +501,7 @@ public class PayActivity extends BaseActivity {
                             boolean isRepeat = false;
                             if(reversalInfo == null) {
                                 reversalInfo = IsoMessageUtil.createReversalInfo(transInfo, msgReasonCode);
-                                reversalInfo.setCreatedOn(System.currentTimeMillis());
+                                reversalInfo.setCreatedOn(TimeUtil.getTimeInEpoch(new Date(System.currentTimeMillis())));
                                 reversalInfoDao.create(reversalInfo);
                             }
                             else{
@@ -489,16 +511,18 @@ public class PayActivity extends BaseActivity {
                                 reversalInfoDao.updateRetryByRetRefNo(retRefNo, retryNo);
                             }
                             transInfoDao.updateCompletionStatusByRetRefNo(retRefNo, 1);
-                            String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo,  isRepeat);
-                            reversalInfo.setStatus(StringUtil.isEmpty(responseCode) ? "" : responseCode);
+                            TcpComms comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+                            String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo,  isRepeat, comms);
+                            reversalInfo.setResponseCode(StringUtil.isEmpty(responseCode) ? "" : responseCode);
                             reversalInfo.setCompleted(1);
-                            reversalInfoDao.updateStatusCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getStatus(), reversalInfo.getCompleted());
+                            reversalInfoDao.updateResponseCodeCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getResponseCode(), reversalInfo.getCompleted());
                             transInfo.setReversed(1);
                             transInfo.setCompleted(1);
-                            transInfoDao.updateReversalCompletionStatusByRetRefNo(transInfo.getRetRefNo(), transInfo.getReversed(), transInfo.getCompleted());
+                            transInfoDao.updateReversalCompletionByRetRefNo(transInfo.getRetRefNo(), transInfo.getReversed(), transInfo.getCompleted());
                         }
                         catch(Exception ex){
                             ex.printStackTrace();
+                            transactionInProgress = false;
                         }
                     }
                 }).start();
@@ -513,11 +537,12 @@ public class PayActivity extends BaseActivity {
                         }
                         catch(Exception ex){
                             ex.printStackTrace();
+                            transactionInProgress = false;
                         }
                     }
                 }).start();
             }
-            baseHandler.sendEmptyMessage(MSG_START_PRINT);
+            baseHandler.sendEmptyMessage(ConstantUtils.MSG_START_PRINT);
         }
     }
     private void doPurchaseResponse(byte[] respData){
@@ -525,14 +550,15 @@ public class PayActivity extends BaseActivity {
             IsoMessage isoMsgResponse = IsoMessageUtil.getInstance().decode(respData);
             System.out.println(isoMsgResponse.debugString());
             String responseCode = isoMsgResponse.getObjectValue(39);
-            String responseMsg = "00".equalsIgnoreCase(responseCode) ? "Approved" : "Declined";
-            baseHandler.obtainMessage(MSG_PROGRESS, responseMsg).sendToTarget();
-            transInfo.setStatus(StringUtil.isEmpty(responseCode) ? "96" : responseCode);
+            String responseMsg = "00".equalsIgnoreCase(responseCode) ? ConstantUtils.TRANSACTION_APPROVED : ConstantUtils.TRANSACTION_DECLINED;
+            responseMsg = "51".equalsIgnoreCase(responseCode) ?  ConstantUtils.INSUFFICIENT_FUNDS : responseMsg;
+            baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, responseMsg).sendToTarget();
+            transInfo.setResponseCode(StringUtil.isEmpty(responseCode) ? "96" : responseCode);
             String authNum = isoMsgResponse.getObjectValue(38);
             transInfo.setAuthNum(StringUtil.isEmpty(authNum) ? "" : authNum);
             transInfo.setCompleted(1);
-            transInfoDao.updateStatusAuthNumCompletedByRetRefNo(transInfo.getRetRefNo(), transInfo.getStatus(), transInfo.getAuthNum(), transInfo.getCompleted());
-            baseHandler.sendEmptyMessage(MSG_START_PRINT);
+            transInfoDao.updateResponseCodeAuthNumCompletedByRetRefNo(transInfo.getRetRefNo(), transInfo.getResponseCode(), transInfo.getAuthNum(), transInfo.getCompleted());
+            baseHandler.sendEmptyMessage(ConstantUtils.MSG_START_PRINT);
         }
         catch(Exception ex){
             ex.printStackTrace();
@@ -560,12 +586,31 @@ public class PayActivity extends BaseActivity {
     }
     */
 
+
+    private void print(boolean customerCopy){
+        //new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
+        baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
+    }
+
+    private void back(){
+        //finish();
+        //skipActivityAnim(-1);
+        startActivity(new Intent(PayActivity.this, MainActivity.class));
+        finish();
+    }
+
+
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
-        startActivity(new Intent(PayActivity.this, MainActivity.class));
-        finish();
+        if(customerReceiptPrinted && transactionInProgress && !printingInProgress && !merchantReceiptPrinted) {
+            printingInProgress = true;
+            print(false);
+        }
+        else if(!transactionInProgress) {
+            super.onBackPressed();
+            back();
+        }
     }
 
     private void finishAndReturnMainActivity() {
@@ -591,6 +636,7 @@ public class PayActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        /*
         if (mBankCard != null) {
             try {
                 mBankCard.breakOffCommand();
@@ -598,6 +644,7 @@ public class PayActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+        */
     }
 
 

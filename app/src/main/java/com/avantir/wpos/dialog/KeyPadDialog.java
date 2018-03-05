@@ -15,6 +15,8 @@ import com.avantir.wpos.interfaces.OnPinPadListener;
 import com.avantir.wpos.R;
 import com.avantir.wpos.utils.ByteUtil;
 import com.avantir.wpos.utils.ConstantUtils;
+import com.avantir.wpos.utils.GlobalData;
+import com.avantir.wpos.utils.StringUtil;
 import wangpos.sdk4.base.ICallbackListener;
 import wangpos.sdk4.libbasebinder.Core;
 
@@ -35,6 +37,10 @@ public class KeyPadDialog {
     private OnPinPadListener pinListener;
     private boolean isOffLine = false;
 
+    private static boolean firstTime = true;
+    private static int maxPinRetry = 3;
+    private static int currentPinRetry = 1;
+
     public static KeyPadDialog getInstance() {
         if(keypad == null ){
             keypad = new KeyPadDialog();
@@ -44,6 +50,12 @@ public class KeyPadDialog {
 
     public KeyPadDialog() {
 //        init();
+    }
+
+    public void clearPinRetries(){
+        firstTime = true;
+        maxPinRetry = 3;
+        currentPinRetry = 1;
     }
 
     public void showDialog(final Activity context, String Pan, final OnPinPadListener onPinPadListener){
@@ -187,15 +199,25 @@ public class KeyPadDialog {
 
 
 
-    public int showDialog(final Activity context, final int command, final byte[] data, final byte[] result, final int[] resultlen, final OnPinPadListener onPinPadListener){
+    public int showDialog(final Activity context, final int command, final byte[] data, final byte[] result, final int[] resultlen, final String pan, final OnPinPadListener onPinPadListener){
         this.pinListener = onPinPadListener;
         mHandler = new EventHandler();
+
         new Thread() {
             @Override
             public void run() {
                 mCore = new Core(context.getApplicationContext());
+                try{
+                    byte[] formatdata = new byte[8];
+                    //mCore.startPinInput(ConstantUtils.PIN_TIMEOUT, ConstantUtils.APP_NAME, ConstantUtils.SUPPORT_PIN_BYPASS, ConstantUtils.MIN_PIN_LENGTH, ConstantUtils.MAX_PIN_LENGTH, ConstantUtils.PIN_BLOCK_FORMAT, formatdata, pan.length(), pan.getBytes("UTF-8"), callback);
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
         }.start();
+
+
         if(data[0]!=0x01&&dialog!=null&&dialog.isShowing())
         {
             if (command != Core.CALLBACK_PIN) {
@@ -255,10 +277,22 @@ public class KeyPadDialog {
             msg_title.setVisibility(View.VISIBLE);
             if (data[1] == 01) {
                 isOffLine = false;
-                msg_title.setText("online pin");
+                //msg_title.setText("online pin");
+                msg_title.setText("Enter PIN");
             }else if (data[1] == 02) {
                 isOffLine = true;
-                msg_title.setText("offline pin,retry times:"+data[3]);
+                //msg_title.setText("offline pin,retry times:"+data[3]);
+                if(firstTime) {
+                    msg_title.setText("Enter PIN");
+                    maxPinRetry = data[3];
+                    firstTime = false;
+                }
+                else if(currentPinRetry == 1){
+                    msg_title.setText("INCORRECT PIN (" + currentPinRetry++ + "/" + maxPinRetry + ")");
+                }
+                else {
+                    msg_title.setText("WRONG PIN (" + currentPinRetry++ + "/" + maxPinRetry + ")");
+                }
             }
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
@@ -315,6 +349,8 @@ public class KeyPadDialog {
                     }
                 }
             });
+
+
             btnb1 = (Button) view.findViewById(R.id.button1);
             btnb2 = (Button) view.findViewById(R.id.button2);
             btnb3 = (Button) view.findViewById(R.id.button3);
@@ -347,12 +383,15 @@ public class KeyPadDialog {
                 dialog.show();
             Log.v("button show", "-----");
             ((TextView) view.findViewById(R.id.textView)).setText("");
+
+
             view.findViewById(R.id.buttonexit).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
+
 
             ((TextView) view.findViewById(R.id.textView)).addTextChangedListener(new TextWatcher() {
                 @Override
@@ -375,7 +414,7 @@ public class KeyPadDialog {
             });
         }
             return 0;
-        }
+    }
 
 
     public  class PINThread extends Thread {
@@ -480,7 +519,7 @@ public class KeyPadDialog {
                                 Log.e("PINPad", "No PIN inputed");
                             }
                         }
-                        //Pain PIN
+                        //Plain PIN
                         //only for test mode
                         else if (data[2] == Core.PIN_QUIT_PAINUPLOAD) {
                             int pinlen = data[3];
@@ -494,10 +533,10 @@ public class KeyPadDialog {
                         else if (data[2] == Core.PIN_QUIT_PINBLOCKUPLOAD) {
                             int pinlen = data[3];
                             Log.e("PINPad", "Encrypt pinlen is " + pinlen);
-                            byte[] PINData = new byte[pinlen+1];
-                            PINData[0] = data[1];
-                            java.lang.System.arraycopy(data, 4, PINData, 1, pinlen);
-                            String strpin = ByteUtil.bytes2HexString(PINData);
+                            byte[] pinData = new byte[pinlen+1];
+                            pinData[0] = data[1];
+                            java.lang.System.arraycopy(data, 4, pinData, 1, pinlen);
+                            String strpin = ByteUtil.bytes2HexString(pinData);
                             pinListener.onSuccess(strpin);
                             if (dialog != null && dialog.isShowing()) {
                                 dialog.dismiss();
@@ -514,16 +553,30 @@ public class KeyPadDialog {
                             dialog.dismiss();
                         }
                     }else if (data[1] == Core.PIN_QUIT_TIMEOUT||data[1] == Core.PIN_QUIT_ERRORPAN) {
+
+                        // if pin pad has text, clear text and dont close otherwise close.
                         int errorCode = data[1];
                         String str = "";
                         if (errorCode == -5) {
                             str = "Timeout";
+                            String pinData = ((TextView)view.findViewById(R.id.textView)).getText().toString();
+                            if(StringUtil.isEmpty(pinData)){
+                                pinListener.onError(errorCode,str);
+                                if (dialog != null && dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                            }
+                            else{
+                                // it timeout and it has data, then clear
+                                ((TextView)view.findViewById(R.id.textView)).setText("");
+                                pinListener.onError(errorCode,str);
+                            }
                         }else if (errorCode == -14) {
                             str = "no PAN";
-                        }
-                        pinListener.onError(errorCode,str);
-                        if (dialog != null && dialog.isShowing()) {
-                            dialog.dismiss();
+                            pinListener.onError(errorCode,str);
+                            if (dialog != null && dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
                         }
                     }else {//others Error
                         pinListener.onError(-100,"others Error");
@@ -537,6 +590,7 @@ public class KeyPadDialog {
             }
         }
     }
+
     private void RestoreKeyPad() {
         btnb1.setText("1");
         btnb2.setText("2");
@@ -548,5 +602,28 @@ public class KeyPadDialog {
         btnb8.setText("8");
         btnb9.setText("9");
         btnb0.setText("0");
+    }
+
+    public void dismissDialog(){
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+
+    public static int getMaxPinRetry() {
+        return maxPinRetry;
+    }
+
+    public static void setMaxPinRetry(int maxPinRetry) {
+        KeyPadDialog.maxPinRetry = maxPinRetry;
+    }
+
+    public static int getCurrentPinRetry() {
+        return currentPinRetry;
+    }
+
+    public static void setCurrentPinRetry(int currentPinRetry) {
+        KeyPadDialog.currentPinRetry = currentPinRetry;
     }
 }

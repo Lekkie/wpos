@@ -22,6 +22,7 @@ public class AccountTypeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_account_type);
+        this.findViewById(R.id.default_btn).setOnClickListener(this);
         this.findViewById(R.id.savings_btn).setOnClickListener(this);
         this.findViewById(R.id.current_btn).setOnClickListener(this);
         this.findViewById(R.id.credit_btn).setOnClickListener(this);
@@ -47,6 +48,9 @@ public class AccountTypeActivity extends BaseActivity {
         {
             bundle = new Bundle();
         }
+        // check if card is still inserted, if yes continue otherwise, go back to main menu or insert card
+        // Check if card is inserted
+        // int res = mBankCard.iccDetect();
     }
 
     @Override
@@ -54,31 +58,60 @@ public class AccountTypeActivity extends BaseActivity {
 
         switch (v.getId()) {
             case R.id.titleBackImage:
-                startActivity(new Intent(AccountTypeActivity.this, InputMoneyActivity.class));
+                startActivity(new Intent(this, MainMenuActivity.class));
                 finish();
                 //skipActivityAnim(-1);
                 break;
+            case R.id.default_btn:
+                doNext(ConstantUtils.DEFAULT_ACCT_TYPE);
+                break;
             case R.id.savings_btn:
-                Intent payActivity = new Intent(this, PayActivity.class);
-                bundle.putString(ConstantUtils.ACCT_TYPE, ConstantUtils.SAVINGS_ACCT_TYPE);
-                payActivity.putExtras(bundle);
-                startActivity(payActivity);
-                finish();
+                doNext(ConstantUtils.SAVINGS_ACCT_TYPE);
                 break;
             case R.id.current_btn:
-                payActivity = new Intent(this, PayActivity.class);
-                bundle.putString(ConstantUtils.ACCT_TYPE, ConstantUtils.CURRENT_ACCT_TYPE);
-                payActivity.putExtras(bundle);
-                startActivity(payActivity);
-                finish();
+                doNext(ConstantUtils.CURRENT_ACCT_TYPE);
                 break;
             case R.id.credit_btn:
-                payActivity = new Intent(this, PayActivity.class);
-                bundle.putString(ConstantUtils.ACCT_TYPE, ConstantUtils.CREDIT_ACCT_TYPE);
-                payActivity.putExtras(bundle);
-                startActivity(payActivity);
-                finish();
+                doNext(ConstantUtils.CREDIT_ACCT_TYPE);
                 break;
         }
+    }
+
+    private void  doNext(String acctType){
+        // check if card is still inserted, if yes continue otherwise, go back to main menu or insert card
+        // Check if card is inserted
+        // int res = mBankCard.iccDetect();
+
+        int tranTypeFlag = bundle.getInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
+        if(ConstantUtils.PURCHASE == tranTypeFlag)
+            doPurchase(acctType);
+        else if(ConstantUtils.BALANCE == tranTypeFlag)
+            doBal(acctType);
+        else if(ConstantUtils.REFUND == tranTypeFlag)
+            doRefund(acctType);
+    }
+
+    private void doPurchase(String acctType){
+        Intent intent = new Intent(this, InputMoneyActivity.class);
+        bundle.putString(ConstantUtils.ACCT_TYPE, acctType);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    private void doRefund(String acctType){
+        Intent intent = new Intent(this, InputMoneyActivity.class);
+        bundle.putString(ConstantUtils.ACCT_TYPE, acctType);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    private void doBal(String acctType){
+        Intent intent = new Intent(this, BalanceActivity.class);
+        bundle.putString(ConstantUtils.ACCT_TYPE, acctType);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 }

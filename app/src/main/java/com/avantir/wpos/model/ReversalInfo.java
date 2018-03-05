@@ -69,8 +69,8 @@ public class ReversalInfo implements Serializable {
     private String msgReasonCode;
     @DatabaseField(unique=false, canBeNull = false)
     private String posDataCode;
-    @DatabaseField(unique=false, canBeNull = true)
-    private String status;
+    @DatabaseField(unique=false, canBeNull = true, columnName = "response_code")
+    private String responseCode;
     @DatabaseField(unique=false, canBeNull = false, defaultValue = "0", columnName = "retry_no")
     private int retryNo = 0;
     @DatabaseField(unique=false, canBeNull = false, defaultValue = "0")
@@ -294,12 +294,12 @@ public class ReversalInfo implements Serializable {
         this.msgReasonCode = msgReasonCode;
     }
 
-    public String getStatus() {
-        return status;
+    public String getResponseCode() {
+        return responseCode;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
     }
 
     public int getRetryNo() {

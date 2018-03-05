@@ -5,12 +5,22 @@ package com.avantir.wpos.utils;
  */
 public class ConstantUtils {
 
-    public static final int PIN_TIMEOUT = 60;
-    public static final int MIN_PIN_LENGTH = 4;
-    public static final int MAX_PIN_LENGTH = 4;
-    public static final int PIN_BLOCK_FORMAT = 0x01;
-    public static final int SUPPORT_PIN_BYPASS = 1;
-
+    public static final int MSG_START_TRANS = 0x2000;
+    public static final int READ_CARD = 99;
+    public static final int ICC_NEXT = 100;
+    public static final int PICC_NEXT = 101;
+    public static final int MAG_STRIPE_NEXT = 102;
+    public static final int MSG_BACK = 0x1000, MSG_PROGRESS = MSG_BACK + 1,
+            MSG_ERROR = MSG_BACK + 2, MSG_RESULT = MSG_BACK + 3, MSG_CARD = MSG_BACK + 4,
+            MSG_SWIPE = MSG_BACK + 5, MSG_INFO = MSG_BACK + 6, MSG_START_COMMS = MSG_BACK + 7,
+            MSG_FINISH_COMMS = MSG_BACK + 8, MSG_FINISH_ERROR_COMMS = MSG_BACK + 9, MSG_START_PRINT = MSG_BACK + 10,
+            MSG_FINISH_PRINT = MSG_BACK + 11;
+    /**
+     * show logs
+     */
+    public static final int SHOWLOG = 1;
+    public static final int ShowToastFlag = 106;//Pop up Toast message
+    public static final int Hide_Progress = 10001;//New thread hidden progress bar
     public static final String SHA256 = "SHA-256";
     public static final int KEY_ID = 1;
     public static final String APP_NAME = "app1";
@@ -18,72 +28,23 @@ public class ConstantUtils {
     public static final int TMK_INDEX = 1;
     public static final int GROUP_ID = 1;
     public static final int TIK_ID = 0;
+
     public static final int PURCHASE = 1;
+    public static final int BALANCE = 2;
+    public static final int REFUND = 3;
+    public static final int BANK_CARD = 1;
+
     public static final String TRAN_TYPE = "tranType";
     public static final String TRAN_AMT = "orderAmount";
-    public static final int BANK_CARD = 1;
     public static final String PAYMENT_INSTRUMENT = "paymentInstrument";
     public static final String ACCT_TYPE = "ACCT_TYPE";
+    public static final String DEFAULT_ACCT_TYPE = "00";
     public static final String SAVINGS_ACCT_TYPE = "10";
     public static final String CURRENT_ACCT_TYPE = "20";
     public static final String CREDIT_ACCT_TYPE = "30";
-
-    public static final String ISO8583_APPROVED = "00";
-
-    public static final int GOODS_TRAN_TYPE = 0x02;
-    public static final int GET_PIN_DATA = 0x01;
-    public static final String TERM_TRANSACTION_QUALITY = "26800080";
-
-    /**
-     *   9A Terminal Master Key 0800
-     9B Terminal Session Key 0800
-     9C Terminal Parameter Download 0800
-     9D Call – home 0800
-     9E CA Public Key Download 0800
-     9F EMV Application AID Download   0800
-     9G Terminal PIN Key 0800
-     9I Initial PIN Encryption Key Download – Track2 Data 0800
-     9J Initial PIN Encryption Key Download – EMV   0800
-     */
-
-    public static final String _0800 = "0800";
-    public static final String _0200 = "0200";
-    public static final String _0420 = "0420";
-    public static final String _0421 = "0421";
-    public static final String TMK_DOWNLOAD_PROC_CODE = "9A0000";
-    public static final String TSK_DOWNLOAD_PROC_CODE = "9B0000";
-    public static final String TERM_PARAM_DOWNLOAD_PROC_CODE = "9C0000";
-    public static final String CALL_HOME_PROC_CODE = "9D0000";
-    public static final String CAPK_DOWNLOAD_PROC_CODE = "9E0000";
-    public static final String AID_DOWNLOAD_PROC_CODE = "9F0000";
-    public static final String TPK_DOWNLOAD_PROC_CODE = "9G0000";
-    public static final String IPEK_TRACK2_DOWNLOAD_PROC_CODE = "9I0000";
-    public static final String IPEK_EMV_DOWNLOAD_PROC_CODE = "9J0000";
-    public static final String PURCHASE_PROC_CODE = "00";
-    public static final String ACCEPT_PIN_MODE_CAPABILITY = "1";
-    public static final String NORMAL_PRESENTMENT_POS_CONDITION_CODE = "00";
-
-    public static final String NETWORK_REQ_TYPE = "NETWORK_REQ_TYPE";
-    public static final int NETWORK_TMS_TERM_PARAM_DOWNLOAD_REQ_TYPE = 1;
-    public static final int NETWORK_TMK_DOWNLOAD_REQ_TYPE = 2;
-    public static final int NETWORK_TPK_DOWNLOAD_REQ_TYPE = 3;
-    public static final int NETWORK_TSK_DOWNLOAD_REQ_TYPE = 4;
-    public static final int NETWORK_IPEK_TRACK2_DOWNLOAD_REQ_TYPE = 5;
-    public static final int NETWORK_IPEK_EMV_DOWNLOAD_REQ_TYPE = 6;
-    public static final int NETWORK_CAPK_DOWNLOAD_REQ_TYPE = 7;
-    public static final int NETWORK_AID_DOWNLOAD_REQ_TYPE = 8;
-    public static final int NETWORK_NIBSS_TERM_PARAM_DOWNLOAD_REQ_TYPE = 9;
-    public static final int NETWORK_PURCHASE_REQ_TYPE = 10;
-    public static final int NETWORK_PURCHASE_REQ_REVERSAL_TYPE = 11;
-
-
     public static final int DOWNLOAD_KEYS_JOB_ID = 1;
     public static final int CALL_HOME_JOB_ID = 2;
     public static final int REVERSAL_JOB_ID =  3;
-
-
-    public static final String MSG_REASON_CODE_TIMEOUT_WAITING_FOR_RESPONSE = "4021";
-
 
     public static final String RSA_KEY_ALIAS = "httpsCert";
     public static final String LOGIN = "LOGIN"; /*login*/
@@ -113,10 +74,13 @@ public class ConstantUtils {
     public static final String AUTH_NUM = "AUTH_NUM";
     public static final String REF_NO = "REF_NO";
     public static final String ACQUIRER_ID = "ACQUIRER_ID";
+    public static final String PTSP = "PTSP";
     public static final String RETRIEVAL_REF = "RETRIEVAL_REF";
     public static final String CURRENCY_CODE = "CURRENCY_CODE";
+    public static final String COUNTRY_CODE = "COUNTRY_CODE";
     public static final String POS_DATA_CODE = "POS_DATA_CODE";
     public static final String CTMS_HOST = "CTMS_HOST";
+    public static final String CTMS_IP = "CTMS_IP";
     public static final String CTMS_PORT = "CTMS_PORT";
     public static final String CTMS_TIMEOUT = "CTMS_TIMEOUT";
     public static final String CTMS_SSL = "CTMS_SSL";
@@ -129,48 +93,107 @@ public class ConstantUtils {
     public static final String CHECK_KEY_DOWNLOAD_INTERVAL_IN_MINS = "CHECK_KEY_DOWNLOAD_INTERVAL_IN_MINS";
     public static final String CALL_HOME_TIME_IN_MINS = "CALL_HOME_TIME_IN_MINS";
     public static final String RESEND_REVERSAL_TIME_IN_MINS =  "RESEND_REVERSAL_TIME_IN_MINS";
+    public static final String PAGE_TIMER_IN_SEC = "PAGE_TIMER_IN_SEC";
     public static final String CTMK = "CTMK";
     public static final String TMK = "TMK";
     public static final String TSK = "TSK";
     public static final String FIRST_LAUNCH = "FIRST_LAUNCH";
-
     public static final String STATUS = "STATUS";
     public static final String APP_LABEL = "APP_LABEL";
     public static final String NETWORK_RESP_DATA = "NETWORK_RESP_DATA";
-
-    public static final String MAG_CARD_TYPE = "02";
-    public static final String ICC_CARD_TYPE = "05";
-    public static final String PICC_CARD_TYPE = "07";
-
-    public static final String TERMINAL_DOWNLOAD_URI = "/api/v1/terminals/parameters";
+    public static final String CARD_TYPE = "CARD_TYPE";
     public static final String DEVICE_SERIAL_NO = "deviceSerialNo";
     public static final String TERMINAL_PUBLIC_KEY = "devicePublicKey";
 
+    public static final String TERMINAL_DOWNLOAD_URI = "/api/v1/terminals/parameters";
+
+    public static final String NETWORK_REQ_TYPE = "NETWORK_REQ_TYPE";
+    public static final int NETWORK_TMS_TERM_PARAM_DOWNLOAD_REQ_TYPE = 1;
+    public static final int NETWORK_TMK_DOWNLOAD_REQ_TYPE = 2;
+    public static final int NETWORK_TPK_DOWNLOAD_REQ_TYPE = 3;
+    public static final int NETWORK_TSK_DOWNLOAD_REQ_TYPE = 4;
+    public static final int NETWORK_IPEK_TRACK2_DOWNLOAD_REQ_TYPE = 5;
+    public static final int NETWORK_IPEK_EMV_DOWNLOAD_REQ_TYPE = 6;
+    public static final int NETWORK_CAPK_DOWNLOAD_REQ_TYPE = 7;
+    public static final int NETWORK_AID_DOWNLOAD_REQ_TYPE = 8;
+    public static final int NETWORK_NIBSS_TERM_PARAM_DOWNLOAD_REQ_TYPE = 9;
+    public static final int NETWORK_EOD_DOWNLOAD_REQ_TYPE = 10;
+    public static final int NETWORK_PURCHASE_REQ_TYPE = 11;
+    public static final int NETWORK_PURCHASE_REQ_REVERSAL_TYPE = 12;
+
+    public static final int INIT_COMMU = 0;
+    public static final int CONNECTING = 1;
+    public static final int SENDING = 2;
+    public static final int RECVING = 3;
+    public static final int FINISH = 4;
+
+
+    public static final String _0800 = "0800";
+    public static final String _0100 = "0100";
+    public static final String _0200 = "0200";
+    public static final String _0420 = "0420";
+    public static final String _0421 = "0421";
+    public static final String TMK_DOWNLOAD_PROC_CODE = "9A0000";
+    public static final String TSK_DOWNLOAD_PROC_CODE = "9B0000";
+    public static final String TERM_PARAM_DOWNLOAD_PROC_CODE = "9C0000";
+    public static final String CALL_HOME_PROC_CODE = "9D0000";
+    public static final String CAPK_DOWNLOAD_PROC_CODE = "9E0000";
+    public static final String AID_DOWNLOAD_PROC_CODE = "9F0000";
+    public static final String TPK_DOWNLOAD_PROC_CODE = "9G0000";
+    public static final String DAILY_REPORT_DOWNLOAD_PROC_CODE = "9H0000";
+    public static final String IPEK_TRACK2_DOWNLOAD_PROC_CODE = "9I0000";
+    public static final String IPEK_EMV_DOWNLOAD_PROC_CODE = "9J0000";
+    public static final String PURCHASE_PROC_CODE = "00";
+    public static final String BALANCE_PROC_CODE = "31";
+    public static final String REFUND_PROC_CODE = "20";
+    public static final String ACCEPT_PIN_MODE_CAPABILITY = "1";
+    public static final String NORMAL_PRESENTMENT_POS_CONDITION_CODE = "00";
+
+    public static final String ISO8583_APPROVED = "00";
+    public static final String MSG_REASON_CODE_TIMEOUT_WAITING_FOR_RESPONSE = "4021";
+
+    // Displayed message
+    public static final String APPROVED = "APPROVED";
+    public static final String DECLINED = "DECLINED";
+    public static final String TRANSACTION_APPROVED = "Transaction Approved";
+    public static final String TRANSACTION_DECLINED = "Transaction Declined";
+    public static final String CARD_REMOVED = "Card has been removed";
+    public static final String INVALID_CARD = "Invalid Card";
+    public static final String REMOVE_CARD = "Please Remove Card";
+    public static final String INSERT_CARD = "Insert or Swipe Card";
+    public static final String WRONG_PIN = "Wrong PIN, Card Restricted/Blocked (3/3)";
+    public static final String INSUFFICIENT_FUNDS = "Insufficient funds";
+    public static final String DO_NOT_REMOVE_CARD = "Please do not remove card";
+    public static final String WAITING_MSG = "EMV-Process waiting…";
+    public static final String PRESS_PRINT_MERCHANT_COPY = "Press any where to print Merchant's copy";
+
+
+    public static final int PIN_TIMEOUT = 10;
+    public static final int MIN_PIN_LENGTH = 4;
+    public static final int MAX_PIN_LENGTH = 4;
+    public static final int PIN_BLOCK_FORMAT = 0x01;
+    public static final int SUPPORT_PIN_BYPASS = 1;
+
+    //EMV Things
+    public static final int GOODS_TRAN_TYPE = 0x02;
+    public static final int GET_PIN_DATA = 0x01;
+    public static final String TERM_TRANSACTION_QUALITY = "26800080";
     public static final int ECTSI_ZERO = 0x00;
     public static final int ECTSI_ONE = 0x01;
-
     public static final int FORCE_ONLINE_TRUE = 0x01;
-
-
     public static final String F55 = "9F26,9F27,9F10,9F37,9F36,95,9A,9C,9F02,5F2A,82,9F1A,9F03,9F33";
     public static final String ex_title = "9F34,9F35,9F1E,91,9F63";
     public static final String onLineTag = ",74,8A";
     public static final String F55_EX = "5F24,57,5A,5F34,50,9F12,4F,9F06,84,9F09,8C,8D,9F4E,9F21,9B,9F41,EFA0,EFA1,8F,5F20";
-
-    public static final String APPROVED = "APPROVED";
-    public static final String DECLINED = "DECLINED";
 
     public static final int EMV_OPERATION_SUCCESS = 0x00;// 成功结果
     public static final int EMV_OPERATION_CANCEL = 0x01;// 成功结果
     public static final int EMV_OPERATION_ERR_END = 0x02;// 错误
 
     public static final int EMV_SALE = 0x02;// 成功结果
-
     public static final int EMV_CARD_TYPE_ICC = 0x01;
     public static final int EMV_CARD_TYPE_OTHER = 0x02;
-
     public static final int EMV_TAG_AID = 0x4F;
-
 
     public static final int OFFLINEAPPROVED       = 0x01    ;    //脱机成功
     public static final int OFFLINEDECLINED     = 0x02       ;    //脱机拒绝
@@ -194,7 +217,6 @@ public class ConstantUtils {
             REFER_DENIAL      = 0x02;     //参考返回码(选择拒绝) 拒绝交易
 
 
-
     /**
      * emvCore 交易结果
      */
@@ -206,8 +228,6 @@ public class ConstantUtils {
     public static final String ARC_ONLINEFAILOFFLINEAPPROVED ="Y3";   //联机失败 脱机成功
     public static final String ARC_ONLINEFAILOFFLINEDECLINED ="Z3";   //联机失败 脱机拒绝
 
-
-
     /**
      * app path
      */
@@ -215,7 +235,6 @@ public class ConstantUtils {
     public static final int PATH_QPBOC = 0x01;     //Application path: qPBOC
     public static final int PATH_MSD   = 0x02;     //Application Path: MSD
     public static final int PATH_ECash = 0x03;     //Application Path: Electronic Cash
-
 
 
     public static final int Type_OffLine_Sale=99;//Offline
@@ -237,14 +256,10 @@ public class ConstantUtils {
     /** Pre-authorized reversal */
     public static final int Type_Cancel = Base + 22;
 
-    public static final String WAITING_MSG = "EMV-Process waiting…";
 
-
-    public static final int INIT_COMMU = 0;
-    public static final int CONNECTING = 1;
-    public static final int SENDING = 2;
-    public static final int RECVING = 3;
-    public static final int FINISH = 4;
+    public static final String MAG_CARD_TYPE = "02";
+    public static final String ICC_CARD_TYPE = "05";
+    public static final String PICC_CARD_TYPE = "07";
 
 
 

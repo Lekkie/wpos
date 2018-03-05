@@ -217,12 +217,28 @@ public class GlobalData {
         return mPrefs.getString(ConstantUtils.ACQUIRER_ID, "000000");
     }
 
+    public void setPTSP(String ptsp) {
+        mEditor.putString(ConstantUtils.PTSP, ptsp);
+        mEditor.commit();
+    }
+    public String getPTSP() {
+        return mPrefs.getString(ConstantUtils.PTSP, "Arca Networks");
+    }
+
     public void setCurrencyCode(String currencyCode) {
         mEditor.putString(ConstantUtils.CURRENCY_CODE, currencyCode);
         mEditor.commit();
     }
     public String getCurrencyCode() {
         return mPrefs.getString(ConstantUtils.CURRENCY_CODE, "566");
+    }
+
+    public void setCountryCode(String countryCode) {
+        mEditor.putString(ConstantUtils.COUNTRY_CODE, countryCode);
+        mEditor.commit();
+    }
+    public String getCountryCode() {
+        return mPrefs.getString(ConstantUtils.COUNTRY_CODE, "566");
     }
 
     public void setPOSDataCode(String posDataCode) {
@@ -238,7 +254,15 @@ public class GlobalData {
         mEditor.commit();
     }
     public String getCTMSHost() {
-        return mPrefs.getString(ConstantUtils.CTMS_HOST, "");
+        return mPrefs.getString(ConstantUtils.CTMS_HOST, "ctms.nibss-plc.com");
+    }
+
+    public void setCTMSIP(String ctmsIp) {
+        mEditor.putString(ConstantUtils.CTMS_IP, ctmsIp);
+        mEditor.commit();
+    }
+    public String getCTMSIP() {
+        return mPrefs.getString(ConstantUtils.CTMS_IP, "");
     }
 
     public void setCTMSPort(int ctmsPort) {
@@ -341,6 +365,17 @@ public class GlobalData {
     public int getResendReversalPeriodInMin() {
         return mPrefs.getInt(ConstantUtils.RESEND_REVERSAL_TIME_IN_MINS, 60);
     }
+
+
+    public void setPageTimerInSec(int pageTimerInSec) {
+        mEditor.putInt(ConstantUtils.PAGE_TIMER_IN_SEC, pageTimerInSec);
+        mEditor.commit();
+    }
+    public int getPageTimerInSec() {
+        return mPrefs.getInt(ConstantUtils.PAGE_TIMER_IN_SEC, 60);
+    }
+
+
 
     public void setCtmk(String ctmk) {
         mEditor.putString(ConstantUtils.CTMK, ctmk);

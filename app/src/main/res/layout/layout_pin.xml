@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:text="online pin"
+        android:textStyle="bold"
         android:id="@+id/msg_title"
         android:visibility="gone"
         android:gravity="center" />
@@ -32,9 +33,9 @@
 
         <Button
             style="@style/base_num_button"
-
             android:textSize="20sp"
             android:text="1"
+            android:textStyle="bold"
             android:id="@+id/button1" />
 
         <Button
@@ -42,6 +43,7 @@
 
             android:textSize="20sp"
             android:text="2"
+            android:textStyle="bold"
             android:id="@+id/button2" />
 
         <Button
@@ -49,6 +51,7 @@
 
             android:textSize="20sp"
             android:text="3"
+            android:textStyle="bold"
             android:id="@+id/button3" />
 
 
@@ -63,18 +66,21 @@
             style="@style/base_num_button"
             android:textSize="20sp"
             android:text="4"
+            android:textStyle="bold"
             android:id="@+id/button4" />
 
         <Button
             style="@style/base_num_button"
             android:textSize="20sp"
             android:text="5"
+            android:textStyle="bold"
             android:id="@+id/button5" />
 
         <Button
             style="@style/base_num_button"
             android:textSize="20sp"
             android:text="6"
+            android:textStyle="bold"
             android:id="@+id/button6" />
     </LinearLayout>
 
@@ -87,18 +93,21 @@
             style="@style/base_num_button"
             android:textSize="20sp"
             android:text="7"
+            android:textStyle="bold"
             android:id="@+id/button7" />
 
         <Button
             android:textSize="20sp"
             style="@style/base_num_button"
             android:text="8"
+            android:textStyle="bold"
             android:id="@+id/button8" />
 
         <Button
             android:textSize="20sp"
             style="@style/base_num_button"
             android:text="9"
+            android:textStyle="bold"
             android:id="@+id/button9" />
     </LinearLayout>
 
@@ -111,6 +120,7 @@
             style="@style/base_num_button"
             android:visibility="gone"
             android:text="@string/cancel"
+            android:textStyle="bold|italic"
             android:textSize="18sp"
             android:id="@+id/buttoncan" />
 
@@ -118,23 +128,29 @@
             android:background="@color/green"
             style="@style/base_num_button"
             android:text="@string/confirm"
+            android:textStyle="bold|italic"
             android:textSize="18sp"
             android:id="@+id/buttonconfirm" />
         <Button
             style="@style/base_num_button"
             android:textSize="20sp"
             android:text="0"
+            android:textStyle="bold"
             android:id="@+id/button0" />
+
+        <!-- android:background="#aa0000" -->
         <Button
-            android:background="#aa0000"
+            android:background="#FFC200"
             style="@style/base_num_button"
             android:text="@string/delete"
+            android:textStyle="bold|italic"
             android:textSize="18sp"
             android:id="@+id/buttonback" />
         <Button
             android:background="@color/red"
             style="@style/base_num_button"
-            android:text="@string/clear"
+            android:textStyle="bold|italic"
+            android:text="@string/cancel"
             android:textSize="18sp"
             android:id="@+id/buttonclean" />
 

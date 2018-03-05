@@ -49,7 +49,7 @@ public class DownloadKeysTask extends AsyncTask<Void, Void, Boolean> {
             }
         }.start();
         globalData = GlobalData.getInstance();
-        tcpComms = new TcpComms(globalData.getCTMSHost(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+        tcpComms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
     }
 
     @Override

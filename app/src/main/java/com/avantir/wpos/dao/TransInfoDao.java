@@ -3,9 +3,11 @@ package com.avantir.wpos.dao;
 import android.content.Context;
 import com.avantir.wpos.model.ReversalInfo;
 import com.avantir.wpos.model.TransInfo;
+import com.avantir.wpos.utils.TimeUtil;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,8 +27,8 @@ public class TransInfoDao extends BaseDao<TransInfo, String> {
         return (transInfoList == null || transInfoList.size() < 1) ? null : transInfoList.get(0);
     }
 
-    public List<TransInfo>  findByStatus(String status) {
-        List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " where status = '" + status + "'");
+    public List<TransInfo>  findByResponseCode(String responseCode) {
+        List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " where response_code = '" + responseCode + "'");
         return transInfoList;
     }
 
@@ -41,7 +43,19 @@ public class TransInfoDao extends BaseDao<TransInfo, String> {
         return transInfoList;
     }
 
-    public void updateReversalCompletionStatusByRetRefNo(String retRefNo, int reversed, int completed) {
+    public List<TransInfo>  findByToday() {
+        long nowEpochTime = TimeUtil.getTimeInEpoch(new Date());
+        long startDate = TimeUtil.getStartOfDay(nowEpochTime);
+        long endDate = TimeUtil.getEndOfDay(nowEpochTime);
+        return findByDate(startDate, endDate);
+    }
+
+    public List<TransInfo>  findByDate(long startDate, long endDate) {
+        List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " where created_on >= " + startDate +  " AND created_on <= " + endDate);
+        return transInfoList;
+    }
+
+    public void updateReversalCompletionByRetRefNo(String retRefNo, int reversed, int completed) {
         this.execute("update " + TABLE_NAME + " set reversed = " + reversed + ", completed = " + completed
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
@@ -52,16 +66,20 @@ public class TransInfoDao extends BaseDao<TransInfo, String> {
     }
 
 
-    public void  updateStatusByRetRefNo(String retRefNo, String status) {
-        this.execute("update " + TABLE_NAME + " set status = '" + status
+    public void  updateResponseCodeByRetRefNo(String retRefNo, String responseCode) {
+        this.execute("update " + TABLE_NAME + " set response_code = '" + responseCode
                 + "' where ret_ref_no = '" + retRefNo + "'");
     }
 
-    public void  updateStatusAuthNumCompletedByRetRefNo(String retRefNo, String status, String authNum, int completed) {
-        this.execute("update " + TABLE_NAME + " set status = '" + status
+    public void  updateResponseCodeAuthNumCompletedByRetRefNo(String retRefNo, String responseCode, String authNum, int completed) {
+        this.execute("update " + TABLE_NAME + " set response_code = '" + responseCode
                 + "', auth_num = '" + authNum + "', completed = " + completed
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
 
+    public TransInfo findLastTransaction() {
+        List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " order by id desc LIMIT 1");
+        return (transInfoList == null || transInfoList.size() < 1) ? null : transInfoList.get(0);
+    }
 
 }

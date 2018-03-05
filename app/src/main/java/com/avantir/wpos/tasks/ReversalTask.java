@@ -12,6 +12,7 @@ import com.avantir.wpos.utils.*;
 import com.solab.iso8583.IsoMessage;
 import wangpos.sdk4.libkeymanagerbinder.Key;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class ReversalTask extends AsyncTask<Void, Void, Boolean> {
 
     protected void initData() {
         globalData = GlobalData.getInstance();
-        comms = new TcpComms(globalData.getCTMSHost(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+        comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
         reversalInfoDao  = new ReversalInfoDao(WPOSApplication.app);
         transInfoDao = new TransInfoDao(WPOSApplication.app);
     }
@@ -54,13 +55,13 @@ public class ReversalTask extends AsyncTask<Void, Void, Boolean> {
             if(transInfoList != null){
                 for(TransInfo transInfo: transInfoList){
                     try{
-                        long now = System.currentTimeMillis();
+                        long now = TimeUtil.getTimeInEpoch(new Date(System.currentTimeMillis()));
                         long diff = now - transInfo.getCreatedOn();
                         if(diff > (60 * 60 * 1000)){ // set this to about 1hr
                             ReversalInfo reversalInfo = reversalInfoDao.findByRetRefNo(transInfo.getRetRefNo());
                             if(reversalInfo == null){
                                 reversalInfo = IsoMessageUtil.createReversalInfo(transInfo, ConstantUtils.MSG_REASON_CODE_TIMEOUT_WAITING_FOR_RESPONSE);
-                                reversalInfo.setCreatedOn(System.currentTimeMillis());
+                                reversalInfo.setCreatedOn(TimeUtil.getTimeInEpoch(new Date(System.currentTimeMillis())));
                                 reversalInfoDao.create(reversalInfo);
                             }
                             transInfoDao.updateCompletionStatusByRetRefNo(transInfo.getRetRefNo(), 1);
@@ -87,11 +88,12 @@ public class ReversalTask extends AsyncTask<Void, Void, Boolean> {
                         retry++;
                         String retRefNo = reversalInfo.getRetRefNo();
                         reversalInfoDao.updateRetryByRetRefNo(retRefNo, retry);
-                        String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo, isRepeat);
-                        reversalInfo.setStatus(StringUtil.isEmpty(responseCode) ? "" : responseCode);
+                        //TcpComms comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+                        String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo, isRepeat, comms);
+                        reversalInfo.setResponseCode(StringUtil.isEmpty(responseCode) ? "" : responseCode);
                         reversalInfo.setCompleted(1);
-                        reversalInfoDao.updateStatusCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getStatus(), reversalInfo.getCompleted());
-                        transInfoDao.updateReversalCompletionStatusByRetRefNo(retRefNo, 1, 1);
+                        reversalInfoDao.updateResponseCodeCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getResponseCode(), reversalInfo.getCompleted());
+                        transInfoDao.updateReversalCompletionByRetRefNo(retRefNo, 1, 1);
                     }
                     catch(Exception ex){
                         ex.printStackTrace();

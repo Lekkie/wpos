@@ -8,8 +8,13 @@
     <!--
     <string name="confirm">OK</string>
     <string name="cancel">cancel</string>-->
-    <string name="clear">clear</string>
-    <string name="delete">delete</string>
+    <string name="clear">Clear</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="baco">Back</string>
+    <string name="settings_password">Enter Password</string>
+    <string name="settings_password2">Confirm Password</string>
+
 
 
     <!--Supervisor password-->
@@ -33,9 +38,6 @@
     <string name="receipt_type">Type：</string>
 
     <!--Pre-authorization-->
-
-    <string name="cancel">Cancel</string>
-    <string name="baco">back</string>
 
 
 </resources>

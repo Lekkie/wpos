@@ -34,10 +34,19 @@
         </activity>
 
         <activity android:name=".activity.MainMenuActivity" />
-        <activity android:name=".activity.InputMoneyActivity" />
+        <activity android:name=".activity.InsertCardActivity" />
         <activity android:name=".activity.AccountTypeActivity" />
+        <activity android:name=".activity.InputMoneyActivity" />
         <activity android:name=".activity.PayActivity" />
-        <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.BalanceActivity" />
+        <activity android:name=".activity.RefundActivity" />
+        <activity android:name=".activity.ReprintActivity" />
+        <activity android:name=".activity.EoDActivity" />
+        <activity android:name=".activity.AdminActivity" />
+        <activity android:name=".activity.CallHomeConfigActivity" />
+        <activity android:name=".activity.PrintConfigActivity" />
+        <activity android:name=".activity.NetworkConfigActivity" />
+        <activity android:name=".activity.DownloadKeysActivity" />
         <activity android:name=".activity.HostConfigActivity" />
         <activity android:name=".activity.DownloadTermParamsActivity" />
 

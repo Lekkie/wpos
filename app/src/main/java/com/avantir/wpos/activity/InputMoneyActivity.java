@@ -2,6 +2,8 @@ package com.avantir.wpos.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.avantir.wpos.R;
 import com.avantir.wpos.WPOSApplication;
 import com.avantir.wpos.utils.ConstantUtils;
+import com.avantir.wpos.utils.GlobalData;
 import com.avantir.wpos.utils.MoneyUtil;
 
 /**
@@ -19,7 +22,7 @@ public class InputMoneyActivity extends BaseActivity {
 
     //Enter the amount of Naira and Kobo
     private TextView inputMoneyMajorText, inputMoneyMinorText;
-    private int inputMoney = 0;
+    private long inputMoney = 0;
     private Bundle bundle;
 
 
@@ -30,15 +33,16 @@ public class InputMoneyActivity extends BaseActivity {
         WPOSApplication.activityList.add(this);
 
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         super.onCreate(savedInstanceState);
     }
 
     protected void initView() {
         //Top Title bar
-        ImageView titleBackImage = (ImageView) findViewById(R.id.titleBackImage);
-        titleBackImage.setOnClickListener(this);
+        //ImageView titleBackImage = (ImageView) findViewById(R.id.titleBackImage);
+        //titleBackImage.setOnClickListener(this);
         TextView titleNameText = (TextView) findViewById(R.id.titleNameText);
-        titleNameText.setText("Cashier");
+        titleNameText.setText("Enter Amount (Naira)");
 
         inputMoneyMajorText = (TextView) findViewById(R.id.inputMoneyMajorText);
         inputMoneyMinorText = (TextView) findViewById(R.id.inputMoneyMinorText);
@@ -77,10 +81,12 @@ public class InputMoneyActivity extends BaseActivity {
 
     protected void initData() {
         bundle = getIntent().getExtras();
-        if(bundle == null)
-        {
+        if (bundle == null) {
             bundle = new Bundle();
         }
+        // check if card is still inserted, if yes continue otherwise, go back to main menu or insert card
+        // Check if card is inserted
+        // int res = mBankCard.iccDetect();
     }
 
 
@@ -89,10 +95,8 @@ public class InputMoneyActivity extends BaseActivity {
 
         switch (v.getId()) {
             case R.id.titleBackImage:
-                finish();
-                skipActivityAnim(-1);
+                back();
                 break;
-
             case R.id.btn_num0:
             case R.id.btn_num1:
             case R.id.btn_num2:
@@ -103,21 +107,24 @@ public class InputMoneyActivity extends BaseActivity {
             case R.id.btn_num7:
             case R.id.btn_num8:
             case R.id.btn_num9:
+                restartTimer();
                 if ((inputMoney + "").length() < 11) {
-                    inputMoney = Integer.parseInt(inputMoney + ((Button) v).getText().toString());
+                    inputMoney = Long.parseLong(inputMoney + ((Button) v).getText().toString());
                     inputMoneySetText();
                 }
                 break;
 
             case R.id.btn_num00:
-                if((inputMoney+"").length()<10) {
-                    inputMoney = Integer.parseInt(inputMoney + ((Button) v).getText().toString());
+                restartTimer();
+                if ((inputMoney + "").length() < 10) {
+                    inputMoney = Long.parseLong(inputMoney + ((Button) v).getText().toString());
                     inputMoneySetText();
                 }
                 break;
 
             case R.id.btn_num_clear:
-                if(inputMoney>0) {
+                restartTimer();
+                if (inputMoney > 0) {
                     inputMoney = inputMoney / 10;
                     inputMoneySetText();
                 }
@@ -133,37 +140,59 @@ public class InputMoneyActivity extends BaseActivity {
 
     /**
      * Jump to the next page
+     *
      * @param tranTypeFlag 0 for bar code payment
      */
     private void invokeNextActivity(int tranTypeFlag) {
-        if(inputMoney>0) {
-            Intent intent = new Intent();
-            bundle.putInt(ConstantUtils.TRAN_AMT, inputMoney);
+        // check if card is still inserted, if yes continue otherwise, go back to main menu or insert card
+        // Check if card is inserted
+        // int res = mBankCard.iccDetect();
 
-            if(tranTypeFlag == ConstantUtils.PURCHASE) {
+        if (inputMoney > 0) {
+            Intent intent = new Intent();
+            bundle.putLong(ConstantUtils.TRAN_AMT, inputMoney);
+
+            if (tranTypeFlag == ConstantUtils.PURCHASE) {
                 bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
-                intent.setClass(this, AccountTypeActivity.class);
+                intent.setClass(this, PayActivity.class);
+            }
+            else if (tranTypeFlag == ConstantUtils.REFUND) {
+                bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.REFUND);
+                intent.setClass(this, RefundActivity.class);
             }
 
             intent.putExtras(bundle);
             startActivity(intent);
             finish();
             skipActivityAnim(1);
-        }
-        else {
-            showToast("Please enter amount！");
+        } else {
+            displayDialog("Amount cannot be Zero");
         }
     }
 
 
-    private void inputMoneySetText()
-    {
+    private void inputMoneySetText() {
         String inputMoneyString = MoneyUtil.kobo2Naira(inputMoney);
-        inputMoneyMajorText.setText(inputMoneyString.substring(0,inputMoneyString.length()-2));
-        inputMoneyMinorText.setText(inputMoneyString.substring(inputMoneyString.length()-2));
+        inputMoneyMajorText.setText(inputMoneyString.substring(0, inputMoneyString.length() - 2));
+        inputMoneyMinorText.setText(inputMoneyString.substring(inputMoneyString.length() - 2));
     }
 
 
+    @Override
+    public void onBackPressed()
+    {
+        if (inputMoney > 0){
+            back();
+        }
+        else
+            displayDialog("Please remove card");
+    }
+
+
+    private void back(){
+        finish();
+        skipActivityAnim(-1);
+    }
 
     @Override
     protected void onResume() {
@@ -176,6 +205,34 @@ public class InputMoneyActivity extends BaseActivity {
             SmartPeakApplication.consumePaySuccess = false;
         }
         */
+    }
+
+    GlobalData globalData = GlobalData.getInstance();
+
+    CountDownTimer countDownTimer = new CountDownTimer(globalData.getPageTimerInSec() * 1000, globalData.getPageTimerInSec() * 1000) {
+
+        public void onTick(long millisUntilFinished) {
+            //System.out.println("Tick Tock...");
+        }
+
+        public void onFinish() {
+            back();
+        }
+    }.start();
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            restartTimer();
+        }
+        return super.onTouchEvent(event);
+    }
+
+
+    private void restartTimer(){
+        countDownTimer.cancel();
+        countDownTimer.start();
+        System.out.println("Starting timer again");
     }
 
 

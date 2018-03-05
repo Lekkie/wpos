@@ -7,7 +7,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="342f26c6-8535-4fea-8b8e-e08fb4a4eeda" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/CallbackListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ReprintTransaction.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/BalanceActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/CallHomeConfigActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadKeysActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/EoDActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InsertCardActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/NetworkConfigActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PrintConfigActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/RefundActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/ReprintActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/SupervisorPINPadDialog.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/EndOfDay.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintConfigThread.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintEoDThread.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_callhome_config.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_ctms_config.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_eod_download.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_insert_card_display.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_keys_download.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_print_config.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_reprint.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_create_pwd.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/SettingsActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AdminActivity.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/threads/PrintThread.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintTransactionThread.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main_menu.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_settings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_admin.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" />
@@ -18,11 +44,37 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/WPOSApplication.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/WPOSApplication.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AccountTypeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AccountTypeActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/BaseActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/BaseActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadTermParamsActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadTermParamsActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InputMoneyActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InputMoneyActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/ReversalInfoDao.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/ReversalInfoDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/TransInfoDao.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/TransInfoDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/CommsListener.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/CommsListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/EMVPINPadListener.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/EMVPINPadListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/ReversalInfo.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/ReversalInfo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/TransInfo.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/TransInfo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/EMVManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/EMVManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/CallHomeTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/CallHomeTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/DownloadKeysTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/DownloadKeysTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/ReversalTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/ReversalTask.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/ConstantUtils.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/ConstantUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/GlobalData.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/GlobalData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_term_params_download.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_term_params_download.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/IsoMessageUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/IsoMessageUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NIBSSRequests.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NIBSSRequests.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NibssTLVUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NibssTLVUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/StringUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/StringUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/TimeUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/TimeUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_account_type.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_account_type.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_pay_display.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_pay_display.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_pin.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_pin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/top_title.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/top_title.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -63,46 +115,76 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PayActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java">
+      <file leaf-file-name="AdminActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AdminActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="562" column="4" lean-forward="false" selection-start-line="562" selection-start-column="4" selection-end-line="568" selection-end-column="5" />
+            <state relative-caret-position="165">
+              <caret line="14" column="41" lean-forward="false" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="28" column="73" lean-forward="false" selection-start-line="28" selection-start-column="73" selection-end-line="28" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DownloadTermParamsActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadTermParamsActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="191" column="44" lean-forward="false" selection-start-line="191" selection-start-column="44" selection-end-line="191" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_term_params_download.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_term_params_download.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-368">
-              <caret line="232" column="106" lean-forward="false" selection-start-line="232" selection-start-column="106" selection-end-line="232" selection-end-column="106" />
-              <folding />
-            </state>
-          </provider>
+      <file leaf-file-name="layout_pin.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_pin.xml">
           <provider editor-type-id="android-designer2">
             <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2145">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SupervisorPINPadDialog.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/SupervisorPINPadDialog.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="246">
+              <caret line="160" column="44" lean-forward="true" selection-start-line="160" selection-start-column="44" selection-end-line="160" selection-end-column="44" />
+              <folding>
+                <element signature="e#2089#2268#0" expanded="true" />
+                <element signature="e#2267#2268#0" expanded="true" />
+                <element signature="e#4178#4328#0" expanded="true" />
+                <element signature="e#4327#4328#0" expanded="true" />
+                <element signature="e#4811#4860#0" expanded="true" />
+                <element signature="e#4921#4969#0" expanded="true" />
+                <element signature="e#5038#5530#0" expanded="true" />
+                <element signature="e#5529#5530#0" expanded="true" />
+                <element signature="e#5571#5806#0" expanded="true" />
+                <element signature="e#5805#5806#0" expanded="true" />
+                <element signature="e#5846#6011#0" expanded="true" />
+                <element signature="e#6010#6011#0" expanded="true" />
+                <element signature="e#6050#6363#0" expanded="true" />
+                <element signature="e#6362#6363#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KeyPadDialog.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="219">
+              <caret line="290" column="103" lean-forward="true" selection-start-line="290" selection-start-column="20" selection-end-line="290" selection-end-column="103" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#11712#14173#0" expanded="true" />
+                <element signature="e#14172#14173#0" expanded="true" />
+                <element signature="method#RestoreKeyPad#0;class#KeyPadDialog#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainMenuActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="82" column="22" lean-forward="false" selection-start-line="82" selection-start-column="22" selection-end-line="82" selection-end-column="22" />
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
@@ -118,36 +200,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getTagLen</find>
-      <find>merchantn</find>
-      <find>new ConnectException(</find>
-      <find>processTCPResponse</find>
-      <find>processFailedResponse</find>
-      <find>cardser</find>
-      <find>cardseq</find>
-      <find>currency</find>
-      <find>reason</find>
-      <find>baseHandler.sendEmptyMessage(MSG_START_PRINT);</find>
-      <find>32</find>
-      <find>infoText</find>
-      <find>setInfoActionTip</find>
-      <find>MSG_INFO</find>
-      <find>processTermParamResponseFromNIBSS</find>
-      <find>job</find>
-      <find>find</find>
-      <find>id=true,</find>
-      <find>MSG_START_PRINT</find>
-      <find>pinp</find>
-      <find>openFile</find>
-      <find>poscondi</find>
-      <find>types</find>
-      <find>create</find>
-      <find>Dao.create</find>
-      <find>callh</find>
-      <find>curr</find>
+      <find>enter</find>
+      <find>enter pin</find>
+      <find>enter p</find>
+      <find>dialo</find>
+      <find>pinthre</find>
+      <find>startpi</find>
+      <find>startPinInput</find>
+      <find>offline s</find>
+      <find>account</find>
+      <find>service</find>
+      <find>7</find>
+      <find>data</find>
+      <find>purch</find>
+      <find>now</find>
+      <find>curre</find>
+      <find>status</find>
       <find>current</find>
-      <find>login</find>
-      <find>done</find>
+      <find>hand</find>
+      <find>inp</find>
+      <find>print</find>
+      <find>print(</find>
+      <find>end of</find>
+      <find>auth</find>
+      <find>acq</find>
+      <find>ctms</find>
+      <find>tcpComms</find>
+      <find>tcp</find>
+      <find>dialog</find>
+      <find>dialog.</find>
+      <find>dialog.s</find>
     </findStrings>
     <replaceStrings>
       <replace>transInfo</replace>
@@ -1966,57 +2048,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/HttpComms.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/TMSDownload.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/Parameter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/assets/PACKAGER/NIBSS_PACKAGER.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/TLVUtil.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/NibssTLV.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/HostConfigActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_host_config.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_pin.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_create_pwd.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NIBSSRequests.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/EndOfDay.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/TimeUtil.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NibssTLVUtil.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/network/SocketConnection.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/threads/PrintThread.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/KeyUtils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/LoadCTMKActivity.java" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/DataHelper.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/TransDao.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/ProcessReversalTask.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/ReversalJobService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/DownloadKeysTask.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/CallHomeTask.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/EMVManager.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/PINPadListener.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/TcpComms.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/SettingsActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/RawRowMapper.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/BaseDao.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NIBSSRequests.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/TransInfoDao.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/ReversalInfoDao.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/ReversalInfo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/TransInfo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/IsoMessageUtil.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/ReversalTask.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/WPOSApplication.java" />
-        <option value="$PROJECT_DIR$/readme.md" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_pay_display.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_account_type.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InputMoneyActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/ReversalInfoDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/threads/PrintTransactionThread.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/threads/PrintEoDThread.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/ReprintTransaction.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AccountTypeActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/Error.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/Errors.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/GlobalData.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InputMoneyActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InsertCardActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/CallbackListener.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_pay_display.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintTransactionThread.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintEoDThread.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/EndOfDayActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_end_of_day_download.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_eod_download.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/TransInfoDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/ReprintActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_reprint.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/TransInfo.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/ConstantUtils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/BaseActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_print_config.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PrintConfigActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/CallHomeConfigActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_callhome_config.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/NetworkConfigActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_ctms_config.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintConfigThread.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/BalanceActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/EoDActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/RefundActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/CallHomeTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/DownloadKeysTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/ReversalTask.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AdminActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_admin.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_keys_download.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadKeysActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/GlobalData.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadTermParamsActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_term_params_download.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/SupervisorPINPadDialog.java" />
       </list>
     </option>
   </component>
@@ -2040,9 +2122,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -2134,10 +2214,6 @@
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values-w820dp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -2165,63 +2241,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="values-v21" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
+              <option name="myItemId" value="layout" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2252,6 +2272,210 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tasks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="printer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="listeners" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dialog" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dao" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2291,6 +2515,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2303,27 +2529,28 @@
     <property name="UI_DESIGNER_EDITOR_MODE.NlPropertiesWindowManager-NlEditorPanel.WIDTH" value="167" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/app/src/main/assets/PACKAGER" />
-    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.avantir.wpos.printer" />
       <recent name="com.avantir.wpos.utils" />
       <recent name="com.avantir.wpos.interfaces" />
     </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.avantir.wpos.model" />
-      <recent name="com.avantir.wpos.activity" />
-      <recent name="com.avantir.wpos.services" />
-      <recent name="com.avantir.wpos.tasks" />
-      <recent name="com.avantir.wpos.dao" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model" />
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model" />
       <recent name="$PROJECT_DIR$/app/libs" />
       <recent name="$PROJECT_DIR$/app/src/main/asset" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable-hdpi" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.avantir.wpos.dialog" />
+      <recent name="com.avantir.wpos.activity" />
+      <recent name="com.avantir.wpos.printer" />
+      <recent name="com.avantir.wpos.threads" />
+      <recent name="com.avantir.wpos.model" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/app/src/main/assets/PACKAGER" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.app">
@@ -2622,8 +2849,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="750" extended-state="6" />
-    <editor active="false" />
+    <frame x="0" y="23" width="1280" height="750" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2641,7 +2868,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3386076" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3386076" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32911393" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2716,13 +2943,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NibssTLVUtil.java</url>
-          <line>132</line>
+          <line>133</line>
           <properties />
           <option name="timeStamp" value="246" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NibssTLVUtil.java</url>
-          <line>176</line>
+          <line>198</line>
           <properties />
           <option name="timeStamp" value="247" />
         </line-breakpoint>
@@ -2739,19 +2966,43 @@
           <option name="timeStamp" value="352" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java</url>
-          <line>478</line>
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java</url>
+          <line>143</line>
           <properties />
-          <option name="timeStamp" value="367" />
+          <option name="timeStamp" value="393" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java</url>
-          <line>493</line>
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/EMVPINPadListener.java</url>
+          <line>59</line>
           <properties />
-          <option name="timeStamp" value="370" />
+          <option name="timeStamp" value="408" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java</url>
+          <line>534</line>
+          <properties />
+          <option name="timeStamp" value="418" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java</url>
+          <line>560</line>
+          <properties />
+          <option name="timeStamp" value="428" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/SupervisorPINPadDialog.java</url>
+          <line>119</line>
+          <properties />
+          <option name="timeStamp" value="448" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/SupervisorPINPadDialog.java</url>
+          <line>110</line>
+          <properties />
+          <option name="timeStamp" value="450" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="384" />
+      <option name="time" value="451" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2760,433 +3011,478 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/MoneyUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-105">
+          <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/ReversalInfoDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="19" column="43" lean-forward="false" selection-start-line="19" selection-start-column="43" selection-end-line="19" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_menu.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="51" column="47" lean-forward="false" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/PINPadListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="63" column="13" lean-forward="false" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="13" />
+        <state relative-caret-position="100">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///usr/local/Caskroom/android-sdk/3859397,26.0.2/platforms/android-23/android.jar!/android/os/AsyncTask.class">
+    <entry file="jar://$PROJECT_DIR$/app/libs/SDK4BaseBinderV2.1.jar!/wangpos/sdk4/libbasebinder/BankCard.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/StringUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+        <state relative-caret-position="201">
+          <caret line="79" column="15" lean-forward="false" selection-start-line="79" selection-start-column="15" selection-end-line="79" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/interfaces/Connection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="10" column="9" lean-forward="false" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/TcpComms.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="707">
-          <caret line="109" column="20" lean-forward="false" selection-start-line="109" selection-start-column="20" selection-end-line="109" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/ormdroid.jar!/com/j256/ormlite/android/apptools/OrmLiteSqliteOpenHelper.class">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InputMoneyActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="48" column="34" lean-forward="false" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="34" />
+          <caret line="149" column="0" lean-forward="false" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/orm.jar!/com/j256/ormlite/dao/BaseDaoImpl.class">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AccountTypeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="245" column="0" lean-forward="false" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
+        <state relative-caret-position="210">
+          <caret line="50" column="8" lean-forward="false" selection-start-line="50" selection-start-column="8" selection-end-line="52" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///usr/local/Caskroom/android-sdk/3859397,26.0.2/platforms/android-23/android.jar!/java/sql/SQLException.class">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InsertCardActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        <state relative-caret-position="220">
+          <caret line="165" column="30" lean-forward="false" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/ormdroid.jar!/com/j256/ormlite/android/apptools/OpenHelperManager.class">
+    <entry file="file://$PROJECT_DIR$/CallbackListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+        <state relative-caret-position="127">
+          <caret line="48" column="151" lean-forward="false" selection-start-line="48" selection-start-column="151" selection-end-line="48" selection-end-column="151" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/DataHelper.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/listeners/EMVPINPadListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="235">
+          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar:///usr/local/Caskroom/android-sdk/3859397,26.0.2/platforms/android-23/android.jar!/java/lang/NullPointerException.class">
+    <entry file="jar://$PROJECT_DIR$/app/libs/SDK4BaseBinderV2.1.jar!/wangpos/sdk4/base/IBaseService.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        <state relative-caret-position="130">
+          <caret line="121" column="8" lean-forward="false" selection-start-line="121" selection-start-column="8" selection-end-line="121" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/orm.jar!/com/j256/ormlite/dao/GenericRawResults.class">
+    <entry file="jar://$PROJECT_DIR$/app/libs/SDK4BaseBinderV2.1.jar!/wangpos/sdk4/libbasebinder/Core.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="220" column="26" lean-forward="false" selection-start-line="220" selection-start-column="23" selection-end-line="220" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/TimeUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="42" column="12" lean-forward="false" selection-start-line="42" selection-start-column="12" selection-end-line="44" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pay_display.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="35" column="40" lean-forward="false" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintEoDThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="750">
+          <caret line="64" column="52" lean-forward="false" selection-start-line="64" selection-start-column="52" selection-end-line="64" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_term_params_download.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
-          <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/orm.jar!/com/j256/ormlite/stmt/StatementExecutor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8">
-          <caret line="566" column="45" lean-forward="false" selection-start-line="566" selection-start-column="25" selection-end-line="566" selection-end-column="45" />
+          <caret line="34" column="40" lean-forward="false" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/orm.jar!/com/j256/ormlite/dao/Dao.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="101" column="31" lean-forward="false" selection-start-line="101" selection-start-column="31" selection-end-line="101" selection-end-column="31" />
-        </state>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_eod_download.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/orm.jar!/com/j256/ormlite/stmt/SelectIterator.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/orm.jar!/com/j256/ormlite/stmt/RawResultsImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15">
-          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/ReversalJobService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="21" column="31" lean-forward="true" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/BaseDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+        <state relative-caret-position="52">
+          <caret line="34" column="54" lean-forward="false" selection-start-line="34" selection-start-column="45" selection-end-line="34" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/RawRowMapper.java" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NIBSSRequests.java">
+    <entry file="file://$PROJECT_DIR$/ReprintTransaction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="63" column="44" lean-forward="false" selection-start-line="63" selection-start-column="44" selection-end-line="63" selection-end-column="44" />
+        <state relative-caret-position="276">
+          <caret line="78" column="0" lean-forward="true" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/TransInfoDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="24" column="65" lean-forward="false" selection-start-line="24" selection-start-column="65" selection-end-line="24" selection-end-column="65" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dao/ReversalInfoDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="39" column="60" lean-forward="false" selection-start-line="39" selection-start-column="60" selection-end-line="39" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/ReversalInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="328" column="32" lean-forward="false" selection-start-line="328" selection-start-column="32" selection-end-line="328" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#8251#8252#0" expanded="false" />
-            <element signature="e#8299#8300#0" expanded="false" />
-            <element signature="e#8341#8342#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/IsoMessageUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="515" column="8" lean-forward="false" selection-start-line="515" selection-start-column="8" selection-end-line="515" selection-end-column="8" />
+        <state relative-caret-position="415">
+          <caret line="80" column="113" lean-forward="false" selection-start-line="80" selection-start-column="113" selection-end-line="80" selection-end-column="113" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/ReversalTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="76" column="14" lean-forward="false" selection-start-line="76" selection-start-column="14" selection-end-line="76" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/WPOSApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8">
-          <caret line="42" column="79" lean-forward="false" selection-start-line="42" selection-start-column="79" selection-end-line="42" selection-end-column="79" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/readme.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="95">
-            <caret line="13" column="31" lean-forward="true" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/HostConfigActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="89" column="5" lean-forward="false" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pay_display.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="61" column="43" lean-forward="false" selection-start-line="61" selection-start-column="43" selection-end-line="61" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_reprint.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/services/EMVManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1815">
-          <caret line="349" column="48" lean-forward="false" selection-start-line="349" selection-start-column="48" selection-end-line="349" selection-end-column="48" />
+        <state relative-caret-position="247">
+          <caret line="56" column="40" lean-forward="false" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/local/Caskroom/android-sdk/3859397,26.0.2/platforms/android-23/android.jar!/android/app/Activity.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="339" column="16" lean-forward="false" selection-start-line="339" selection-start-column="16" selection-end-line="339" selection-end-column="16" />
-          <folding>
-            <element signature="e#9634#9635#0" expanded="true" />
-            <element signature="e#9685#9686#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/TransInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-720">
-          <caret line="23" column="27" lean-forward="false" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="27" />
-          <folding>
-            <element signature="e#9422#9423#0" expanded="false" />
-            <element signature="e#9462#9463#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/InputMoneyActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1102">
-          <caret line="153" column="42" lean-forward="false" selection-start-line="153" selection-start-column="42" selection-end-line="153" selection-end-column="42" />
+        <state relative-caret-position="53">
+          <caret line="92" column="82" lean-forward="false" selection-start-line="92" selection-start-column="82" selection-end-line="92" selection-end-column="82" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_settings.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintTransactionThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/Errors.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/model/Error.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="167">
+          <caret line="82" column="82" lean-forward="false" selection-start-line="82" selection-start-column="82" selection-end-line="82" selection-end-column="82" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/ConstantUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="134" column="31" lean-forward="false" selection-start-line="134" selection-start-column="31" selection-end-line="134" selection-end-column="31" />
+        <state relative-caret-position="145">
+          <caret line="82" column="31" lean-forward="false" selection-start-line="82" selection-start-column="31" selection-end-line="82" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_print_config.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="47" column="48" lean-forward="false" selection-start-line="47" selection-start-column="48" selection-end-line="47" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_callhome_config.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="104" column="49" lean-forward="false" selection-start-line="104" selection-start-column="49" selection-end-line="104" selection-end-column="49" />
+          <folding>
+            <element signature="n#LinearLayout#0;n#LinearLayout#0;n#LinearLayout#0;n#LinearLayout#0;n#LinearLayout#0;n#LinearLayout#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_ctms_config.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="223" column="44" lean-forward="false" selection-start-line="223" selection-start-column="44" selection-end-line="223" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/printer/PrintConfigThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/NIBSSRequests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-549">
+          <caret line="35" column="23" lean-forward="false" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/BalanceActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-982">
+          <caret line="476" column="51" lean-forward="false" selection-start-line="476" selection-start-column="51" selection-end-line="476" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/EoDActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-189">
+          <caret line="165" column="45" lean-forward="false" selection-start-line="165" selection-start-column="45" selection-end-line="165" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/HostConfigActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="117" column="5" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="117" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/NetworkConfigActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-714">
+          <caret line="30" column="50" lean-forward="false" selection-start-line="30" selection-start-column="50" selection-end-line="30" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="462" column="62" lean-forward="false" selection-start-line="462" selection-start-column="62" selection-end-line="462" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/ReprintActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="149" column="31" lean-forward="false" selection-start-line="149" selection-start-column="31" selection-end-line="149" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/CallHomeTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-150">
+          <caret line="38" column="49" lean-forward="false" selection-start-line="38" selection-start-column="49" selection-end-line="38" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/DownloadKeysTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-690">
+          <caret line="51" column="52" lean-forward="false" selection-start-line="51" selection-start-column="52" selection-end-line="51" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/tasks/ReversalTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1050">
+          <caret line="90" column="26" lean-forward="false" selection-start-line="90" selection-start-column="26" selection-end-line="90" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PrintConfigActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="111" column="20" lean-forward="false" selection-start-line="111" selection-start-column="20" selection-end-line="111" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="48" column="66" lean-forward="false" selection-start-line="48" selection-start-column="66" selection-end-line="48" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_keys_download.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="44" column="31" lean-forward="true" selection-start-line="44" selection-start-column="31" selection-end-line="44" selection-end-column="31" />
+          <folding>
+            <element signature="n#LinearLayout#0;n#LinearLayout#0;n#LinearLayout#0;n#LinearLayout#0;n#LinearLayout#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_pin.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2145">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/RefundActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="533" column="78" lean-forward="false" selection-start-line="533" selection-start-column="78" selection-end-line="533" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadKeysActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="482">
+          <caret line="204" column="0" lean-forward="false" selection-start-line="204" selection-start-column="0" selection-end-line="204" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/GlobalData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="365" column="47" lean-forward="false" selection-start-line="365" selection-start-column="47" selection-end-line="365" selection-end-column="47" />
-          <folding>
-            <element signature="e#3652#3653#0" expanded="true" />
-            <element signature="e#3720#3721#0" expanded="true" />
-            <element signature="e#11296#11297#0" expanded="true" />
-            <element signature="e#11370#11371#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/BaseActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="50" column="43" lean-forward="false" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
+        <state relative-caret-position="190">
+          <caret line="256" column="76" lean-forward="false" selection-start-line="256" selection-start-column="76" selection-end-line="256" selection-end-column="76" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/SettingsActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/CallHomeConfigActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
-          <caret line="25" column="37" lean-forward="true" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_account_type.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="33" column="48" lean-forward="false" selection-start-line="28" selection-start-column="8" selection-end-line="33" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AccountTypeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="631">
-          <caret line="57" column="25" lean-forward="false" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/PayActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="562" column="4" lean-forward="false" selection-start-line="562" selection-start-column="4" selection-end-line="568" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="35" column="58" lean-forward="false" selection-start-line="35" selection-start-column="58" selection-end-line="35" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="28" column="73" lean-forward="false" selection-start-line="28" selection-start-column="73" selection-end-line="28" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/utils/TMSDownload.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="19" column="64" lean-forward="false" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="55" column="35" lean-forward="true" selection-start-line="55" selection-start-column="35" selection-end-line="55" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-w820dp/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="17" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/DownloadTermParamsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="191" column="44" lean-forward="false" selection-start-line="191" selection-start-column="44" selection-end-line="191" selection-end-column="44" />
+        <state relative-caret-position="66">
+          <caret line="388" column="76" lean-forward="false" selection-start-line="388" selection-start-column="76" selection-end-line="388" selection-end-column="76" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_term_params_download.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_admin.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-368">
-          <caret line="232" column="106" lean-forward="false" selection-start-line="232" selection-start-column="106" selection-end-line="232" selection-end-column="106" />
+        <state relative-caret-position="142">
+          <caret line="76" column="46" lean-forward="false" selection-start-line="76" selection-start-column="46" selection-end-line="76" selection-end-column="46" />
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/AdminActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="14" column="41" lean-forward="false" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/activity/MainMenuActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="82" column="22" lean-forward="false" selection-start-line="82" selection-start-column="22" selection-end-line="82" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/KeyPadDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="290" column="103" lean-forward="true" selection-start-line="290" selection-start-column="20" selection-end-line="290" selection-end-column="103" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11712#14173#0" expanded="true" />
+            <element signature="e#14172#14173#0" expanded="true" />
+            <element signature="method#RestoreKeyPad#0;class#KeyPadDialog#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/avantir/wpos/dialog/SupervisorPINPadDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="160" column="44" lean-forward="true" selection-start-line="160" selection-start-column="44" selection-end-line="160" selection-end-column="44" />
+          <folding>
+            <element signature="e#2089#2268#0" expanded="true" />
+            <element signature="e#2267#2268#0" expanded="true" />
+            <element signature="e#4178#4328#0" expanded="true" />
+            <element signature="e#4327#4328#0" expanded="true" />
+            <element signature="e#4811#4860#0" expanded="true" />
+            <element signature="e#4921#4969#0" expanded="true" />
+            <element signature="e#5038#5530#0" expanded="true" />
+            <element signature="e#5529#5530#0" expanded="true" />
+            <element signature="e#5571#5806#0" expanded="true" />
+            <element signature="e#5805#5806#0" expanded="true" />
+            <element signature="e#5846#6011#0" expanded="true" />
+            <element signature="e#6010#6011#0" expanded="true" />
+            <element signature="e#6050#6363#0" expanded="true" />
+            <element signature="e#6362#6363#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>

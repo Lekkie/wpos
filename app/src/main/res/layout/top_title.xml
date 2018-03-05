@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:textStyle="bold|italic"
             android:text="ArcaPOS"/>
 
     <ImageView android:id="@+id/operText"

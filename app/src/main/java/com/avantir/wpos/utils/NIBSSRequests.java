@@ -61,15 +61,30 @@ public class NIBSSRequests {
         comms.dataCommu(WPOSApplication.app, tmkReqBytes, commsListener);
     }
 
-    public static String doPurchaseReversal(ReversalInfo reversalInfo, boolean isRepeat) throws Exception{
+
+    public static void doPurchase(TransInfo transInfo, TcpComms comms, Handler handler) throws Exception{
+        GlobalData globalData = GlobalData.getInstance();
+        byte[] dataBytes = IsoMessageUtil.createRequest(transInfo);
+        ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_PURCHASE_REQ_TYPE);
+        comms.dataCommu(WPOSApplication.app, dataBytes, commsListener);
+    }
+
+    public static String doPurchaseReversal(ReversalInfo reversalInfo, boolean isRepeat, TcpComms comms) throws Exception{
         byte[] data = IsoMessageUtil.createPurchaseReversal(reversalInfo, isRepeat);
         GlobalData globalData = GlobalData.getInstance();
-        TcpComms comms = new TcpComms(globalData.getCTMSHost(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
         byte[] respData = comms.dataCommuBlocking(WPOSApplication.app, data);
         IsoMessage isoMsgResponse = IsoMessageUtil.getInstance().decode(respData);
         System.out.println(isoMsgResponse.debugString());
         String responseCode = isoMsgResponse.getObjectValue(39);
         return  responseCode;
+    }
+
+    //EoD
+    public static void downloadEoD(Handler handler, TcpComms comms) throws Exception{
+        IsoMessageUtil isoMessageUtil = IsoMessageUtil.getInstance();
+        byte[] eodReqBytes = isoMessageUtil.createDailyTransactionReportDownloadRequest();
+        ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_EOD_DOWNLOAD_REQ_TYPE);
+        comms.dataCommu(WPOSApplication.app, eodReqBytes, commsListener);
     }
 
 }

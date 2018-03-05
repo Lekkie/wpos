@@ -222,7 +222,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
     protected void handleMessage(Message msg) {
         Log.i(PayActivity.class.getSimpleName(), "handleMessage: "+msg.what);
         switch (msg.what) {
-            case MSG_INFO:
+            case ConstantUtils.MSG_INFO:
                 //setTransactionStatusActionTip();
                 break;
             case MSG_DOWNLOAD_FROM_MGT_SERVER:
@@ -246,13 +246,13 @@ public class DownloadTermParamsActivity extends BaseActivity {
             case MSG_DOWNLOAD_NIBSS_TERM_PARAM:
                 downloadTermParamFromNIBSS();
                 break;
-            case MSG_FINISH_COMMS:
+            case ConstantUtils.MSG_FINISH_COMMS:
                 // end tcpComms
                 byte[] receiveData = (byte[])msg.obj;
                 Bundle bundleSuccess = msg.getData();
                 processResponse(bundleSuccess, receiveData);
                 break;
-            case  MSG_FINISH_ERROR_COMMS:
+            case  ConstantUtils.MSG_FINISH_ERROR_COMMS:
                 // end tcpComms with error
                 //int commsErrorCode = Integer.parseInt(msg.obj.toString());
                 //Bundle bundleFail = msg.getData(); //display which one is not successful
@@ -385,7 +385,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 int getDataPin = ConstantUtils.GET_PIN_DATA; //Whether to get the PIN retry times TAG9F17 0x01 Yes;  0x00 No
                 String termTransQuali = ConstantUtils.TERM_TRANSACTION_QUALITY; // "26800080"
 
-                globalData.setCTMSHost(parameter.getTmsIp());
+                globalData.setCTMSHost("ctms.nibss-plc.com");
+                globalData.setCTMSIP(parameter.getTmsIp()); // 41.58.130.139
                 globalData.setCTMSPort(parameter.getTmsPort());
                 globalData.setCTMSTimeout(parameter.getTmsTimeout());
                 globalData.setIfCTMSSSL(parameter.isTmsSsl());
@@ -398,6 +399,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 globalData.setPOSDataCode(posDataCode);
                 globalData.setICCData(iccData);
                 globalData.setResendReversalPeriodInMin(60); // get from remote
+                globalData.setPageTimerInSec(60);
+                globalData.setPTSP("Arca Networks");
 
                 byte[] outData = new byte[1024];
                 int[] outStatus = new int[1];
@@ -464,8 +467,8 @@ public class DownloadTermParamsActivity extends BaseActivity {
 
 
     private void downloadKeys(){
-        tcpComms = new TcpComms(globalData.getCTMSHost(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
-        tcpComms.setHost(globalData.getCTMSHost());
+        tcpComms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+        tcpComms.setHost(globalData.getCTMSIP());
         tcpComms.setPort(globalData.getCTMSPort());
         tcpComms.setTimeout(globalData.getCTMSTimeout());
         tcpComms.setIfSSL(globalData.getIfCTMSSSL());
@@ -481,7 +484,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 }
                 catch(Exception ex){
                     ex.printStackTrace();
-                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download TMK!").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download TMK!").sendToTarget();
                     doneButton.setEnabled(true);
                     retryButton.setEnabled(true);
                 }
@@ -507,7 +510,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
         catch(Exception ex){
             ex.printStackTrace();
             downloadStatusText.setText("TMK Key download failed ...");
-            baseHandler.obtainMessage(ShowToastFlag, "Failed to download TMK!").sendToTarget();
+            baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download TMK!").sendToTarget();
             setTmkStatus("Failed");
             setTpkStatus("Stopped");
             setTskStatus("Stopped");
@@ -529,7 +532,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     //showToast("Failed to download TPK!");
-                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download TPK!").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download TPK!").sendToTarget();
                     doneButton.setEnabled(true);
                     retryButton.setEnabled(true);
                 }
@@ -576,7 +579,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     //showToast("Failed to download TSK!");
-                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download TSK!").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download TSK!").sendToTarget();
                     doneButton.setEnabled(true);
                     retryButton.setEnabled(true);
                 }
@@ -633,7 +636,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
         catch(Exception ex){
             ex.printStackTrace();
             //showToast("Failed to download TSK!");
-            baseHandler.obtainMessage(ShowToastFlag, "Failed to download TSK!").sendToTarget();
+            baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download TSK!").sendToTarget();
             downloadStatusText.setText("TSK Key download failed ...");
             setTmkStatus("downloaded (not loaded)");
             setTpkStatus("downloaded (not loaded)");
@@ -657,7 +660,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     //showToast("Failed to download Terminal Parameter from NIBSS CTMS!");
-                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download Term Param form NIBSS!").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download Term Param form NIBSS!").sendToTarget();
                     doneButton.setEnabled(true);
                     retryButton.setEnabled(true);
                 }
@@ -771,7 +774,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     //showToast("Failed to download CAPK!");
-                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download CAPK!").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download CAPK!").sendToTarget();
                     doneButton.setEnabled(true);
                     retryButton.setEnabled(true);
                 }
@@ -828,7 +831,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
         catch(Exception ex){
             ex.printStackTrace();
             //showToast("Failed to download CAPK!");
-            baseHandler.obtainMessage(ShowToastFlag, "Failed to download CAPK!").sendToTarget();
+            baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download CAPK!").sendToTarget();
             downloadStatusText.setText("CAPK download failed ...");
             setCapkStatus("Failed");
             setAidStatus("Stopped");
@@ -849,7 +852,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 catch(Exception ex){
                     ex.printStackTrace();
                     //showToast("Failed to download AID!");
-                    baseHandler.obtainMessage(ShowToastFlag, "Failed to download AID!").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download AID!").sendToTarget();
                     doneButton.setEnabled(true);
                     retryButton.setEnabled(true);
                 }
@@ -914,7 +917,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
         catch(Exception ex){
             ex.printStackTrace();
             //showToast("Failed to download AID!");
-            baseHandler.obtainMessage(ShowToastFlag, "Failed to download AID!").sendToTarget();
+            baseHandler.obtainMessage(ConstantUtils.ShowToastFlag, "Failed to download AID!").sendToTarget();
             downloadStatusText.setText("AID download failed ...");
             setAidStatus("Failed");
         }

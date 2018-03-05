@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:fitsSystemWindows="true">
+
+
+    <include
+            layout="@layout/top_title"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+
+        <!--
+        <Button
+                android:id="@+id/load_ctmk_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Load CTMK"/>
+        <Button
+                android:id="@+id/load_bdk_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Load BDK"/>
+
+        <Button
+                android:id="@+id/term_settings_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Download Terminal Settings"/>
+
+        <Button
+                android:id="@+id/download_key_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Download Keys"/>
+        -->
+
+        <Button
+                android:id="@+id/call_home_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="CallHome Config"/>
+
+        <Button
+                android:id="@+id/print_config_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Print Config"/>
+
+        <Button
+                android:id="@+id/network_param_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Network Parameter Config"/>
+
+
+        <Button
+                android:id="@+id/download_keys_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Download Keys"/>
+
+        <Button
+                android:id="@+id/setup_mgt_host_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Setup Mgt Host"/>
+
+        <Button
+                android:id="@+id/download_terminal_params_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Download Terminal Parameters"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.avantir.wpos.utils;
 
+import com.avantir.wpos.model.EndOfDay;
 import com.avantir.wpos.model.NibssTLV;
 
 import java.util.ArrayList;
@@ -168,6 +169,27 @@ public class NibssTLVUtil {
         return aidStrArr;
     }
 
+
+    public static HashMap<String, EndOfDay> getEndOfDayList(List<List<NibssTLV>> eodTlvListList){
+        HashMap<String, EndOfDay> endOfDayList = new HashMap<>();
+        for(List<NibssTLV> eodTlvList: eodTlvListList){
+            //String aidStr = "";
+            EndOfDay endOfDay = new EndOfDay();
+            for(NibssTLV eodTlv: eodTlvList){
+                String tag = eodTlv.getTag();
+                if("53".equalsIgnoreCase(tag))
+                    endOfDay.setTransDateTime(eodTlv.getValue());
+                else if("54".equalsIgnoreCase(tag))
+                    endOfDay.setTransDateTime(eodTlv.getValue());
+                else if("55".equalsIgnoreCase(tag))
+                    endOfDay.setTransDateTime(eodTlv.getValue());
+                else if("56".equalsIgnoreCase(tag))
+                    endOfDay.setTransDateTime(eodTlv.getValue());
+            }
+            endOfDayList.put(endOfDay.getTransDateTime(), endOfDay);
+        }
+        return endOfDayList;
+    }
 
 
 

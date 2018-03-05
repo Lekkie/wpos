@@ -36,7 +36,7 @@ public class CallHomeTask extends AsyncTask<Void, Void, Boolean> {
             }
         }.start();
         globalData = GlobalData.getInstance();
-        comms = new TcpComms(globalData.getCTMSHost(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+        comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
     }
 
     @Override

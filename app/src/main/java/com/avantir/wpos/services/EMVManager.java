@@ -126,7 +126,7 @@ public class EMVManager {
             handler.sendEmptyMessage(2);
         }
 
-        handler.sendEmptyMessage(BaseActivity.MSG_START_COMMS);
+        handler.sendEmptyMessage(ConstantUtils.MSG_START_COMMS);
         return 0;
     }
 
@@ -445,10 +445,14 @@ public class EMVManager {
         emv.getTLV(0x5F20, outData, outDataLen);
         transInfo.setCardHolderName(new String(outData).trim());
         emv.getTLV(0x5F30, outData, outDataLen); // 5F30 - service code
-        transInfo.setServiceRestrictionCode(new String(outData).trim());
+        String src = ByteUtil.bytes2HexString(Arrays.copyOf(outData, outDataLen[0]));
+        src = (src == null) ? null : (src.length() > 3 ? src.substring(1) : StringUtil.leftPad(src, 3, '0'));
+        transInfo.setServiceRestrictionCode(src);
         emv.getTLV(0x9F12, outData, outDataLen); // 9F 12 - Application Preferred Name
         transInfo.setCardTypeName(new String(outData).trim());
         transInfo.setMaskedPan(StringUtil.maskPan(transInfo.getCardNo()));
+        emv.getTLV(0x5F28, outData, outDataLen);
+        transInfo.setIssuerCountry(new String(outData).trim());
 
         return 0;
     }

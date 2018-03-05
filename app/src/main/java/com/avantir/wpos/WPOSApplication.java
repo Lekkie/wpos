@@ -58,7 +58,7 @@ public class WPOSApplication extends Application { //LitePalApplication
 
         ComponentName callHomeComponent = new ComponentName(getPackageName(), CallHomeJobService.class.getName());
         JobInfo.Builder callHomeBuilder = new JobInfo.Builder(ConstantUtils.CALL_HOME_JOB_ID, callHomeComponent);
-        callHomeBuilder = callHomeBuilder.setRequiresDeviceIdle(false);
+        callHomeBuilder = callHomeBuilder.setRequiresDeviceIdle(true);
         JobInfo callHomeJobInfo =  callHomeBuilder.setPeriodic(callHomeTimeInMill)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 //.setPersisted(true)
@@ -70,7 +70,7 @@ public class WPOSApplication extends Application { //LitePalApplication
 
         ComponentName reversalComponent = new ComponentName(getPackageName(), ReversalJobService.class.getName());
         JobInfo.Builder reversalBuilder = new JobInfo.Builder(ConstantUtils.REVERSAL_JOB_ID, reversalComponent);
-        reversalBuilder = reversalBuilder.setRequiresDeviceIdle(false); // set to true
+        reversalBuilder = reversalBuilder.setRequiresDeviceIdle(true); // set to true
         JobInfo reversalJobInfo =  reversalBuilder.setPeriodic(reversalTimeInMill)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 //.setPersisted(true)
