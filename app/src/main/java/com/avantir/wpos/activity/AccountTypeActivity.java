@@ -21,12 +21,18 @@ public class AccountTypeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         setContentView(R.layout.activity_account_type);
+
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
+        findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+
         this.findViewById(R.id.default_btn).setOnClickListener(this);
         this.findViewById(R.id.savings_btn).setOnClickListener(this);
         this.findViewById(R.id.current_btn).setOnClickListener(this);
         this.findViewById(R.id.credit_btn).setOnClickListener(this);
-        this.findViewById(R.id.titleBackImage).setOnClickListener(this);
+
+        //this.findViewById(R.id.titleBackImage).setOnClickListener(this);
         super.onCreate(savedInstanceState);
         WPOSApplication.activityList.add(this);
     }

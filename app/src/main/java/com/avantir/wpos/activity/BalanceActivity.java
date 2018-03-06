@@ -70,6 +70,7 @@ public class BalanceActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_pay_display);
+
         findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
         super.onCreate(savedInstanceState);
@@ -545,7 +546,7 @@ public class BalanceActivity extends BaseActivity {
     private void back(){
         //finish();
         //skipActivityAnim(-1);
-        startActivity(new Intent(BalanceActivity.this, MainActivity.class));
+        startActivity(new Intent(this, MainMenuActivity.class));
         finish();
     }
 

@@ -27,8 +27,6 @@ public class ReprintActivity extends BaseActivity {
     LinearLayout reprintLayout;
     private TextView reprintHeaderText;
     private TextView reprintStatusText;
-    private Button doneButton;
-    private Button reprintButton;
 
     private Printer mPrinter;
 
@@ -43,11 +41,10 @@ public class ReprintActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_reprint);
+
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
-        //doneButton = ((Button) findViewById(R.id.done_btn));
-        //doneButton.setEnabled(false);
-        //reprintButton = ((Button) findViewById(R.id.reprint_btn));
-        //reprintButton.setEnabled(false);
+
         super.onCreate(savedInstanceState);
     }
 

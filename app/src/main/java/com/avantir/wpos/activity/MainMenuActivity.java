@@ -37,13 +37,16 @@ public class MainMenuActivity extends BaseActivity {
 
 
         findViewById(R.id.titleBackImage).setVisibility(View.GONE);
+        findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+
         this.findViewById(R.id.purchase_btn).setOnClickListener(this);
         this.findViewById(R.id.balance_btn).setOnClickListener(this);
         this.findViewById(R.id.refund_btn).setOnClickListener(this);
         this.findViewById(R.id.reprint_btn).setOnClickListener(this);
         this.findViewById(R.id.end_of_day_btn).setOnClickListener(this);
         this.findViewById(R.id.admin_btn).setOnClickListener(this);
-        this.findViewById(R.id.titleSettingsImage).setOnClickListener(this);
+
+        //this.findViewById(R.id.titleSettingsImage).setOnClickListener(this);
     }
 
 
@@ -79,30 +82,33 @@ public class MainMenuActivity extends BaseActivity {
                 break;
             case R.id.refund_btn:
                 if(performTransactionChecks()){
-                    SupervisorPINPadDialog.getInstance().showDialog(this);
-                    /*
-                    Intent intent = new Intent(this, InsertCardActivity.class);
+                    Intent intent = new Intent(this, SupervisorPinActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.REFUND);
+                    bundle.putInt(ConstantUtils.NEXT_ACTIVITY, ConstantUtils.REFUND_ACTIVITY);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                    */
                 }
                 break;
             case R.id.reprint_btn:
                 if(performPrinterChecks()){
-                    Intent reprintIntent = new Intent(this, ReprintActivity.class);
-                    startActivity(reprintIntent);
+                    Intent intent = new Intent(this, SupervisorPinActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ConstantUtils.NEXT_ACTIVITY, ConstantUtils.REPRINT_ACTIVITY);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
                 break;
             case R.id.end_of_day_btn:
                 if(performPrinterChecks()){
-                    Intent intent = new Intent(this, EoDActivity.class);
+                    Intent intent = new Intent(this, SupervisorPinActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ConstantUtils.NEXT_ACTIVITY, ConstantUtils.EOD_ACTIVITY);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
                 break;
             case R.id.admin_btn:
-                Intent adminIntent = new Intent(this, AdminActivity.class);
+                Intent adminIntent = new Intent(this, AdminPasswordActivity.class);
                 startActivity(adminIntent);
                 break;
         }

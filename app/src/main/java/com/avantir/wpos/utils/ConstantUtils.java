@@ -45,6 +45,12 @@ public class ConstantUtils {
     public static final int DOWNLOAD_KEYS_JOB_ID = 1;
     public static final int CALL_HOME_JOB_ID = 2;
     public static final int REVERSAL_JOB_ID =  3;
+    public static final String NEXT_ACTIVITY = "NEXT_ACTIVITY";
+    public static final int REFUND_ACTIVITY = 1;
+    public static final int REPRINT_ACTIVITY = 2;
+    public static final int EOD_ACTIVITY = 3;
+    public static final int ADMIN_ACTIVITY = 4;
+
 
     public static final String RSA_KEY_ALIAS = "httpsCert";
     public static final String LOGIN = "LOGIN"; /*login*/
@@ -104,6 +110,8 @@ public class ConstantUtils {
     public static final String CARD_TYPE = "CARD_TYPE";
     public static final String DEVICE_SERIAL_NO = "deviceSerialNo";
     public static final String TERMINAL_PUBLIC_KEY = "devicePublicKey";
+    public static final String SUPERVISOR_PIN = "SUPERVISOR_PIN";
+    public static final String ADMIN_PWD = "ADMIN_PWD";
 
     public static final String TERMINAL_DOWNLOAD_URI = "/api/v1/terminals/parameters";
 

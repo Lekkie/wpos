@@ -18,35 +18,6 @@
             android:orientation="vertical">
 
 
-        <!--
-        <Button
-                android:id="@+id/load_ctmk_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Load CTMK"/>
-        <Button
-                android:id="@+id/load_bdk_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Load BDK"/>
-
-        <Button
-                android:id="@+id/term_settings_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Download Terminal Settings"/>
-
-        <Button
-                android:id="@+id/download_key_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Download Keys"/>
-        -->
-
         <Button
                 android:id="@+id/call_home_btn"
                 android:layout_width="match_parent"

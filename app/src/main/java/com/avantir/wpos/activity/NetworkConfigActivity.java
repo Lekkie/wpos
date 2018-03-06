@@ -29,7 +29,10 @@ public class NetworkConfigActivity extends BaseActivity implements  View.OnFocus
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_ctms_config);
+
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+
         super.onCreate(savedInstanceState);
     }
 

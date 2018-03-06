@@ -69,7 +69,10 @@ public class DownloadKeysActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_keys_download);
+
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+
         doneButton = ((Button) findViewById(R.id.done_btn));
         doneButton.setEnabled(false);
         retryButton = ((Button) findViewById(R.id.retry_btn));

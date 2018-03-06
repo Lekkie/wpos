@@ -25,7 +25,10 @@ public class CallHomeConfigActivity extends BaseActivity implements  View.OnFocu
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_callhome_config);
+
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+
         super.onCreate(savedInstanceState);
     }
 

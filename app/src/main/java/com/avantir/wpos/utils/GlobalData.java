@@ -401,6 +401,22 @@ public class GlobalData {
         return mPrefs.getString(ConstantUtils.TSK, "");
     }
 
+    public void setSupervisorPIN(String supervisorPIN) {
+        mEditor.putString(ConstantUtils.SUPERVISOR_PIN, supervisorPIN);
+        mEditor.commit();
+    }
+    public String getSupervisorPIN() {
+        return mPrefs.getString(ConstantUtils.SUPERVISOR_PIN, "1234");
+    }
+
+    public void setAdminPassword(String adminPassword) {
+        mEditor.putString(ConstantUtils.ADMIN_PWD, adminPassword);
+        mEditor.commit();
+    }
+    public String getAdminPassword() {
+        return mPrefs.getString(ConstantUtils.ADMIN_PWD, "Password1$");
+    }
+
 
 
     public void setIfFirstLaunch(boolean ifFirstLaunch) {

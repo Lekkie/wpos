@@ -49,7 +49,10 @@ public class EoDActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_eod_download);
+
+        findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
+
         super.onCreate(savedInstanceState);
     }
 

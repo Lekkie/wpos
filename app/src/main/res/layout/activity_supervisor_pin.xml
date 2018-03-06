@@ -1,0 +1,143 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:fitsSystemWindows="true">
+
+
+    <include
+            layout="@layout/top_title"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1.12"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#DDDDDD"
+                android:weightSum="10"
+                android:orientation="vertical">
+
+
+            <LinearLayout
+                    android:id="@+id/supervisor_pin_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal" android:layout_weight="9" android:weightSum="1">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#DDDDDD"
+                        android:weightSum="7"
+                        android:orientation="vertical">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold|italic"
+                                android:gravity="center"
+                                android:text="Supervisor PIN"
+                                android:textSize="20sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal" android:layout_weight="1" android:weightSum="1"/>
+
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/divider_height">
+
+                        <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold|italic"
+                                android:gravity="center_vertical"
+                                android:text="PIN:"
+                                android:textSize="20sp"/>
+
+                        <EditText
+                                android:id="@+id/supervisorPINText"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textSize="20sp"
+                                android:layout_marginTop="0dp"
+                                android:gravity="center_vertical"
+                                android:layout_marginRight="3dp"
+                                android:digits="0123456789"
+                                android:maxLength="4"
+                                android:inputType="numberPassword"
+                                android:text=""/>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:weightSum="2"
+                        android:orientation="horizontal"
+                        android:background="@color/btn_num_press"
+                        android:layout_marginTop="@dimen/divider_height">
+
+                    <Button
+                            android:id="@+id/cancel_supervisor_pin_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:text="Cancel"/>
+
+                    <Button
+                            android:id="@+id/ok_supervisor_pin_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:text="Ok"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
