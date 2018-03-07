@@ -590,8 +590,8 @@ public class PayActivity extends BaseActivity {
 
 
     private void print(boolean customerCopy){
-        //new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
-        baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
+        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
+        //baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
     }
 
     private void back(){

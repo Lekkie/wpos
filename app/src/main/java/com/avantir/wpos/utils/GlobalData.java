@@ -427,7 +427,15 @@ public class GlobalData {
         return mPrefs.getBoolean(ConstantUtils.FIRST_LAUNCH, true);
     }
 
-
+    /*
+    public void setIfUseRemoteNetworkConfig(boolean ifUseRemoteNetworkConfig) {
+        mEditor.putBoolean(ConstantUtils.USE_REMOTE_NETWORK_CONFIG, ifUseRemoteNetworkConfig);
+        mEditor.commit();
+    }
+    public boolean getIfUseRemoteNetworkConfig() {
+        return mPrefs.getBoolean(ConstantUtils.USE_REMOTE_NETWORK_CONFIG, false);
+    }
+    */
 
 
 }

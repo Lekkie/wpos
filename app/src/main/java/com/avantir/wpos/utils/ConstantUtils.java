@@ -1,10 +1,19 @@
 package com.avantir.wpos.utils;
 
+import java.util.HashMap;
+
 /**
  * Created by lekanomotayo on 30/01/2018.
  */
 public class ConstantUtils {
 
+
+    public static HashMap<String, String> ISO_CURRENCY_MAP = new HashMap<>();
+    static{
+        ISO_CURRENCY_MAP.put("566", "NGN");
+        ISO_CURRENCY_MAP.put("840", "USD");
+        ISO_CURRENCY_MAP.put("826", "GBP");
+    }
     public static final int MSG_START_TRANS = 0x2000;
     public static final int READ_CARD = 99;
     public static final int ICC_NEXT = 100;
@@ -34,6 +43,7 @@ public class ConstantUtils {
     public static final int REFUND = 3;
     public static final int BANK_CARD = 1;
 
+    public static final String TRANS_INFO = "TRANS_INFO";
     public static final String TRAN_TYPE = "tranType";
     public static final String TRAN_AMT = "orderAmount";
     public static final String PAYMENT_INSTRUMENT = "paymentInstrument";
@@ -112,6 +122,7 @@ public class ConstantUtils {
     public static final String TERMINAL_PUBLIC_KEY = "devicePublicKey";
     public static final String SUPERVISOR_PIN = "SUPERVISOR_PIN";
     public static final String ADMIN_PWD = "ADMIN_PWD";
+    public static final String USE_REMOTE_NETWORK_CONFIG = "USE_REMOTE_NETWORK_CONFIG";
 
     public static final String TERMINAL_DOWNLOAD_URI = "/api/v1/terminals/parameters";
 
@@ -128,6 +139,9 @@ public class ConstantUtils {
     public static final int NETWORK_EOD_DOWNLOAD_REQ_TYPE = 10;
     public static final int NETWORK_PURCHASE_REQ_TYPE = 11;
     public static final int NETWORK_PURCHASE_REQ_REVERSAL_TYPE = 12;
+    public static final int NETWORK_BAL_REQ_TYPE = 13;
+    public static final int NETWORK_REFUND_REQ_TYPE = 14;
+    public static final int NETWORK_REFUND_REQ_REVERSAL_TYPE = 15;
 
     public static final int INIT_COMMU = 0;
     public static final int CONNECTING = 1;

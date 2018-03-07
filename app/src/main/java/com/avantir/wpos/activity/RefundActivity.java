@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.avantir.wpos.R;
 import com.avantir.wpos.WPOSApplication;
@@ -23,6 +24,7 @@ import com.avantir.wpos.listeners.EMVPINPadListener;
 import com.avantir.wpos.listeners.PINPadListener;
 import com.avantir.wpos.model.ReversalInfo;
 import com.avantir.wpos.model.TransInfo;
+import com.avantir.wpos.printer.PrintTransactionThread;
 import com.avantir.wpos.services.EMVManager;
 import com.avantir.wpos.services.TcpComms;
 import com.avantir.wpos.utils.*;
@@ -68,6 +70,9 @@ public class RefundActivity extends BaseActivity {
     TransInfoDao transInfoDao;
     ReversalInfoDao reversalInfoDao;
     boolean transactionInProgress = true;
+    boolean printingInProgress = false;
+    boolean customerReceiptPrinted = false;
+    boolean merchantReceiptPrinted = false;
 
 
     @Override
@@ -90,6 +95,8 @@ public class RefundActivity extends BaseActivity {
         WPOSApplication.activityList.add(this);
         tranStatusText = (TextView) findViewById(R.id.transactionStatusText);
         infoText = (TextView) findViewById(R.id.infoText);
+
+        ((LinearLayout) findViewById(R.id.payDummy)).setOnClickListener(this);
     }
 
     @Override
@@ -101,19 +108,21 @@ public class RefundActivity extends BaseActivity {
         {
             bundle = new Bundle();
         }
-        tranTypeFlag = bundle.getInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
-        paymentInstrumentFlag = bundle.getInt(ConstantUtils.PAYMENT_INSTRUMENT, ConstantUtils.BANK_CARD);
-        orderAmount = bundle.getLong(ConstantUtils.TRAN_AMT, 0);
-        ((TextView) findViewById(R.id.titleNameText)).setText("Amount: ₦" + MoneyUtil.kobo2Naira(orderAmount));
-        accountType = bundle.getString(ConstantUtils.ACCT_TYPE, "00");
+
 
         transInfoDao = new TransInfoDao(WPOSApplication.app);
         reversalInfoDao = new ReversalInfoDao(WPOSApplication.app);
-        transInfo = new TransInfo();
+        transInfo = (TransInfo) bundle.getSerializable(ConstantUtils.TRANS_INFO);
         reversalInfo = new ReversalInfo();
         globalData = GlobalData.getInstance();
         KeyPadDialog.getInstance().clearPinRetries();
 
+        tranTypeFlag = bundle.getInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
+        paymentInstrumentFlag = bundle.getInt(ConstantUtils.PAYMENT_INSTRUMENT, ConstantUtils.BANK_CARD);
+
+        orderAmount = Long.parseLong(transInfo.getAmt());
+        ((TextView) findViewById(R.id.titleNameText)).setText("Amount: ₦" + MoneyUtil.kobo2Naira(orderAmount));
+        accountType = transInfo.getAccountType();
 
 
         new Thread(new Runnable() {
@@ -140,8 +149,8 @@ public class RefundActivity extends BaseActivity {
                         retRef = 1;
                     globalData.setRetrievalRef(retRef);
                     transInfo.setRetRefNo(StringUtil.leftPad(String.valueOf(retRef), 12, '0'));
-                    transInfo.setAmt(String.valueOf(orderAmount));
-                    transInfo.setAccountType(accountType);
+                    //transInfo.setAmt(String.valueOf(orderAmount));
+                    //transInfo.setAccountType(accountType);
                     transInfo.setOnLine(true);// Default is online transaction
                 }
                 catch(Exception ex){
@@ -161,6 +170,14 @@ public class RefundActivity extends BaseActivity {
         {
             case R.id.titleBackImage:
                 back();
+                break;
+            case R.id.transactionStatusText:
+            case R.id.infoText:
+            case R.id.payDummy:
+                if(customerReceiptPrinted && transactionInProgress && !printingInProgress && !merchantReceiptPrinted) {
+                    printingInProgress = true;
+                    print(false);
+                }
                 break;
             default:
                 break;
@@ -193,12 +210,12 @@ public class RefundActivity extends BaseActivity {
                 break;
             case ConstantUtils.MSG_START_COMMS:
                 // start processing transaction online
-                doPurchase();
+                doRefund();
                 break;
             case ConstantUtils.MSG_FINISH_COMMS:
                 // end comms
                 byte[] receiveData = (byte[])msg.obj;
-                processResponse(msg.getData(), receiveData);
+                doRefundResponse(receiveData);
                 baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please remove card").sendToTarget();
                 break;
             case  ConstantUtils.MSG_FINISH_ERROR_COMMS:
@@ -213,65 +230,28 @@ public class RefundActivity extends BaseActivity {
                 break;
             case ConstantUtils.MSG_START_PRINT:
                 // Print Receipt
-                //new PrintThread(mPrinter, baseHandler, transInfo, true).start();
-                transactionInProgress = false;
+                printingInProgress = true;
+                print(true);
                 break;
             case ConstantUtils.MSG_FINISH_PRINT:
                 // go to main page
-                finishAndReturnMainActivity();
-                transactionInProgress = false;
+                boolean customerCopy = Boolean.parseBoolean(msg.obj.toString());
+                if(customerCopy) {
+                    // wait for key press to print merchant copy
+                    customerReceiptPrinted = true;
+                    printingInProgress = false;
+                    // press back key or any key,to initiate merchant print
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.PRESS_PRINT_MERCHANT_COPY).sendToTarget();
+                }
+                else {
+                    merchantReceiptPrinted = true;
+                    printingInProgress = false;
+                    transactionInProgress = false;
+                    finishAndReturnMainActivity();
+                }
                 break;
         }
     }
-
-    /*
-    private void startTransaction() {
-        baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "waiting read card...").sendToTarget();
-
-        try {
-            mBankCard.breakOffCommand();//结束上一笔交易的命令(Order to close the previous transaction)
-            byte[] outData = new byte[512];
-            int[] outDataLen = new int[1];
-            int result = mBankCard.readCard(BankCard.CARD_TYPE_NORMAL, BankCard.CARD_MODE_PICC|BankCard.CARD_MODE_ICC|BankCard.CARD_MODE_MAG,0x60,outData,outDataLen,ConstantUtils.APP_NAME);
-            baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please do not remove card").sendToTarget();
-            if (result == 0) {
-                Log.d("outData", ByteUtil.bytes2HexString(outData));
-                switch (outData[0]) {
-                    case 0x01:
-                        //Read card failed
-                        baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Failed to read card").sendToTarget();
-                        break;
-                    case 0x02:
-                        //Read card success,but encryption processing failed
-                        baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Readcard, but encryption processing failed").sendToTarget();
-                        break;
-                    case 0x03:
-                        //Read card timeout
-                        baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Timeout reading card").sendToTarget();
-                        break;
-                    case 0x04:
-                        //Cancel read card
-                        baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Cancelled while reading card").sendToTarget();
-                        break;
-                    case 0x05:
-                        //Read card success,type ICC
-                        baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "Chip (IC) card detected").sendToTarget();
-                        mCore.buzzer();
-                        readCardInfo(ConstantUtils.ICC_CARD_TYPE);
-                        break;
-                    //case 0x07:
-                    //Read card success,type PICC
-                    // baseHandler.obtainMessage(MSG_PROGRESS, "Contactless card detected").sendToTarget();
-                    //   mCore.buzzer();
-                    //   readCardInfo(ConstantUtils.PICC_CARD_TYPE);
-                    //   break;
-                }
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 
 
     private void readCardInfo(String s) {
@@ -328,14 +308,6 @@ public class RefundActivity extends BaseActivity {
                             // User canceled
                             onBack();
                         }
-                        /*else if(transResult == -4){
-                            // WRONG PIN, CARD RESTRICTED/BLOCKED (3/3)
-                            int totalPinRetry = KeyPadDialog.getInstance().getTotalPinRetry();
-                            KeyPadDialog.getInstance().dismissDialog();
-                            baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
-                            baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please Remove Card").sendToTarget();
-                        }
-                        */
                         else if(transResult == 5){ // timeout
                             // Timeout, go to main menu or display error with decline or timeout msg?
                             KeyPadDialog.getInstance().dismissDialog();
@@ -452,11 +424,11 @@ public class RefundActivity extends BaseActivity {
     };
 
 
-    private void doPurchase(){
+    private void doRefund(){
         byte[] data = null;
         try{
             transInfo.setMsgType(ConstantUtils._0200);
-            transInfo.setProcCode(ConstantUtils.PURCHASE_PROC_CODE + accountType +  "00");
+            transInfo.setProcCode(ConstantUtils.REFUND_PROC_CODE + accountType +  "00");
             Date now = new Date(System.currentTimeMillis());
             String transmissionDatetime = TimeUtil.getDateTimeMMddhhmmss(now);
             String localTime = TimeUtil.getTimehhmmss(now);
@@ -482,7 +454,7 @@ public class RefundActivity extends BaseActivity {
             data = IsoMessageUtil.createRequest(transInfo);
             GlobalData globalData = GlobalData.getInstance();
             TcpComms comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
-            ICommsListener commsListener = new CommsListener(baseHandler, ConstantUtils.NETWORK_PURCHASE_REQ_TYPE);
+            ICommsListener commsListener = new CommsListener(baseHandler, ConstantUtils.NETWORK_REFUND_REQ_TYPE);
             comms.dataCommu(this, data, commsListener);
         }
         catch(Exception ex){
@@ -493,84 +465,73 @@ public class RefundActivity extends BaseActivity {
         }
     }
 
-    private void processResponse(Bundle bundle, byte[] receiveData){
-        int reqType = bundle.getInt(ConstantUtils.NETWORK_REQ_TYPE);
-        if(reqType == ConstantUtils.NETWORK_PURCHASE_REQ_TYPE) {
-            doPurchaseResponse(receiveData);
-            // log failed purchase response to database
-        }
-        //else if(reqType == ConstantUtils.NETWORK_PURCHASE_REQ_REVERSAL_TYPE) {
-            // log reversal response to database, ask to do repeat reversal
-        //}
-    }
-
     private void  processFailedResponse(int commsErrorCode, Bundle bundle){
-        int reqType = bundle.getInt(ConstantUtils.NETWORK_REQ_TYPE);
-        if(reqType == ConstantUtils.NETWORK_PURCHASE_REQ_TYPE) {
-            // 1  - connect error
-            // 2  - sending error (error occuring during sending)
-            // 3, 4, 5 - receiving error
-            // 6 - disconnect error
-            if(commsErrorCode == 2 || commsErrorCode == 3 || commsErrorCode == 4 || commsErrorCode == 5){
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            // Request may have got to server, do reversal
-                            String msgReasonCode = ConstantUtils.MSG_REASON_CODE_TIMEOUT_WAITING_FOR_RESPONSE;
-                            String retRefNo = transInfo.getRetRefNo();
-                            reversalInfo = reversalInfoDao.findByRetRefNo(retRefNo);
-                            boolean isRepeat = false;
-                            if(reversalInfo == null) {
-                                reversalInfo = IsoMessageUtil.createReversalInfo(transInfo, msgReasonCode);
-                                reversalInfo.setCreatedOn(System.currentTimeMillis());
-                                reversalInfoDao.create(reversalInfo);
-                            }
-                            else{
-                                int retryNo = reversalInfo.getRetryNo();
-                                if(retryNo > 0)
-                                    isRepeat = true;
-                                reversalInfoDao.updateRetryByRetRefNo(retRefNo, retryNo);
-                            }
-                            transInfoDao.updateCompletionStatusByRetRefNo(retRefNo, 1);
-                            TcpComms comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
-                            String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo,  isRepeat, comms);
-                            reversalInfo.setResponseCode(StringUtil.isEmpty(responseCode) ? "" : responseCode);
-                            reversalInfo.setCompleted(1);
-                            reversalInfoDao.updateResponseCodeCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getResponseCode(), reversalInfo.getCompleted());
-                            transInfo.setReversed(1);
-                            transInfo.setCompleted(1);
-                            transInfoDao.updateReversalCompletionByRetRefNo(transInfo.getRetRefNo(), transInfo.getReversed(), transInfo.getCompleted());
+        // 1  - connect error
+        // 2  - sending error (error occuring during sending)
+        // 3, 4, 5 - receiving error
+        // 6 - disconnect error
+        if(commsErrorCode == 2 || commsErrorCode == 3 || commsErrorCode == 4 || commsErrorCode == 5){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        // Request may have got to server, do reversal
+                        String msgReasonCode = ConstantUtils.MSG_REASON_CODE_TIMEOUT_WAITING_FOR_RESPONSE;
+                        String retRefNo = transInfo.getRetRefNo();
+                        reversalInfo = reversalInfoDao.findByRetRefNo(retRefNo);
+                        boolean isRepeat = false;
+                        if(reversalInfo == null) {
+                            reversalInfo = IsoMessageUtil.createReversalInfo(transInfo, msgReasonCode);
+                            reversalInfo.setCreatedOn(System.currentTimeMillis());
+                            reversalInfoDao.create(reversalInfo);
+                        }
+                        else{
+                            int retryNo = reversalInfo.getRetryNo();
+                            if(retryNo > 0)
+                                isRepeat = true;
+                            reversalInfoDao.updateRetryByRetRefNo(retRefNo, retryNo);
+                        }
+                        transInfoDao.updateCompletionStatusByRetRefNo(retRefNo, 1);
+                        TcpComms comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
+                        String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo,  isRepeat, comms);
+                        reversalInfo.setResponseCode(StringUtil.isEmpty(responseCode) ? "" : responseCode);
+                        reversalInfo.setCompleted(1);
+                        reversalInfoDao.updateResponseCodeCompletionByRetRefNo(reversalInfo.getRetRefNo(), reversalInfo.getResponseCode(), reversalInfo.getCompleted());
+                        transInfo.setReversed(1);
+                        transInfo.setCompleted(1);
+                        transInfoDao.updateReversalCompletionByRetRefNo(transInfo.getRetRefNo(), transInfo.getReversed(), transInfo.getCompleted());
 
-                            // remove this later, when print is enabled
-                            transactionInProgress = false;
-                        }
-                        catch(Exception ex){
-                            ex.printStackTrace();
-                            transactionInProgress = false;
-                        }
+                        // remove this later, when print is enabled
+                        transactionInProgress = false;
                     }
-                }).start();
-            }else{
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            // Request never got to server, mark transaction as complete
-                            transInfo.setCompleted(1);
-                            transInfoDao.updateCompletionStatusByRetRefNo(transInfo.getRetRefNo(), transInfo.getCompleted());
-                        }
-                        catch(Exception ex){
-                            ex.printStackTrace();
-                            transactionInProgress = false;
-                        }
+                    catch(Exception ex){
+                        ex.printStackTrace();
+                        transactionInProgress = false;
                     }
-                }).start();
-            }
-            baseHandler.sendEmptyMessage(ConstantUtils.MSG_START_PRINT);
+                }
+            }).start();
+        }else{
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        // Request never got to server, mark transaction as complete
+                        transInfo.setCompleted(1);
+                        transInfoDao.updateCompletionStatusByRetRefNo(transInfo.getRetRefNo(), transInfo.getCompleted());
+                    }
+                    catch(Exception ex){
+                        ex.printStackTrace();
+                        transactionInProgress = false;
+                    }
+                }
+            }).start();
         }
+        baseHandler.sendEmptyMessage(ConstantUtils.MSG_START_PRINT);
     }
-    private void doPurchaseResponse(byte[] respData){
+
+
+
+    private void doRefundResponse(byte[] respData){
         try{
             IsoMessage isoMsgResponse = IsoMessageUtil.getInstance().decode(respData);
             System.out.println(isoMsgResponse.debugString());
@@ -589,6 +550,11 @@ public class RefundActivity extends BaseActivity {
         }
     }
 
+
+    private void print(boolean customerCopy){
+        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
+        //baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
+    }
 
 
     //The plug-in to display the status of transaction
@@ -622,11 +588,16 @@ public class RefundActivity extends BaseActivity {
     @Override
     public void onBackPressed()
     {
-        if(!transactionInProgress) {
+        if(customerReceiptPrinted && transactionInProgress && !printingInProgress && !merchantReceiptPrinted) {
+            printingInProgress = true;
+            print(false);
+        }
+        else if(!transactionInProgress) {
             super.onBackPressed();
             back();
         }
     }
+
 
     private void finishAndReturnMainActivity() {
         finishAppActivity();

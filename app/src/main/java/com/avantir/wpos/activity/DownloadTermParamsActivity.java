@@ -388,11 +388,14 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 int getDataPin = ConstantUtils.GET_PIN_DATA; //Whether to get the PIN retry times TAG9F17 0x01 Yes;  0x00 No
                 String termTransQuali = ConstantUtils.TERM_TRANSACTION_QUALITY; // "26800080"
 
-                globalData.setCTMSHost("ctms.nibss-plc.com");
-                globalData.setCTMSIP(parameter.getTmsIp()); // 41.58.130.139
-                globalData.setCTMSPort(parameter.getTmsPort());
-                globalData.setCTMSTimeout(parameter.getTmsTimeout());
-                globalData.setIfCTMSSSL(parameter.isTmsSsl());
+                if(!parameter.isUseLocalNetworkConfig()){
+                    globalData.setCTMSHost(parameter.getTmsHost());
+                    globalData.setCTMSIP(parameter.getTmsIp()); // 41.58.130.139
+                    globalData.setCTMSPort(parameter.getTmsPort());
+                    globalData.setCTMSTimeout(parameter.getTmsTimeout());
+                    globalData.setIfCTMSSSL(parameter.isTmsSsl());
+                }
+
                 globalData.setMerchantName(merchantName);
                 globalData.setTerminalId(terminalId);
                 globalData.setAcquirerId(parameter.getAcquirer());
@@ -403,7 +406,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 globalData.setICCData(iccData);
                 globalData.setResendReversalPeriodInMin(60); // get from remote
                 globalData.setPageTimerInSec(60);
-                globalData.setPTSP("Arca Networks");
+                globalData.setPTSP(parameter.getPtsp());
 
                 byte[] outData = new byte[1024];
                 int[] outStatus = new int[1];

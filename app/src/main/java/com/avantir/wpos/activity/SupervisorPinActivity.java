@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -21,7 +23,6 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
 
     private String TAG = "SupervisorPinActivity";
 
-    GlobalData globalData;
     private Bundle bundle;
     private int nextActivity;
 
@@ -49,7 +50,6 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
 
     @Override
     protected void initData() {
-        globalData = GlobalData.getInstance();
 
         bundle = getIntent().getExtras();
         if(bundle == null)
@@ -98,10 +98,7 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
             String verifyPin = globalData.getSupervisorPIN();
             if(pin.equalsIgnoreCase(verifyPin)){
                 if(nextActivity == ConstantUtils.REFUND_ACTIVITY){
-                    Intent intent = new Intent(this, RefundActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.REFUND);
-                    intent.putExtras(bundle);
+                    Intent intent = new Intent(this, TranSequenceNrActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -139,5 +136,37 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
         startActivity(new Intent(this, MainMenuActivity.class));
         finish();
     }
+
+
+
+    GlobalData globalData = GlobalData.getInstance();
+
+    CountDownTimer countDownTimer = new CountDownTimer(globalData.getPageTimerInSec() * 1000, globalData.getPageTimerInSec() * 1000) {
+
+        public void onTick(long millisUntilFinished) {
+            //System.out.println("Tick Tock...");
+        }
+
+        public void onFinish() {
+            back();
+        }
+
+    }.start();
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            restartTimer();
+        }
+        return super.onTouchEvent(event);
+    }
+
+
+    private void restartTimer(){
+        countDownTimer.cancel();
+        countDownTimer.start();
+        System.out.println("Starting timer again");
+    }
+
 
 }

@@ -40,6 +40,7 @@
         <activity android:name=".activity.PayActivity" />
         <activity android:name=".activity.BalanceActivity" />
         <activity android:name=".activity.RefundActivity" />
+        <activity android:name=".activity.TranSequenceNrActivity" />
         <activity android:name=".activity.ReprintActivity" />
         <activity android:name=".activity.EoDActivity" />
         <activity android:name=".activity.AdminActivity" />
@@ -49,7 +50,8 @@
         <activity android:name=".activity.DownloadKeysActivity" />
         <activity android:name=".activity.HostConfigActivity" />
         <activity android:name=".activity.DownloadTermParamsActivity" />
-
+        <activity android:name=".activity.SupervisorPinActivity" />
+        <activity android:name=".activity.AdminPasswordActivity" />
         <service
                 android:name=".services.DownloadKeysJobService"
                 android:permission="android.permission.BIND_JOB_SERVICE"

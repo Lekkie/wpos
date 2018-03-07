@@ -27,6 +27,11 @@ public class TransInfoDao extends BaseDao<TransInfo, String> {
         return (transInfoList == null || transInfoList.size() < 1) ? null : transInfoList.get(0);
     }
 
+    public TransInfo findByStan(String stan) {
+        List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " where stan = '" + stan + "'");
+        return (transInfoList == null || transInfoList.size() < 1) ? null : transInfoList.get(0);
+    }
+
     public List<TransInfo>  findByResponseCode(String responseCode) {
         List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " where response_code = '" + responseCode + "'");
         return transInfoList;
