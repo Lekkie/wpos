@@ -571,15 +571,13 @@ public class BalanceActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /*
-        if (mBankCard != null) {
+        if (InsertCardActivity.mBankCard != null) {
             try {
-                mBankCard.breakOffCommand();
+                InsertCardActivity.mBankCard.breakOffCommand();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
-        */
     }
 
 

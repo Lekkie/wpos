@@ -163,7 +163,7 @@ public class InputMoneyActivity extends BaseActivity {
 
             intent.putExtras(bundle);
             startActivity(intent);
-            finish();
+            //finish();
             skipActivityAnim(1);
         } else {
             displayDialog("Amount cannot be Zero");
@@ -181,11 +181,21 @@ public class InputMoneyActivity extends BaseActivity {
     @Override
     public void onBackPressed()
     {
-        if (inputMoney > 0){
-            back();
+        back();
+        //if (inputMoney > 0){
+
+        //}
+        /*
+        else {
+            try{
+                int cardpresent = InsertCardActivity.mBankCard.iccDetect();
+                displayDialog("Please remove card");
+            }
+            catch(Exception ex){
+
+            }
         }
-        else
-            displayDialog("Please remove card");
+        */
     }
 
 

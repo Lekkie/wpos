@@ -29,7 +29,7 @@ public class InsertCardActivity extends BaseActivity {
     private TextView insertCardInfoText;
 
 
-    private BankCard mBankCard;
+    public static BankCard mBankCard;
     private Core mCore;
     private EmvCore emvCore;
 
@@ -55,6 +55,8 @@ public class InsertCardActivity extends BaseActivity {
         this.findViewById(R.id.titleBackImage).setVisibility(View.GONE);
         this.findViewById(R.id.titleSettingsImage).setVisibility(View.GONE);
         //this.findViewById(R.id.titleBackImage).setOnClickListener(this);
+        WPOSApplication.activityList.add(this);
+
         super.onCreate(savedInstanceState);
 
     }
@@ -262,6 +264,7 @@ public class InsertCardActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        /*
         if (mBankCard != null) {
             try {
                 mBankCard.breakOffCommand();
@@ -269,6 +272,7 @@ public class InsertCardActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+        */
     }
 
 

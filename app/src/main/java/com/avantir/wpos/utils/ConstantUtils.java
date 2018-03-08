@@ -124,7 +124,7 @@ public class ConstantUtils {
     public static final String ADMIN_PWD = "ADMIN_PWD";
     public static final String USE_REMOTE_NETWORK_CONFIG = "USE_REMOTE_NETWORK_CONFIG";
 
-    public static final String TERMINAL_DOWNLOAD_URI = "/api/v1/terminals/parameters";
+    public static final String TERMINAL_DOWNLOAD_URI = "/api/v1/termparams";
 
     public static final String NETWORK_REQ_TYPE = "NETWORK_REQ_TYPE";
     public static final int NETWORK_TMS_TERM_PARAM_DOWNLOAD_REQ_TYPE = 1;

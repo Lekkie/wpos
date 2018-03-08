@@ -95,7 +95,7 @@ public class PrintTransactionThread extends Thread {
                 result = mPrinter.printString("---------------",bodyFontSize, Printer.Align.RIGHT,false, false);
                 result = mPrinter.printString("Please retain your receipt\n", bodyFontSize, Printer.Align.LEFT, false, false);
                 result = mPrinter.printString("Thank you", bodyFontSize, Printer.Align.LEFT, false, false);
-                result = mPrinter.printString("               Powered by Arca Networks",bodyFontSize, Printer.Align.LEFT,false,false);
+                result = mPrinter.printString("               Powered by " + globalData.getPTSP(),bodyFontSize, Printer.Align.LEFT,false,false);
                 result = mPrinter.printString("               Version: 1.0\n",bodyFontSize, Printer.Align.LEFT,false,false);
                 result = mPrinter.printString("------------------------------------------\n\n",30, Printer.Align.CENTER,true,false);
 
