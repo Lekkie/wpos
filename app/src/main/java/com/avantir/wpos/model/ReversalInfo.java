@@ -37,7 +37,7 @@ public class ReversalInfo implements Serializable {
     private String merchType;
     @DatabaseField(unique=false, canBeNull = false)
     private String posEntryMode;
-    @DatabaseField(unique=false, canBeNull = false)
+    @DatabaseField(unique=false, canBeNull = true)
     private String cardSequenceNo;
     @DatabaseField(unique=false, canBeNull = false)
     private String posConditionCode;

@@ -149,8 +149,7 @@ public class RefundActivity extends BaseActivity {
                         retRef = 1;
                     globalData.setRetrievalRef(retRef);
                     transInfo.setRetRefNo(StringUtil.leftPad(String.valueOf(retRef), 12, '0'));
-                    //transInfo.setAmt(String.valueOf(orderAmount));
-                    //transInfo.setAccountType(accountType);
+                    transInfo.setAuthenticationMethod("NONE");
                     transInfo.setOnLine(true);// Default is online transaction
                 }
                 catch(Exception ex){
@@ -190,9 +189,9 @@ public class RefundActivity extends BaseActivity {
     protected void handleMessage(Message msg) {
         Log.i(RefundActivity.class.getSimpleName(), "handleMessage: "+msg.what);
         switch (msg.what) {
-            //case 2:
-            //    setTransactionStatusActionTip("get card information success,start trading ,pls connect your services ...");
-            //    break;
+            case ConstantUtils.MSG_BACK:
+                transactionInProgress = false;
+                finishAndReturnMainActivity();
             case ConstantUtils.MSG_ERROR:
                 //myHandler.sendMessage(myHandler.obtainMessage(WhetherRetryVisiableTrue, msg.obj));
                 setTransactionStatusActionTip(msg.obj + "");
@@ -210,7 +209,7 @@ public class RefundActivity extends BaseActivity {
                 break;
             case ConstantUtils.MSG_START_COMMS:
                 // start processing transaction online
-                doRefund();
+                doRefund(String.valueOf(msg.obj));
                 break;
             case ConstantUtils.MSG_FINISH_COMMS:
                 // end comms
@@ -265,6 +264,9 @@ public class RefundActivity extends BaseActivity {
                 break;
             case ConstantUtils.PICC_CARD_TYPE:
                 readContactlessCardInfo();
+                break;
+            case ConstantUtils.MAG_CARD_TYPE:
+                readMagStripeCardInfo();
                 break;
         }
     }
@@ -356,12 +358,33 @@ public class RefundActivity extends BaseActivity {
         }
     }
 
+
+    private void readMagStripeCardInfo(){
+
+        String pan = bundle.getString(ConstantUtils.MAG_STRIPE_PAN);
+        transInfo.setCardNo(pan);
+        transInfo.setMaskedPan(StringUtil.maskPan(pan));
+        String expDate = bundle.getString(ConstantUtils.MAG_STRIPE_EXP_DATE);
+        transInfo.setExpDate(expDate);
+        String serviceCode = bundle.getString(ConstantUtils.MAG_STRIPE_SERVICE_CODE);
+        transInfo.setServiceRestrictionCode(StringUtil.leftPad(serviceCode, 3, '0'));
+        String track2Data = bundle.getString(ConstantUtils.MAG_STRIPE_TRACK2_DATA);
+        transInfo.setTrack2(track2Data);
+        String cardHolderName = bundle.getString(ConstantUtils.MAG_STRIPE_CARDHOLDER_NAME);
+        transInfo.setCardHolderName(cardHolderName);
+        //String track3Data = bundle.getString(ConstantUtils.MAG_STRIPE_TRACK3_DATA);
+
+        displayPinPad(ConstantUtils.MAG_CARD_TYPE);
+    }
+
+
     private void displayPinPad(final String tradeType) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 String cardNo = transInfo.getCardNo();
                 KeyPadDialog.getInstance().showDialog((Activity) context, cardNo, new PINPadListener(baseHandler, iCallBackListener, transInfo, tradeType));
+                transInfo.setAuthenticationMethod("PIN");
             }
         });
     }
@@ -372,6 +395,7 @@ public class RefundActivity extends BaseActivity {
         @Override
         public int emvCoreCallback(final int command, final byte[] data, final byte[] result, final int[] resultlen) throws RemoteException {
             countDownLatch = new CountDownLatch(1);
+            final KeyPadDialog keyPadDialog = KeyPadDialog.getInstance();
             //Log.d(TAG, "emvCoreCallback。command==" + command);
             switch (command) {
                 case 2818: //Core.CALLBACK_PIN
@@ -379,18 +403,25 @@ public class RefundActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            KeyPadDialog.getInstance().showDialog((Activity) context, command, data, result, resultlen, transInfo.getCardNo(), new EMVPINPadListener(baseHandler, countDownLatch));
+                            keyPadDialog.showDialog((Activity) context, command, data, result, resultlen, transInfo.getCardNo(), new EMVPINPadListener(baseHandler, countDownLatch));
                             transInfo.setAuthenticationMethod("PIN");
                         }
                     });
                     break;
                 case 2821://Core.CALLBACK_ONLINE
                     Log.i("iCallbackListener", "Core.CALLBACK_ONLINE");
-                    //strTxt = "getCardInformation …";
-                    //baseHandler.sendEmptyMessage(0);
-                    baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "Sending transaction online").sendToTarget();
-                    int ret = EMVManager.EMV_OnlineProc(result, resultlen,countDownLatch,baseHandler, transInfo);
-                    Log.i("iCallbackListener", "Core.CALLBACK_ONLINE, ret = " + ret);
+                    int pinRetry = keyPadDialog.getCurrentPinRetry();
+                    if(pinRetry >= keyPadDialog.getMaxPinRetry()){
+                        KeyPadDialog.getInstance().dismissDialog();
+                        baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.WRONG_PIN).sendToTarget();
+                        baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
+                        transactionInProgress = false;
+                    }
+                    else{
+                        baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "Sending transaction online").sendToTarget();
+                        int ret = EMVManager.EMV_OnlineProc(result, resultlen,countDownLatch,baseHandler, transInfo);
+                        Log.i("iCallbackListener", "Core.CALLBACK_ONLINE, ret = " + ret);
+                    }
                     break;
                 case 2823:
                     //strTxt = "OffLine pin check success";
@@ -424,7 +455,7 @@ public class RefundActivity extends BaseActivity {
     };
 
 
-    private void doRefund(){
+    private void doRefund(String pinblock){
         byte[] data = null;
         try{
             transInfo.setMsgType(ConstantUtils._0200);
@@ -438,7 +469,7 @@ public class RefundActivity extends BaseActivity {
             transInfo.setLocalDate(localDate);
             transInfo.setMerchType(globalData.getMerchantCategoryCode());
             String cardSeqNo = transInfo.getCardSequenceNo();
-            transInfo.setCardSequenceNo(StringUtil.leftPadding("0", 3, cardSeqNo));
+            transInfo.setCardSequenceNo(StringUtil.isEmpty(cardSeqNo) ? null : StringUtil.leftPadding("0", 3, cardSeqNo));
             transInfo.setPosConditionCode(ConstantUtils.NORMAL_PRESENTMENT_POS_CONDITION_CODE);
             transInfo.setPosPinCaptureCode(StringUtil.leftPadding("0", 2, String.valueOf(ConstantUtils.MAX_PIN_LENGTH)));
             transInfo.setPosEntryMode(transInfo.getPosInputType() + ConstantUtils.ACCEPT_PIN_MODE_CAPABILITY);
@@ -446,6 +477,9 @@ public class RefundActivity extends BaseActivity {
             transInfo.setAcqInstId(globalData.getAcquirerId());
             transInfo.setMerchantLoc(IsoMessageUtil.getIso8583MerchantLoc(globalData.getMerchantLoc()));
             transInfo.setCurrencyCode(globalData.getCurrencyCode().substring(1));
+            if(!StringUtil.isEmpty(pinblock)){
+                transInfo.setPinData(pinblock.substring(2));
+            }
             transInfo.setPosDataCode(globalData.getPOSDataCode());
             transInfo.setCreatedOn(System.currentTimeMillis());
             transInfoDao.create(transInfo);

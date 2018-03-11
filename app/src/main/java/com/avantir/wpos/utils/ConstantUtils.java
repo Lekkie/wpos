@@ -118,6 +118,14 @@ public class ConstantUtils {
     public static final String APP_LABEL = "APP_LABEL";
     public static final String NETWORK_RESP_DATA = "NETWORK_RESP_DATA";
     public static final String CARD_TYPE = "CARD_TYPE";
+    public static final String MAG_STRIPE_PAN = "MAG_STRIPE_PAN";
+    public static final String MAG_STRIPE_CARDHOLDER_NAME = "MAG_STRIPE_CARDHOLDER_NAME";
+    public static final String MAG_STRIPE_EXP_DATE = "MAG_STRIPE_EXP_DATE";
+    public static final String MAG_STRIPE_SERVICE_CODE = "MAG_STRIPE_SERVICE_CODE";
+    public static final String MAG_STRIPE_TRACK2_DATA = "MAG_STRIPE_TRACK2_DATA";
+    public static final String MAG_STRIPE_TRACK3_DATA = "MAG_STRIPE_TRACK3_DATA";
+
+
     public static final String DEVICE_SERIAL_NO = "deviceSerialNo";
     public static final String TERMINAL_PUBLIC_KEY = "devicePublicKey";
     public static final String SUPERVISOR_PIN = "SUPERVISOR_PIN";
@@ -182,7 +190,9 @@ public class ConstantUtils {
     public static final String CARD_REMOVED = "Card has been removed";
     public static final String INVALID_CARD = "Invalid Card";
     public static final String REMOVE_CARD = "Please Remove Card";
-    public static final String INSERT_CARD = "Insert or Swipe Card";
+    public static final String INSERT_SWIPE_CARD = "Insert or Swipe Card";
+    public static final String INSERT_CHIP_CARD = "Insert a Chip Card";
+    public static final String INSERT_CARD_PROPERLY = "Insert Card Properly";
     public static final String WRONG_PIN = "Wrong PIN, Card Restricted/Blocked (3/3)";
     public static final String INSUFFICIENT_FUNDS = "Insufficient funds";
     public static final String DO_NOT_REMOVE_CARD = "Please do not remove card";

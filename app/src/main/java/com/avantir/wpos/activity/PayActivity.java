@@ -7,11 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -154,6 +152,7 @@ public class PayActivity extends BaseActivity {
                     transInfo.setRetRefNo(StringUtil.leftPad(String.valueOf(retRef), 12, '0'));
                     transInfo.setAmt(String.valueOf(orderAmount));
                     transInfo.setAccountType(accountType);
+                    transInfo.setAuthenticationMethod("NONE");
                     transInfo.setOnLine(true);// Default is online transaction
                 }
                 catch(Exception ex){
@@ -193,12 +192,13 @@ public class PayActivity extends BaseActivity {
     protected void handleMessage(Message msg) {
         Log.i(PayActivity.class.getSimpleName(), "handleMessage: "+msg.what);
         switch (msg.what) {
-            //case 2:
-            //    setTransactionStatusActionTip("get card information success,start trading ,pls connect your services ...");
-            //    break;
+            case ConstantUtils.MSG_BACK:
+                transactionInProgress = false;
+                finishAndReturnMainActivity();
             case ConstantUtils.MSG_ERROR:
                 //myHandler.sendMessage(myHandler.obtainMessage(WhetherRetryVisiableTrue, msg.obj));
                 setTransactionStatusActionTip(msg.obj + "");
+                transactionInProgress = false;
                 break;
             case ConstantUtils.MSG_PROGRESS:
                 //myHandler.sendMessage(myHandler.obtainMessage(WhetherRetryVisiableFlase, msg.obj));
@@ -213,7 +213,7 @@ public class PayActivity extends BaseActivity {
                 break;
             case ConstantUtils.MSG_START_COMMS:
                 // start processing transaction online
-                doPurchase();
+                doPurchase(String.valueOf(msg.obj));
                 break;
             case ConstantUtils.MSG_FINISH_COMMS:
                 // end comms
@@ -269,6 +269,9 @@ public class PayActivity extends BaseActivity {
             case ConstantUtils.PICC_CARD_TYPE:
                 readContactlessCardInfo();
                 break;
+            case ConstantUtils.MAG_CARD_TYPE:
+                readMagStripeCardInfo();
+                break;
         }
     }
 
@@ -287,7 +290,7 @@ public class PayActivity extends BaseActivity {
             else if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
                 if (result == -20){
                     baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.CARD_REMOVED).sendToTarget();
-                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.INSERT_CARD).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.INSERT_SWIPE_CARD).sendToTarget();
                     transactionInProgress = false;
                 }
                 else
@@ -359,12 +362,32 @@ public class PayActivity extends BaseActivity {
         }
     }
 
+
+    private void readMagStripeCardInfo(){
+
+        String pan = bundle.getString(ConstantUtils.MAG_STRIPE_PAN);
+        transInfo.setCardNo(pan);
+        transInfo.setMaskedPan(StringUtil.maskPan(pan));
+        String expDate = bundle.getString(ConstantUtils.MAG_STRIPE_EXP_DATE);
+        transInfo.setExpDate(expDate);
+        String serviceCode = bundle.getString(ConstantUtils.MAG_STRIPE_SERVICE_CODE);
+        transInfo.setServiceRestrictionCode(StringUtil.leftPad(serviceCode, 3, '0'));
+        String track2Data = bundle.getString(ConstantUtils.MAG_STRIPE_TRACK2_DATA);
+        transInfo.setTrack2(track2Data);
+        String cardHolderName = bundle.getString(ConstantUtils.MAG_STRIPE_CARDHOLDER_NAME);
+        transInfo.setCardHolderName(cardHolderName);
+        //String track3Data = bundle.getString(ConstantUtils.MAG_STRIPE_TRACK3_DATA);
+
+        displayPinPad(ConstantUtils.MAG_CARD_TYPE);
+    }
+
     private void displayPinPad(final String tradeType) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 String cardNo = transInfo.getCardNo();
                 KeyPadDialog.getInstance().showDialog((Activity) context, cardNo, new PINPadListener(baseHandler, iCallBackListener, transInfo, tradeType));
+                transInfo.setAuthenticationMethod("PIN");
             }
         });
     }
@@ -435,7 +458,7 @@ public class PayActivity extends BaseActivity {
     };
 
 
-    private void doPurchase(){
+    private void doPurchase(String pinblock){
         byte[] data = null;
         try{
             transInfo.setMsgType(ConstantUtils._0200);
@@ -449,7 +472,7 @@ public class PayActivity extends BaseActivity {
             transInfo.setLocalDate(localDate);
             transInfo.setMerchType(globalData.getMerchantCategoryCode());
             String cardSeqNo = transInfo.getCardSequenceNo();
-            transInfo.setCardSequenceNo(StringUtil.leftPadding("0", 3, cardSeqNo));
+            transInfo.setCardSequenceNo(StringUtil.isEmpty(cardSeqNo) ? null : StringUtil.leftPadding("0", 3, cardSeqNo));
             transInfo.setPosConditionCode(ConstantUtils.NORMAL_PRESENTMENT_POS_CONDITION_CODE);
             transInfo.setPosPinCaptureCode(StringUtil.leftPadding("0", 2, String.valueOf(ConstantUtils.MAX_PIN_LENGTH)));
             transInfo.setPosEntryMode(transInfo.getPosInputType() + ConstantUtils.ACCEPT_PIN_MODE_CAPABILITY);
@@ -457,6 +480,9 @@ public class PayActivity extends BaseActivity {
             transInfo.setAcqInstId(globalData.getAcquirerId());
             transInfo.setMerchantLoc(IsoMessageUtil.getIso8583MerchantLoc(globalData.getMerchantLoc()));
             transInfo.setCurrencyCode(globalData.getCurrencyCode().substring(1));
+            if(!StringUtil.isEmpty(pinblock)){
+                transInfo.setPinData(pinblock.substring(2));
+            }
             transInfo.setPosDataCode(globalData.getPOSDataCode());
             transInfo.setCreatedOn(TimeUtil.getTimeInEpoch(new Date(System.currentTimeMillis())));
             transInfoDao.create(transInfo);

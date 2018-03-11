@@ -38,7 +38,7 @@ public class TransInfo implements Serializable {
     private String merchType;
     @DatabaseField(unique=false, canBeNull = false)
     private String posEntryMode;
-    @DatabaseField(unique=false, canBeNull = false)
+    @DatabaseField(unique=false, canBeNull = true)
     private String cardSequenceNo;
     @DatabaseField(unique=false, canBeNull = false)
     private String posConditionCode;
@@ -86,7 +86,7 @@ public class TransInfo implements Serializable {
     private String maskedPan;
     @DatabaseField(unique=false, canBeNull = false, columnName = "card_holder_name")
     private String cardHolderName;
-    @DatabaseField(unique=false, canBeNull = false, columnName = "card_type_name")
+    @DatabaseField(unique=false, canBeNull = true, columnName = "card_type_name")
     private String cardTypeName;
     @DatabaseField(unique=false, canBeNull = false, columnName = "account_type")
     private String accountType;
