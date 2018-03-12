@@ -62,7 +62,7 @@ public class PrintEoDThread extends Thread {
                 result = mPrinter.printString("------------------------------------------",30, Printer.Align.CENTER,true,false);
                 result = mPrinter.printString("Day: " + transDate + "\n\n", bodyFontSize, Printer.Align.LEFT, false, false);
 
-                result = mPrinter.printString("Time     |Amount       |Resp|State |",bodyFontSize, Printer.Align.LEFT,false,false);
+                result = mPrinter.printString("Time|PAN              |Amount       |Tran|Rsp|State|",17, Printer.Align.LEFT,false,false);
                 //result = mPrinter.printString("Time  |Amount       |Resp|State|Matched",bodyFontSize, Printer.Align.CENTER,true,false);
                 result = mPrinter.printString("------------------------------------------",30, Printer.Align.CENTER,true,false);
 
@@ -91,7 +91,7 @@ public class PrintEoDThread extends Thread {
                     String state = pass ? "Pass" : "Fail";
                     state = StringUtil.rightPad(state, 5, ' ');
                     //result = mPrinter.printString(time + "    |" + amt + "    |" + respCode + "  |" + state + "   |Matched",bodyFontSize, Printer.Align.CENTER,true,false);
-                    result = mPrinter.printString(time + "    |" + amt + "    |" + respCode + "  |" + state + "   |",bodyFontSize, Printer.Align.LEFT,false,false);
+                    result = mPrinter.printString(time + "|" + transInfo.getMaskedPan().substring(0, 12) + "|"+ amt + "  |" + transInfo.getProcCode().substring(0, 2) + "|  " + respCode + " |" + state + "|",17, Printer.Align.LEFT,false,false);
                 }
 
                 /*

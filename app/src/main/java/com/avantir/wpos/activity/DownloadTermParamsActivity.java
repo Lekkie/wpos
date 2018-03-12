@@ -407,6 +407,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                 globalData.setResendReversalPeriodInMin(60); // get from remote
                 globalData.setPageTimerInSec(60);
                 globalData.setPTSP(parameter.getPtsp());
+                globalData.setAppName(parameter.getAppname());
 
                 byte[] outData = new byte[1024];
                 int[] outStatus = new int[1];

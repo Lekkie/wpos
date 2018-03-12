@@ -209,7 +209,7 @@ public class RefundActivity extends BaseActivity {
                 break;
             case ConstantUtils.MSG_START_COMMS:
                 // start processing transaction online
-                doRefund(String.valueOf(msg.obj));
+                doRefund(msg.obj == null ? null : String.valueOf(msg.obj));
                 break;
             case ConstantUtils.MSG_FINISH_COMMS:
                 // end comms
@@ -278,21 +278,21 @@ public class RefundActivity extends BaseActivity {
 
             int result = EMVManager.PBOC_Simple(transInfo, iCallBackListener);
 
-            if(TimeUtil.hasExpired(transInfo.getExpDate())){
-                baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Invalid Card").sendToTarget();
-                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please Remove Card").sendToTarget();
+            if(!StringUtil.isEmpty(transInfo.getExpDate()) && TimeUtil.hasExpired(transInfo.getExpDate())){
+                baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.INVALID_CARD).sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                 transactionInProgress = false;
             }
             else if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
                 if (result == -20){
-                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Card has been removed").sendToTarget();
-                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Insert or Swipe Card").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.CARD_REMOVED).sendToTarget();
                     transactionInProgress = false;
                 }
                 else
                 {
                     baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED + result).sendToTarget();
-                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please Remove Card").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                     transactionInProgress = false;
                 }
             }
@@ -586,7 +586,7 @@ public class RefundActivity extends BaseActivity {
 
 
     private void print(boolean customerCopy){
-        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
+        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy, false).start();
         //baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
     }
 

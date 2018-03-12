@@ -171,7 +171,7 @@ public class PayActivity extends BaseActivity {
         switch (v.getId())
         {
             case R.id.titleBackImage:
-                back();
+                onBack();
                 break;
             case R.id.transactionStatusText:
             case R.id.infoText:
@@ -213,7 +213,7 @@ public class PayActivity extends BaseActivity {
                 break;
             case ConstantUtils.MSG_START_COMMS:
                 // start processing transaction online
-                doPurchase(String.valueOf(msg.obj));
+                doPurchase(msg.obj == null ? null : String.valueOf(msg.obj));
                 break;
             case ConstantUtils.MSG_FINISH_COMMS:
                 // end comms
@@ -282,15 +282,15 @@ public class PayActivity extends BaseActivity {
 
             int result = EMVManager.PBOC_Simple(transInfo, iCallBackListener);
 
-            if(TimeUtil.hasExpired(transInfo.getExpDate())){
+            if(!StringUtil.isEmpty(transInfo.getExpDate()) && TimeUtil.hasExpired(transInfo.getExpDate())){
                 baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.INVALID_CARD).sendToTarget();
                 baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                 transactionInProgress = false;
             }
             else if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
                 if (result == -20){
-                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.CARD_REMOVED).sendToTarget();
-                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.INSERT_SWIPE_CARD).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.CARD_REMOVED).sendToTarget();
                     transactionInProgress = false;
                 }
                 else
@@ -312,7 +312,9 @@ public class PayActivity extends BaseActivity {
                     if (transResult != -8) {
                         if(transResult == -4){
                             // User canceled
-                            onBack();
+                            KeyPadDialog.getInstance().dismissDialog();
+                            baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                            baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                         }
                         else if(transResult == 5){ // timeout
                             // Timeout, go to main menu or display error with decline or timeout msg?
@@ -616,11 +618,11 @@ public class PayActivity extends BaseActivity {
 
 
     private void print(boolean customerCopy){
-        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
+        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy, false).start();
         //baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
     }
 
-    private void back(){
+    protected void onBack(){
         //finish();
         //skipActivityAnim(-1);
         startActivity(new Intent(PayActivity.this, MainMenuActivity.class));
@@ -637,7 +639,7 @@ public class PayActivity extends BaseActivity {
         }
         else if(!transactionInProgress) {
             super.onBackPressed();
-            back();
+            onBack();
         }
     }
 

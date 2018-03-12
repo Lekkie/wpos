@@ -84,7 +84,7 @@ public class TransInfo implements Serializable {
     private long createdOn = 0;
     @DatabaseField(unique=false, canBeNull = false, columnName = "masked_pan")
     private String maskedPan;
-    @DatabaseField(unique=false, canBeNull = false, columnName = "card_holder_name")
+    @DatabaseField(unique=false, canBeNull = true, columnName = "card_holder_name")
     private String cardHolderName;
     @DatabaseField(unique=false, canBeNull = true, columnName = "card_type_name")
     private String cardTypeName;

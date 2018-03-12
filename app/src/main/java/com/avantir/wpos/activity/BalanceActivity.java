@@ -190,7 +190,7 @@ public class BalanceActivity extends BaseActivity {
                 break;
             case ConstantUtils.MSG_START_COMMS:
                 // start processing transaction online
-                doBalance(String.valueOf(msg.obj));
+                doBalance(msg.obj == null ? null : String.valueOf(msg.obj));
                 break;
             case ConstantUtils.MSG_FINISH_COMMS:
                 // end comms
@@ -201,7 +201,7 @@ public class BalanceActivity extends BaseActivity {
             case  ConstantUtils.MSG_FINISH_ERROR_COMMS:
                 // end comms with error
                 processFailedResponse(Integer.parseInt(msg.obj.toString()), msg.getData());
-                baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, "Network connection error, please try again later.").sendToTarget();
                 baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please remove card").sendToTarget();
                 break;
             case ConstantUtils.MSG_INFO:
@@ -247,21 +247,21 @@ public class BalanceActivity extends BaseActivity {
 
             int result = EMVManager.PBOC_Simple(transInfo, iCallBackListener);
 
-            if(TimeUtil.hasExpired(transInfo.getExpDate())){
-                baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Invalid Card").sendToTarget();
-                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please Remove Card").sendToTarget();
+            if(!StringUtil.isEmpty(transInfo.getExpDate()) && TimeUtil.hasExpired(transInfo.getExpDate())){
+                baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.INVALID_CARD).sendToTarget();
+                baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                 transactionInProgress = false;
             }
             else if (result != ConstantUtils.EMV_OPERATION_SUCCESS) {
                 if (result == -20){
-                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, "Card has been removed").sendToTarget();
-                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Insert or Swipe Card").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED).sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.CARD_REMOVED).sendToTarget();
                     transactionInProgress = false;
                 }
                 else
                 {
                     baseHandler.obtainMessage(ConstantUtils.MSG_ERROR, ConstantUtils.TRANSACTION_DECLINED + result).sendToTarget();
-                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, "Please Remove Card").sendToTarget();
+                    baseHandler.obtainMessage(ConstantUtils.MSG_INFO, ConstantUtils.REMOVE_CARD).sendToTarget();
                     transactionInProgress = false;
                 }
             }
@@ -490,7 +490,7 @@ public class BalanceActivity extends BaseActivity {
             System.out.println(isoMsgResponse.debugString());
             String responseCode = isoMsgResponse.getObjectValue(39);
             boolean approved = "00".equalsIgnoreCase(responseCode);
-            String responseMsg = approved ? ConstantUtils.TRANSACTION_APPROVED : ConstantUtils.TRANSACTION_DECLINED;
+            String responseMsg = approved ? ConstantUtils.TRANSACTION_APPROVED : ConstantUtils.RSP_CODE_MSG_MAP.get(responseCode);
             if(approved){
                 String additionalAmt = isoMsgResponse.getObjectValue(54);
                 String amt = getAvailableBalance(transInfo.getAccountType(), additionalAmt);
@@ -501,6 +501,7 @@ public class BalanceActivity extends BaseActivity {
                 }
             }
             else{
+                responseMsg = StringUtil.isEmpty(responseMsg) ? "Error, please try again later." : responseMsg;
                 baseHandler.obtainMessage(ConstantUtils.MSG_PROGRESS, responseMsg).sendToTarget();
             }
             transInfo.setResponseCode(StringUtil.isEmpty(responseCode) ? "96" : responseCode);
@@ -543,7 +544,7 @@ public class BalanceActivity extends BaseActivity {
 
 
     private void print(boolean customerCopy){
-        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
+        new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy, false).start();
         //baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
     }
 

@@ -2,13 +2,21 @@ package com.avantir.wpos.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.view.View;
 import com.avantir.wpos.R;
+import com.avantir.wpos.utils.ConstantUtils;
+import wangpos.sdk4.libbasebinder.Printer;
+import wangpos.sdk4.libkeymanagerbinder.Key;
 
 /**
  * Created by lekanomotayo on 30/01/2018.
  */
 public class AdminActivity extends BaseActivity {
+
+
+    private Printer mPrinter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +33,14 @@ public class AdminActivity extends BaseActivity {
         this.findViewById(R.id.setup_mgt_host_btn).setOnClickListener(this);
         this.findViewById(R.id.download_terminal_params_btn).setOnClickListener(this);
         //this.findViewById(R.id.titleBackImage).setOnClickListener(this);
+
+        new Thread() {
+            @Override
+            public void run() {
+                mPrinter = new Printer(getApplicationContext());
+            }
+        }.start();
+
         super.onCreate(savedInstanceState);
     }
 
@@ -42,8 +58,10 @@ public class AdminActivity extends BaseActivity {
                 startActivity(intent1);
                 break;
             case R.id.print_config_btn:
-                Intent intent2 = new Intent(this, PrintConfigActivity.class);
-                startActivity(intent2);
+                if(performPrinterChecks()) {
+                    Intent intent2 = new Intent(this, PrintConfigActivity.class);
+                    startActivity(intent2);
+                }
                 break;
             case R.id.network_param_btn:
                 Intent intent3 = new Intent(this, NetworkConfigActivity.class);
@@ -62,5 +80,40 @@ public class AdminActivity extends BaseActivity {
                 startActivity(downloadTermParamsIntent);
                 break;
         }
+    }
+
+    private boolean performPrinterChecks(){
+
+        int ret = -1;
+        // if there is paper in printer
+        int[] status = new int[1];
+        ret = -1;
+        try {
+            ret = mPrinter.getPrinterStatus(status);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        if(ret != 0 || status[0] != 0){
+            //Toast.makeText(this, "Check Printer (paper)", Toast.LENGTH_LONG).show();
+            displayDialog("Printer not ready", ConstantUtils.MSG_BACK);
+            return false;
+        }
+        return true;
+    }
+
+
+    protected void onBack(){
+        //finish();
+        //skipActivityAnim(-1);
+        startActivity(new Intent(this, MainMenuActivity.class));
+        finish();
+    }
+
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        onBack();
     }
 }

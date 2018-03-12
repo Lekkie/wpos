@@ -21,13 +21,15 @@ public class PrintTransactionThread extends Thread {
     private Printer mPrinter;
     TransInfo transInfo;
     Handler handler;
-    boolean customerCopy = false;
+    boolean customerCopy = true;
+    boolean reprint = false;
 
-    public PrintTransactionThread(Printer mPrinter, Handler handler, TransInfo transInfo, boolean customerCopy){
+    public PrintTransactionThread(Printer mPrinter, Handler handler, TransInfo transInfo, boolean customerCopy, boolean reprint){
         this.mPrinter = mPrinter;
         this.handler = handler;
         this.transInfo = transInfo;
         this.customerCopy = customerCopy;
+        this.reprint = reprint;
     }
 
 
@@ -43,7 +45,11 @@ public class PrintTransactionThread extends Thread {
                 //clear print cache
                 mPrinter.clearPrintDataCache();
 
-                String receiptCopy = customerCopy ? "* Customer Copy *" : "* Merchant Copy *";
+                String receiptCopy = customerCopy ? "Customer Copy" : "Merchant Copy";
+                if(reprint)
+                    receiptCopy += " (Reprint)";
+
+                receiptCopy = "* " + receiptCopy + " *";
 
                 String transDateTime = transInfo.getTransmissionDateTime();
                 String transMonth = transDateTime.substring(0, 2);
@@ -96,6 +102,8 @@ public class PrintTransactionThread extends Thread {
                 result = mPrinter.printString("Please retain your receipt\n", bodyFontSize, Printer.Align.LEFT, false, false);
                 result = mPrinter.printString("Thank you", bodyFontSize, Printer.Align.LEFT, false, false);
                 result = mPrinter.printString("               Powered by " + globalData.getPTSP(),bodyFontSize, Printer.Align.LEFT,false,false);
+                result = mPrinter.printString("               PTSP: " + globalData.getPTSP(),bodyFontSize, Printer.Align.LEFT,false,false);
+                result = mPrinter.printString("               Application: " + globalData.getAppName(),bodyFontSize, Printer.Align.LEFT,false,false);
                 result = mPrinter.printString("               Version: 1.0\n",bodyFontSize, Printer.Align.LEFT,false,false);
                 result = mPrinter.printString("------------------------------------------\n\n",30, Printer.Align.CENTER,true,false);
 

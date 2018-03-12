@@ -38,6 +38,7 @@ public class Parameter {
     String ptsp;
     private String tmsHost;
     boolean useLocalNetworkConfig;
+    String appname;
 
     public String getName() {
         return name;
@@ -301,5 +302,13 @@ public class Parameter {
 
     public void setUseLocalNetworkConfig(boolean useLocalNetworkConfig) {
         this.useLocalNetworkConfig = useLocalNetworkConfig;
+    }
+
+    public String getAppname() {
+        return appname;
+    }
+
+    public void setAppname(String appname) {
+        this.appname = appname;
     }
 }

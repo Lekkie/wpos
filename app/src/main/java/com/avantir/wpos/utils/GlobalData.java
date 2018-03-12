@@ -225,6 +225,14 @@ public class GlobalData {
         return mPrefs.getString(ConstantUtils.PTSP, "Arca Networks");
     }
 
+    public void setAppName(String appName) {
+        mEditor.putString(ConstantUtils.APP_NAME_ID, appName);
+        mEditor.commit();
+    }
+    public String getAppName() {
+        return mPrefs.getString(ConstantUtils.APP_NAME_ID, "ArcaPOS");
+    }
+
     public void setCurrencyCode(String currencyCode) {
         mEditor.putString(ConstantUtils.CURRENCY_CODE, currencyCode);
         mEditor.commit();

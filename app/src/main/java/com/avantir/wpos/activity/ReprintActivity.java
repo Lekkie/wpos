@@ -144,7 +144,7 @@ public class ReprintActivity extends BaseActivity {
 
     private void print(boolean customerCopy){
         if(transInfo != null){
-            new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy).start();
+            new PrintTransactionThread(mPrinter, baseHandler, transInfo, customerCopy, true).start();
         }
         //baseHandler.obtainMessage(ConstantUtils.MSG_FINISH_PRINT, customerCopy).sendToTarget();
     }

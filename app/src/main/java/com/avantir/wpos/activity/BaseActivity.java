@@ -122,17 +122,25 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
     protected void displayDialog(String msg) {
 
+        displayDialog(msg, 0);
+    }
+
+    protected void displayDialog(String msg, final int msgWhat) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(msg)
                 .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                if(msgWhat > 0)
+                                    baseHandler.sendEmptyMessage(msgWhat);
                                 return;
                             }
                         });
         builder.show();
     }
+
 
     @Override
     public void onProgress(String progress) {

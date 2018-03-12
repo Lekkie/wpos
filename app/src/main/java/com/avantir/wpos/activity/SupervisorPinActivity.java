@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -67,19 +69,31 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
         switch (v.getId())
         {
             case R.id.titleBackImage:
-                back();
+                onBack();
                 break;
             case R.id.supervisor_pin_page:
                 InputMethodManager imm =  (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 break;
             case R.id.cancel_supervisor_pin_btn:
-                back();
+                displayDialog("Authentication Failed", ConstantUtils.MSG_BACK);
+                //back();
                 break;
             case R.id.ok_supervisor_pin_btn:
                 verifyPIN();
                 break;
             default:
+                break;
+        }
+    }
+
+
+    @Override
+    protected void handleMessage(Message msg) {
+        Log.i(PayActivity.class.getSimpleName(), "handleMessage: " + msg.what);
+        switch (msg.what) {
+            case ConstantUtils.MSG_BACK:
+                onBack();
                 break;
         }
     }
@@ -116,21 +130,19 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
                     displayDialog("Authentication Invalid");
                 }
                 else{
-                    displayDialog("Authentication Failed");
-                    onBack();
+                    displayDialog("Authentication Failed", ConstantUtils.MSG_BACK);
                 }
             }
             else{
-                displayDialog("Authentication Failed");
-                onBack();
+                displayDialog("Authentication Failed", ConstantUtils.MSG_BACK);
             }
         }
         catch(Exception ex){
-            showToast("Authentication Error!");
+            displayDialog("Authentication Error!", ConstantUtils.MSG_BACK);
         }
     }
 
-    private void back(){
+    protected void onBack(){
         //finish();
         //skipActivityAnim(-1);
         startActivity(new Intent(this, MainMenuActivity.class));
@@ -148,7 +160,7 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
         }
 
         public void onFinish() {
-            back();
+            onBack();
         }
 
     }.start();
