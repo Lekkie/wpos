@@ -3,6 +3,9 @@ package com.avantir.wpos.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +29,7 @@ public class AdminPasswordActivity extends BaseActivity implements  View.OnFocus
     GlobalData globalData;
     private Bundle bundle;
 
+    EditText editText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,18 @@ public class AdminPasswordActivity extends BaseActivity implements  View.OnFocus
     protected void initView() {
         //Top title bar
         ((ImageView) findViewById(R.id.titleBackImage)).setOnClickListener(this);
-        ((EditText) findViewById(R.id.adminPasswordText)).setOnFocusChangeListener(this);
+
+        editText = ((EditText) findViewById(R.id.adminPasswordText));
+        editText.setOnFocusChangeListener(this);
+        editText.requestFocus();
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN , 0, 0, 0));
+                editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
+            }
+        }, 200);
+
         ((Button) findViewById(R.id.cancel_admin_password_btn)).setOnClickListener(this);
         ((Button) findViewById(R.id.ok_admin_password_btn)).setOnClickListener(this);
         ((LinearLayout) findViewById(R.id.admin_password_page)).setOnClickListener(this);

@@ -353,7 +353,6 @@ public class InsertCardActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /*
         if (mBankCard != null) {
             try {
                 mBankCard.breakOffCommand();
@@ -361,48 +360,7 @@ public class InsertCardActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-        */
     }
-
-
-    /*
-    case 0x00://磁条卡成功(read card success,type MAG)
-                        mCore.buzzer();
-                        int len1 = outData[1];
-                        int len2 = outData[2];
-                        int len3 = outData[3];
-                        Log.i(TAG, "run: read card len1==" + len1 + "len2==" + len2 + "len3==" + len3);
-                        byte[] data1 = Arrays.copyOfRange(outData, 4, len1 + 4);
-                        Log.i(TAG, "run: card data1==" + ByteUtil.bytes2HexString(data1));
-                        byte[] data2 = Arrays.copyOfRange(outData, 4 + len1, len2 + len1 + 4);
-                        Log.i(TAG, "run: card data2==" + ByteUtil.bytes2HexString(data2));
-                        byte[] data3 = Arrays.copyOfRange(outData, 4 + len1 + len2, len3 + len2 + 4 + len1);
-                        Log.i(TAG, "run: card data3==" + ByteUtil.bytes2HexString(data3));
-                        if (len2 > 0) {
-                            TradeInfo.getInstance().setMagneticCardData2(new String(data2));
-                            String serviceCode = ByteUtil.bytes2HexString(data2).split("D")[1];
-                            if (StringUtils.isEmpty(TradeInfo.getInstance().getId())) {
-                                TradeInfo.getInstance().setId(new String(data2).split("=")[0]);
-                                handler.sendEmptyMessage(1);
-                            }
-                            Log.i(TAG, "run: serviceCode" + serviceCode + "--" + new String(Arrays.copyOfRange(ByteUtil.hexString2Bytes(serviceCode), 4, 6)));
-                            String expireDate = new String(Arrays.copyOfRange(ByteUtil.hexString2Bytes(serviceCode), 0, 4));
-                            Log.i(TAG, "run: expireDate==" + expireDate.replace("=", "D"));
-                            TradeInfo.getInstance().setValidityPeriod(expireDate);
-                            serviceCode = new String(Arrays.copyOfRange(ByteUtil.hexString2Bytes(serviceCode), 4, 6));
-                            if (serviceCode.startsWith("2") || serviceCode.startsWith("6")) {
-                                //IC卡不支持降级操作
-                                strTxt = "The IC card does not support degraded operation";
-                                handler.sendEmptyMessage(0);
-                                return;
-                            }
-                        }
-                        if (len3 > 0)
-                            TradeInfo.getInstance().setMagneticCardData3(new String(data3));
-                        readCardInfo("02");
-                        break;
-     */
-
 
 
 }

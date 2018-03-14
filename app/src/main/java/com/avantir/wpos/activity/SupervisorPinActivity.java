@@ -3,9 +3,7 @@ package com.avantir.wpos.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Message;
+import android.os.*;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +26,8 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
     private Bundle bundle;
     private int nextActivity;
 
+    EditText editText;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,21 @@ public class SupervisorPinActivity extends BaseActivity implements  View.OnFocus
     protected void initView() {
         //Top title bar
         ((ImageView) findViewById(R.id.titleBackImage)).setOnClickListener(this);
-        ((EditText) findViewById(R.id.supervisorPINText)).setOnFocusChangeListener(this);
+
+
+        editText = ((EditText) findViewById(R.id.supervisorPINText));
+        editText.setOnFocusChangeListener(this);
+        editText.requestFocus();
+        //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN , 0, 0, 0));
+                editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
+            }
+        }, 200);
+
         ((Button) findViewById(R.id.cancel_supervisor_pin_btn)).setOnClickListener(this);
         ((Button) findViewById(R.id.ok_supervisor_pin_btn)).setOnClickListener(this);
         ((LinearLayout) findViewById(R.id.supervisor_pin_page)).setOnClickListener(this);

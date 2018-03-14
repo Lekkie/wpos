@@ -396,6 +396,7 @@ public class DownloadTermParamsActivity extends BaseActivity {
                     globalData.setIfCTMSSSL(parameter.isTmsSsl());
                 }
 
+
                 globalData.setMerchantName(merchantName);
                 globalData.setTerminalId(terminalId);
                 globalData.setAcquirerId(parameter.getAcquirer());

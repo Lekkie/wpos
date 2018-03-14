@@ -144,6 +144,8 @@ public class ConstantUtils {
     public static final int EOD_ACTIVITY = 3;
     public static final int ADMIN_ACTIVITY = 4;
 
+    public static final String TIMEZONE_LAGOS = "Africa/Lagos";
+
 
     public static final String RSA_KEY_ALIAS = "httpsCert";
     public static final String LOGIN = "LOGIN"; /*login*/

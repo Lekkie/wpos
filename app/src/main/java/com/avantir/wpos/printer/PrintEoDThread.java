@@ -48,6 +48,10 @@ public class PrintEoDThread extends Thread {
                 GlobalData globalData = GlobalData.getInstance();
                 TransInfo tInfo = (matched != null && matched.size() > 0) ? ((TransInfo) matched.values().toArray()[0]) : null;
                 tInfo = (tInfo == null && notMatched != null && notMatched.size() > 0) ? ((TransInfo) notMatched.values().toArray()[0]) : tInfo;
+
+                if(tInfo == null)
+                    throw new Exception("");
+
                 String transDateTime = tInfo.getTransmissionDateTime();
                 String transMonth = transDateTime.substring(0, 2);
                 String transDay = transDateTime.substring(2, 4);
@@ -82,12 +86,13 @@ public class PrintEoDThread extends Thread {
                     long amtLong = Long.valueOf(amtStr);
                     String amt = MoneyUtil.kobo2Naira(amtLong);
                     amt = StringUtil.rightPad(amt, 13, ' ');
-                    totalApprovedAmt += amtLong;
                     String respCode = transInfo.getResponseCode();
                     respCode = StringUtil.rightPad(respCode, 4, ' ');
                     boolean pass = "00".equalsIgnoreCase(respCode);
-                    if(pass)
+                    if(pass) {
                         totalPassedTrans++;
+                        totalApprovedAmt += amtLong;
+                    }
                     String state = pass ? "Pass" : "Fail";
                     state = StringUtil.rightPad(state, 5, ' ');
                     //result = mPrinter.printString(time + "    |" + amt + "    |" + respCode + "  |" + state + "   |Matched",bodyFontSize, Printer.Align.CENTER,true,false);
@@ -125,7 +130,7 @@ public class PrintEoDThread extends Thread {
                 result = mPrinter.printPaper(100 + totalTrans);// 100, 80
                 result = mPrinter.printFinish();
 
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

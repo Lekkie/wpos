@@ -459,7 +459,7 @@ public class BalanceActivity extends BaseActivity {
                 transInfo.setPinData(pinblock.substring(2));
             }
             transInfo.setPosDataCode(globalData.getPOSDataCode());
-            transInfo.setCreatedOn(System.currentTimeMillis());
+            transInfo.setCreatedOn(TimeUtil.getTimeInEpoch(new Date(System.currentTimeMillis())));
             transInfoDao.create(transInfo);
             //transInfo = transInfoDao.findByRetRefNo(transInfo.getRetRefNo()); // get database ID
 

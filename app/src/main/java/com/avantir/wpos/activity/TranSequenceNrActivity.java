@@ -101,7 +101,7 @@ public class TranSequenceNrActivity extends BaseActivity implements  View.OnFocu
             if(transInfo == null)
                 throw new Exception();
 
-            Intent intent = new Intent(this, RefundActivity.class);
+            Intent intent = new Intent(this, InsertCardActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.REFUND);
             bundle.putSerializable(ConstantUtils.TRANS_INFO, transInfo);

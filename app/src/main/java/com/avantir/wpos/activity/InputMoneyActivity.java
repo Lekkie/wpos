@@ -155,10 +155,12 @@ public class InputMoneyActivity extends BaseActivity {
             if (tranTypeFlag == ConstantUtils.PURCHASE) {
                 bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
                 intent.setClass(this, PayActivity.class);
+                countDownTimer.cancel();
             }
             else if (tranTypeFlag == ConstantUtils.REFUND) {
                 bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.REFUND);
                 intent.setClass(this, RefundActivity.class);
+                countDownTimer.cancel();
             }
 
             intent.putExtras(bundle);

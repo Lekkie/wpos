@@ -1,5 +1,6 @@
 package com.avantir.wpos.utils;
 
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,8 +42,9 @@ public class TimeUtil {
     public static long getTimeInEpoch(Date date) {
         try{
             SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sdfDate.setTimeZone(TimeZone.getTimeZone("Africa/Lagos"));
-            Date newDate = sdfDate.parse(sdfDate.format(date));
+            sdfDate.setTimeZone(TimeZone.getTimeZone(ConstantUtils.TIMEZONE_LAGOS));
+            String nowStr = sdfDate.format(date);
+            Date newDate = sdfDate.parse(nowStr);
             return newDate.getTime() / 1000;
         }
         catch(Exception ex){
@@ -53,17 +55,30 @@ public class TimeUtil {
 
 
     public static long getStartOfDay(long epoch){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(epoch);
-        cal.set(Calendar.HOUR_OF_DAY, 0); //set hours to zero
-        cal.set(Calendar.MINUTE, 0); // set minutes to zero
-        cal.set(Calendar.SECOND, 0); //set seconds to zero
-        //Log.i("Time", cal.getTime().toString());
-        return cal.getTimeInMillis() / 1000;
+
+        try{
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdfDate.setTimeZone(TimeZone.getTimeZone(ConstantUtils.TIMEZONE_LAGOS));
+            Date date = new Date(epoch * 1000);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            String dateStr = year + "-" + month + "-" + day + " 00:00:00";
+            Date newDate = sdfDate.parse(dateStr);
+
+            return newDate.getTime() / 1000;
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+
+        return 0;
     }
 
     public static long getEndOfDay(long epoch){
-        return getStartOfDay(epoch) * (24 * 60 * 60);
+        return getStartOfDay(epoch) + (24 * 60 * 60);
     }
 
     public static String getYearFromExpDate(String expDate){
@@ -80,7 +95,7 @@ public class TimeUtil {
 
     public static String getDateTimeMMddhhmmss(Date date){
         SimpleDateFormat sdfDate = new SimpleDateFormat("MMddHHmmss");
-        sdfDate.setTimeZone(TimeZone.getTimeZone("Africa/Lagos"));
+        sdfDate.setTimeZone(TimeZone.getTimeZone(ConstantUtils.TIMEZONE_LAGOS));
         String strDate = sdfDate.format(date);
         return strDate;
     }
@@ -94,7 +109,7 @@ public class TimeUtil {
 
     public static String getDateMMdd(Date date){
         SimpleDateFormat sdfDate = new SimpleDateFormat("MMdd");
-        sdfDate.setTimeZone(TimeZone.getTimeZone("Africa/Lagos"));
+        sdfDate.setTimeZone(TimeZone.getTimeZone(ConstantUtils.TIMEZONE_LAGOS));
         String strDate = sdfDate.format(date);
         return strDate;
     }
