@@ -106,7 +106,8 @@ public class ConstantUtils {
             MSG_ERROR = MSG_BACK + 2, MSG_RESULT = MSG_BACK + 3, MSG_CARD = MSG_BACK + 4,
             MSG_SWIPE = MSG_BACK + 5, MSG_INFO = MSG_BACK + 6, MSG_START_COMMS = MSG_BACK + 7,
             MSG_FINISH_COMMS = MSG_BACK + 8, MSG_FINISH_ERROR_COMMS = MSG_BACK + 9, MSG_START_PRINT = MSG_BACK + 10,
-            MSG_FINISH_PRINT = MSG_BACK + 11;
+            MSG_FINISH_PRINT = MSG_BACK + 11, MSG_FINISH_ERROR_COMMS_MSG = MSG_BACK + 12,
+            SEND_TRANSACTION_NOTIFICATION = MSG_BACK + 13, SEND_TRANSACTION_REVERSAL_NOTIFICATION = MSG_BACK + 14;
     /**
      * show logs
      */
@@ -138,6 +139,9 @@ public class ConstantUtils {
     public static final int DOWNLOAD_KEYS_JOB_ID = 1;
     public static final int CALL_HOME_JOB_ID = 2;
     public static final int REVERSAL_JOB_ID =  3;
+    public static final int TRANSACTION_NOTIFICATION_JOB_ID =  4;
+    public static final int DELETE_REVERSAL_JOB_ID =  5;
+    public static final int DELETE_TRANSACTION_JOB_ID =  6;
     public static final String NEXT_ACTIVITY = "NEXT_ACTIVITY";
     public static final int REFUND_ACTIVITY = 1;
     public static final int REPRINT_ACTIVITY = 2;
@@ -195,6 +199,9 @@ public class ConstantUtils {
     public static final String CHECK_KEY_DOWNLOAD_INTERVAL_IN_MINS = "CHECK_KEY_DOWNLOAD_INTERVAL_IN_MINS";
     public static final String CALL_HOME_TIME_IN_MINS = "CALL_HOME_TIME_IN_MINS";
     public static final String RESEND_REVERSAL_TIME_IN_MINS =  "RESEND_REVERSAL_TIME_IN_MINS";
+    public static final String RESEND_TRANSACTION_NOTIFICATION_TIME_IN_MINS =  "RESEND_TRANSACTION_NOTIFICATION_TIME_IN_MINS";
+    public static final String REVERSAL_RETENTION_IN_DAYS = "REVERSAL_RETENTION_IN_DAYS";
+    public static final String TRAN_NOTIFY_RETENTION_IN_DAYS = "TRAN_NOTIFY_RETENTION_IN_DAYS";
     public static final String PAGE_TIMER_IN_SEC = "PAGE_TIMER_IN_SEC";
     public static final String CTMK = "CTMK";
     public static final String TMK = "TMK";
@@ -210,15 +217,19 @@ public class ConstantUtils {
     public static final String MAG_STRIPE_SERVICE_CODE = "MAG_STRIPE_SERVICE_CODE";
     public static final String MAG_STRIPE_TRACK2_DATA = "MAG_STRIPE_TRACK2_DATA";
     public static final String MAG_STRIPE_TRACK3_DATA = "MAG_STRIPE_TRACK3_DATA";
+    public static final String DEMO_MODE = "DEMO_MODE";
+    public static final String DEMO_RESPONSE_CODE = "DEMO_RESPONSE_CODE";
 
 
     public static final String DEVICE_SERIAL_NO = "deviceSerialNo";
     public static final String TERMINAL_PUBLIC_KEY = "devicePublicKey";
+    public static final String DEVICE_LOCATION = "deviceLocation";
     public static final String SUPERVISOR_PIN = "SUPERVISOR_PIN";
     public static final String ADMIN_PWD = "ADMIN_PWD";
     public static final String USE_REMOTE_NETWORK_CONFIG = "USE_REMOTE_NETWORK_CONFIG";
 
     public static final String TERMINAL_DOWNLOAD_URI = "/api/v1/termparams";
+    public static final String NOTIFY_TRANSACTION_URI = "/api/v1/trans/notifications";
 
     public static final String NETWORK_REQ_TYPE = "NETWORK_REQ_TYPE";
     public static final int NETWORK_TMS_TERM_PARAM_DOWNLOAD_REQ_TYPE = 1;
@@ -236,6 +247,8 @@ public class ConstantUtils {
     public static final int NETWORK_BAL_REQ_TYPE = 13;
     public static final int NETWORK_REFUND_REQ_TYPE = 14;
     public static final int NETWORK_REFUND_REQ_REVERSAL_TYPE = 15;
+    public static final int TRAN_NOTIFICATION_REQ_TYPE = 16;
+    public static final int TRAN_NOTIFICATION_REVERSAL_REQ_TYPE = 17;
 
     public static final int INIT_COMMU = 0;
     public static final int CONNECTING = 1;

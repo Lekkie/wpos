@@ -16,6 +16,9 @@
     <uses-permission android:name="com.pos.permission.PRINTER" />
     <uses-permission android:name="com.pos.permission.SECURITY" />
     <uses-permission android:name="com.pos.permission.BIND_JOB_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
             android:name=".WPOSApplication"
@@ -35,24 +38,24 @@
         </activity>
 
         <activity android:name=".activity.MainMenuActivity" />
-        <activity android:name=".activity.InsertCardActivity" />
-        <activity android:name=".activity.AccountTypeActivity" />
-        <activity android:name=".activity.InputMoneyActivity" />
-        <activity android:name=".activity.PayActivity" />
-        <activity android:name=".activity.BalanceActivity" />
-        <activity android:name=".activity.RefundActivity" />
-        <activity android:name=".activity.TranSequenceNrActivity" />
-        <activity android:name=".activity.ReprintActivity" />
-        <activity android:name=".activity.EoDActivity" />
-        <activity android:name=".activity.AdminActivity" />
-        <activity android:name=".activity.CallHomeConfigActivity" />
-        <activity android:name=".activity.PrintConfigActivity" />
-        <activity android:name=".activity.NetworkConfigActivity" />
-        <activity android:name=".activity.DownloadKeysActivity" />
-        <activity android:name=".activity.HostConfigActivity" />
-        <activity android:name=".activity.DownloadTermParamsActivity" />
-        <activity android:name=".activity.SupervisorPinActivity" />
-        <activity android:name=".activity.AdminPasswordActivity" />
+        <activity android:name=".activity.transactions.InsertCardActivity" />
+        <activity android:name=".activity.transactions.AccountTypeActivity" />
+        <activity android:name=".activity.transactions.InputMoneyActivity" />
+        <activity android:name=".activity.transactions.PayActivity" />
+        <activity android:name=".activity.transactions.BalanceActivity" />
+        <activity android:name=".activity.transactions.RefundActivity" />
+        <activity android:name=".activity.transactions.TranSequenceNrActivity" />
+        <activity android:name=".activity.admin.ReprintActivity" />
+        <activity android:name=".activity.admin.EoDActivity" />
+        <activity android:name=".activity.admin.AdminActivity" />
+        <activity android:name=".activity.admin.CallHomeConfigActivity" />
+        <activity android:name=".activity.admin.PrintConfigActivity" />
+        <activity android:name=".activity.admin.NetworkConfigActivity" />
+        <activity android:name=".activity.admin.DownloadKeysActivity" />
+        <activity android:name=".activity.admin.HostConfigActivity" />
+        <activity android:name=".activity.admin.DownloadTermParamsActivity" />
+        <activity android:name=".activity.admin.SupervisorPinActivity" />
+        <activity android:name=".activity.admin.AdminPasswordActivity" />
         <service
                 android:name=".services.DownloadKeysJobService"
                 android:permission="android.permission.BIND_JOB_SERVICE"
@@ -65,6 +68,22 @@
 
         <service
                 android:name=".services.ReversalJobService"
+                android:permission="android.permission.BIND_JOB_SERVICE"
+                android:exported="true"/>
+
+
+        <service
+                android:name=".services.TransNotifyUploadRetryJobService"
+                android:permission="android.permission.BIND_JOB_SERVICE"
+                android:exported="true"/>
+
+        <service
+                android:name=".services.DeleteReversalJobService"
+                android:permission="android.permission.BIND_JOB_SERVICE"
+                android:exported="true"/>
+
+        <service
+                android:name=".services.DeleteTransactionJobService"
                 android:permission="android.permission.BIND_JOB_SERVICE"
                 android:exported="true"/>
 

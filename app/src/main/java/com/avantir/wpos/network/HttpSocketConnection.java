@@ -39,7 +39,7 @@ public class HttpSocketConnection {
 
             Request request = null;
             if(httpMethod == 1){ // POST
-                request = new Request.Builder().url(url)
+                request = builder.url(url)
                         .post(RequestBody.create(MediaTypeJSON, body)).build();
             }
             else { //Default isGET

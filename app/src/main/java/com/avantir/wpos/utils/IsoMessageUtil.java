@@ -19,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -26,76 +28,114 @@ import java.util.Formatter;
  */
 public class IsoMessageUtil {
 
-    /*
-    private final static String FORMAT =
-            "2:Primary Account Number (PAN),LLVAR-N19;"
-                    + "3:Processing Code,N6;"
-                    + "4:Amount Transaction,N12;"
-                    + "7:Transmission Date and Time,N10;"
-                    + "9:Settlement Conversion Rate,N8;"
-                    + "11:Systems Trace Audit Number,N6;"
-                    + "12:Local Transaction Time,N6;"
-                    + "13:Local Transaction Date,N4;"
-                    + "14:Expiration Date,N4;"//YYMM
-                    + "15:Settlement Date,N4;"
-                    + "18:Merchant Type,N4;"
-                    + "22:POS Entry Mode,N3;"
-                    + "23:Card Sequence Number,N3;"
-                    + "25:POS Condition Code,N2;"
-                    + "26:POS PIN Capture Code,N2;"
-                    + "28:Transaction Fee Amount,AN9;"
-                    + "29:Settlement Fee Amount,AN9;"
-                    + "30:Transaction Processing Fee Amount,AN9;"
-                    + "31:Settle Processing Fee Amount,AN9;"
-                    + "32:Acquiring Institution ID Code,LLVAR-N11;"
-                    + "33:Forwarding Institution ID Code,LLVAR-N11;"
-                    + "35:Track 2 Data,LLVAR-N37;"
-                    + "37:Retrieval Reference Number,AN12;"
-                    + "38:Authorization ID Response,AN6;"
-                    + "39:Response Code,AN9;"
-                    + "40:Service Restriction Code,AN9;"
-                    + "41:Card Acceptor Terminal ID,AN9;"
-                    + "42:Card Acceptor ID Code,ANS15;"
-                    + "43:Card Acceptor Name Location,ANS40;"
-                    + "44:Additional Response Data,LLVAR-AN40;"
-                    + "45:Track 1 Data,LLLVAR-ANS999;"
-                    // + "46:自定义域,LLVAR-ANS4;"
-                    //  + "47:自定义域,LLLVAR-ANS999;"
-                    + "48:Additional Data,LLLVAR-N999;"
-                    + "49:Transaction Currency Code,N3;"
-                    + "50:Settlement Currency Code,N3;"
-                    + "52:PIN Data,B8;"
-                    + "53:Security Related Control Information,B48;"
-                    + "54:Additional Amounts,LLLVAR-AN120;"
-                    + "55:Integrated Circuit Card System Related Data,LLLVAR-AN510;"
-                    + "56:Message Reason Code,LLLVAR-AN999;"
-                    + "57:Authorization Life-cycle Code,LLLVAR-ANS999;"
-                    + "58:Authorizing Agent Institution,LLVAR-ANS11;"
-                    + "59:Echo Data,LLLVAR-ANS255;"
-                    + "60:Payment Information,LLLVAR-N999;"
-                    //  + "61:原始信息域,LLLVAR-N29;"
-                    + "62:Private management data 1,LLLVAR-ANS999;"
-                    + "63:Private management data 2,LLLVAR-ANS163;"
-                    + "64:MAC,B24;"
-                    + "67:Extended Payment Code,N2;"
-                    + "90:Original Data Elements,N42;"
-                    + "95:Replacement Amounts,N42;"
-                    + "98:Payee,AN25;"
-                    + "100:Receiving Institution ID Code,LLVAR-N11;"
-                    + "102:Account Identification 1,LLVAR-N28;"
-                    + "103:Account Identification 2,LLVAR-N28;"
-                    + "123:POS Data Code,LLVAR-N15;"
-                    + "124:Near Field Communication Data,LLLVAR-ANS999;"
-                    + "128:MAC,B24;";
-
-    public final static Field ITEMS[] = Field.makeItems(FORMAT, true);
-    */
-
     private static String clearTsk;
     static MessageFactory<IsoMessage> messageFactory;
     private static IsoMessageUtil instance;
     private static boolean messageFactoryInit = false;
     private static boolean sessionKeyInit = false;
+    public static Map<String, String> responseMessageMap = new HashMap<>();
+    private static String COUNTRY_CODE = "NG";
+    private static String DEFAULT_ACCOUNT = "DEFAULT";
+    private static String SAVINGS_ACCOUNT = "SAVINGS";
+    private static String CURRENT_ACCOUNT = "CURRENT";
+    private static String CREDIT_ACCOUNT = "CREDIT";
+
+    private static String PURCHASE = "Purchase";
+    private static String BALANCE = "Balance";
+    private static String REFUND = "Refund";
+    private static String TRANSACTION = "Transaction";
+
+
+    static {
+        responseMessageMap.put("00", "Transaction Approved");
+        responseMessageMap.put("01", "Refer to card issuer");
+        responseMessageMap.put("02", "Refer to card issuer, special condition");
+        responseMessageMap.put("03", "Invalid merchant");
+        responseMessageMap.put("04", "Pick-up card");
+        responseMessageMap.put("05", "Do not honor");
+        responseMessageMap.put("06", "Error");
+        responseMessageMap.put("07", "Pick-up card, special condition");
+        responseMessageMap.put("08", "Honor with identification");
+        responseMessageMap.put("09", "Request in progress");
+        responseMessageMap.put("10", "Approved, partial");
+        responseMessageMap.put("11", "Approved, VIP");
+        responseMessageMap.put("12", "Invalid transaction");
+        responseMessageMap.put("13", "Invalid amount");
+        responseMessageMap.put("14", "Invalid card number");
+        responseMessageMap.put("15", "No such issuer");
+        responseMessageMap.put("16", "Approved, update track 3");
+        responseMessageMap.put("17", "Customer cancellation");
+        responseMessageMap.put("18", "Customer dispute");
+        responseMessageMap.put("19", "Re-enter transaction");
+        responseMessageMap.put("20", "Invalid response");
+        responseMessageMap.put("21", "No action taken");
+        responseMessageMap.put("22", "Suspected malfunction");
+        responseMessageMap.put("23", "Unacceptable transaction fee");
+        responseMessageMap.put("24", "File update not supported");
+        responseMessageMap.put("25", "Unable to locate record");
+        responseMessageMap.put("26", "Duplicate record");
+        responseMessageMap.put("27", "File update field edit error");
+        responseMessageMap.put("28", "File update file locked");
+        responseMessageMap.put("29", "File update failed");
+        responseMessageMap.put("30", "Format error");
+        responseMessageMap.put("31", "Bank not supported");
+        responseMessageMap.put("32", "Completed partially");
+        responseMessageMap.put("33", "Expired card, pick-up");
+        responseMessageMap.put("34", "Suspected fraud, pick-up");
+        responseMessageMap.put("35", "Contact acquirer, pick-up");
+        responseMessageMap.put("36", "Restricted card, pick-up");
+        responseMessageMap.put("37", "Call acquirer security, pick-up");
+        responseMessageMap.put("38", "PIN tries exceeded, pick-up");
+        responseMessageMap.put("39", "No credit account");
+        responseMessageMap.put("40", "Function not supported");
+        responseMessageMap.put("41", "Lost card, pick-up");
+        responseMessageMap.put("42", "No universal account");
+        responseMessageMap.put("43", "Stolen card, pick-up");
+        responseMessageMap.put("44", "No investment account");
+        responseMessageMap.put("45", "Account closed");
+        responseMessageMap.put("46", "Identification required");
+        responseMessageMap.put("47", "Identification cross-check required");
+        responseMessageMap.put("51", "Not sufficient funds");
+        responseMessageMap.put("52", "No check account");
+        responseMessageMap.put("53", "No savings account");
+        responseMessageMap.put("54", "Expired card");
+        responseMessageMap.put("55", "Incorrect PIN");
+        responseMessageMap.put("56", "No card record");
+        responseMessageMap.put("57", "Transaction not permitted to cardholder");
+        responseMessageMap.put("58", "Transaction not permitted on terminal");
+        responseMessageMap.put("59", "Suspected fraud");
+        responseMessageMap.put("60", "Contact acquirer");
+        responseMessageMap.put("61", "Exceeds withdrawal limit");
+        responseMessageMap.put("62", "Restricted card");
+        responseMessageMap.put("63", "Security violation");
+        responseMessageMap.put("64", "Original amount incorrect");
+        responseMessageMap.put("65", "Exceeds withdrawal frequency");
+        responseMessageMap.put("66", "Call acquirer security");
+        responseMessageMap.put("67", "Hard capture");
+        responseMessageMap.put("68", "Response received too late");
+        responseMessageMap.put("69", "Advice received too late");
+        responseMessageMap.put("90", "Cut-off in progress");
+        responseMessageMap.put("91", "Issuer or switch inoperative");
+        responseMessageMap.put("92", "Routing error");
+        responseMessageMap.put("93", "Violation of law");
+        responseMessageMap.put("94", "Duplicate transaction");
+        responseMessageMap.put("95", "Reconcile error");
+        responseMessageMap.put("96", "System malfunction");
+        responseMessageMap.put("98", "Exceeds cash limit");
+        responseMessageMap.put("A1", "ATC not incremented");
+        responseMessageMap.put("A2", "ATC limit exceeded");
+        responseMessageMap.put("A3", "ATC configuration error");
+        responseMessageMap.put("A4", "CVR check failure");
+        responseMessageMap.put("A5", "CVR configuration error");
+        responseMessageMap.put("A6", "TVR check failure");
+        responseMessageMap.put("A7", "TVR configuration error");
+        responseMessageMap.put("C0", "Unacceptable PIN");
+        responseMessageMap.put("C1", "PIN Change failed");
+        responseMessageMap.put("C2", "PIN Unblock failed");
+        responseMessageMap.put("D1", "MAC Error");
+        responseMessageMap.put("E1", "Prepay error");
+
+    }
 
     private IsoMessageUtil(){
 
@@ -529,7 +569,7 @@ public class IsoMessageUtil {
             message.setValue(35, track2, templ.getField(35).getType(), track2.length());
         }
         message.setValue(37, transInfo.getRetRefNo(), templ.getField(37).getType(), templ.getField(37).getLength());
-        if (!StringUtil.isEmpty(serviceRestrictionCode)) {
+        if (!StringUtil.isEmpty(serviceRestrictionCode) && serviceRestrictionCode.length() == 3) {
             message.setValue(40, serviceRestrictionCode, templ.getField(40).getType(), templ.getField(40).getLength());
         }
         message.setValue(41, transInfo.getTerminalId(), templ.getField(41).getType(), templ.getField(41).getLength());
@@ -559,7 +599,7 @@ public class IsoMessageUtil {
     }
 
 
-    public static byte[] createPurchaseReversal(ReversalInfo reversalInfo, boolean isRepeat) throws Exception{
+    public static byte[] createRequestReversal(ReversalInfo reversalInfo, boolean isRepeat) throws Exception{
         String pan = reversalInfo.getCardNo();
         String amt = reversalInfo.getAmt();
         String cardSeqNo = reversalInfo.getCardSequenceNo();
@@ -607,7 +647,7 @@ public class IsoMessageUtil {
             message.setValue(35, track2, templ.getField(35).getType(), track2.length());
         }
         message.setValue(37, retRefNo, templ.getField(37).getType(), templ.getField(37).getLength());
-        if (serviceRestrictionCode != null) {
+        if (!StringUtil.isEmpty(serviceRestrictionCode) && serviceRestrictionCode.length() == 3) {
             message.setValue(40, serviceRestrictionCode, templ.getField(40).getType(), templ.getField(40).getLength());
         }
         message.setValue(41, reversalInfo.getTerminalId(), templ.getField(41).getType(), templ.getField(41).getLength());
@@ -673,10 +713,10 @@ public class IsoMessageUtil {
 
     public static String getIso8583MerchantLoc(String merchantLoc){
         if(merchantLoc == null)
-            return (StringUtil.leftPadding(" ", 38, "") + "NG");
+            return (StringUtil.leftPadding(" ", 38, "") + COUNTRY_CODE);
         if(merchantLoc.length() > 38)
-            return merchantLoc.substring(0, 38) + "NG";
-        return StringUtil.rightPadding(" ", 38, merchantLoc) + "NG";
+            return merchantLoc.substring(0, 38) + COUNTRY_CODE;
+        return StringUtil.rightPadding(" ", 38, merchantLoc) + COUNTRY_CODE;
     }
 
 
@@ -730,13 +770,24 @@ public class IsoMessageUtil {
 
     public static String getAccountTypeName(String acctType){
         if("00".equalsIgnoreCase(acctType))
-            return "DEFAULT";
+            return DEFAULT_ACCOUNT;
         if("10".equalsIgnoreCase(acctType))
-            return "SAVINGS";
+            return SAVINGS_ACCOUNT;
         else if("20".equalsIgnoreCase(acctType))
-            return "CURRENT";
+            return CURRENT_ACCOUNT;
         else if("30".equalsIgnoreCase(acctType))
-            return "CREDIT";
-        return "DEFAULT";
+            return CREDIT_ACCOUNT;
+        return DEFAULT_ACCOUNT;
+    }
+
+    public static String getTranTypeName(String procCode){
+        String tranType = procCode.substring(0, 2);
+        if(ConstantUtils.PURCHASE_PROC_CODE.equalsIgnoreCase(tranType))
+            return PURCHASE;
+        if(ConstantUtils.BALANCE_PROC_CODE.equalsIgnoreCase(tranType))
+            return BALANCE;
+        else if(ConstantUtils.REFUND_PROC_CODE.equalsIgnoreCase(tranType))
+            return REFUND;
+        return TRANSACTION;
     }
 }

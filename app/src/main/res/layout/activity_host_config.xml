@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#DDDDDD"
-                android:weightSum="4"
+                android:weightSum="10"
                 android:orientation="vertical">
 
 
@@ -29,13 +29,13 @@
                     android:id="@+id/host_page"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:orientation="horizontal" android:layout_weight="3" android:weightSum="1">
+                    android:orientation="horizontal" android:layout_weight="9" android:weightSum="1">
 
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#DDDDDD"
-                        android:weightSum="7"
+                        android:weightSum="9"
                         android:orientation="vertical">
 
                     <LinearLayout
@@ -178,6 +178,65 @@
                                 android:layout_marginTop="0dp"
                                 android:gravity="center_vertical"
                                 android:layout_marginRight="3dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/divider_height">
+
+                        <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold|italic"
+                                android:gravity="center_vertical"
+                                android:text="Demo Mode:"
+                                android:textSize="20sp"/>
+
+                        <CheckBox
+                                android:id="@+id/demoText"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textSize="20sp"
+                                android:layout_marginTop="0dp"
+                                android:gravity="center_vertical"
+                                android:layout_marginRight="3dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/divider_height">
+
+                        <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold|italic"
+                                android:gravity="center_vertical"
+                                android:text="Demo Rsp Code:"
+                                android:textSize="20sp"/>
+
+                        <EditText
+                                android:id="@+id/demoResponseCodeText"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textSize="20sp"
+                                android:layout_marginTop="0dp"
+                                android:gravity="center_vertical"
+                                android:layout_marginRight="3dp"
+                                android:digits="0123456789"
+                                android:inputType="number"
+                                android:text="00"/>
                     </LinearLayout>
 
                     <LinearLayout

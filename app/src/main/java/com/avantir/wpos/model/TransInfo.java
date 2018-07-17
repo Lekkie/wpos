@@ -92,6 +92,13 @@ public class TransInfo implements Serializable {
     private String accountType;
     @DatabaseField(unique=false, canBeNull = false, columnName = "authentication_method")
     private String authenticationMethod;
+    @DatabaseField(unique=false, canBeNull = false)
+    private int notified = 0;
+    @DatabaseField(unique=false, canBeNull = true)
+    private long latency = 0;
+    private long startTime = 0;
+    private long endTime = 0;
+    private String printerMsg;
 
 
 
@@ -657,5 +664,45 @@ public class TransInfo implements Serializable {
 
     public void setIssuerCountry(String issuerCountry) {
         this.issuerCountry = issuerCountry;
+    }
+
+    public int getNotified() {
+        return notified;
+    }
+
+    public void setNotified(int notified) {
+        this.notified = notified;
+    }
+
+    public long getLatency() {
+        return latency;
+    }
+
+    public void setLatency(long latency) {
+        this.latency = latency;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getPrinterMsg() {
+        return printerMsg;
+    }
+
+    public void setPrinterMsg(String printerMsg) {
+        this.printerMsg = printerMsg;
     }
 }

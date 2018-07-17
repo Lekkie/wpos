@@ -257,6 +257,7 @@ public class GlobalData {
         return mPrefs.getString(ConstantUtils.POS_DATA_CODE, "511201213344002");
     }
 
+
     public void setCTMSHost(String ctmsHost) {
         mEditor.putString(ConstantUtils.CTMS_HOST, ctmsHost);
         mEditor.commit();
@@ -304,7 +305,7 @@ public class GlobalData {
         mEditor.commit();
     }
     public String getTMSHost() {
-        return mPrefs.getString(ConstantUtils.TMS_HOST, "52.56.159.171");
+        return mPrefs.getString(ConstantUtils.TMS_HOST, "54.76.112.168");
     }
 
     public void setTMSPort(int tmsPort) {
@@ -324,7 +325,7 @@ public class GlobalData {
     }
 
     public void setIfTMSSSL(boolean ifTMSSSL) {
-        mEditor.putBoolean(ConstantUtils.CTMS_SSL, ifTMSSSL);
+        mEditor.putBoolean(ConstantUtils.TMS_SSL, ifTMSSSL);
         mEditor.commit();
     }
     public boolean getIfTMSSSL() {
@@ -366,12 +367,38 @@ public class GlobalData {
         return mPrefs.getInt(ConstantUtils.CALL_HOME_TIME_IN_MINS, 60);
     }
 
-    public void setResendReversalPeriodInMin(int resendReversal) {
+    public void setReversalRetryTimeInMin(int resendReversal) {
         mEditor.putInt(ConstantUtils.RESEND_REVERSAL_TIME_IN_MINS, resendReversal);
         mEditor.commit();
     }
-    public int getResendReversalPeriodInMin() {
-        return mPrefs.getInt(ConstantUtils.RESEND_REVERSAL_TIME_IN_MINS, 60);
+    public int getReversalRetryTimeInMin() {
+        return mPrefs.getInt(ConstantUtils.RESEND_REVERSAL_TIME_IN_MINS, 30);
+    }
+
+    public void setTranNotifyRetentionInDays(int tranNotifyRetentionInDays) {
+        mEditor.putInt(ConstantUtils.TRAN_NOTIFY_RETENTION_IN_DAYS, tranNotifyRetentionInDays);
+        mEditor.commit();
+    }
+    public int getTranNotifyRetentionInDays() {
+        return mPrefs.getInt(ConstantUtils.TRAN_NOTIFY_RETENTION_IN_DAYS, 3);
+    }
+
+
+    public void setReversalRetentionInDays(int resendReversal) {
+        mEditor.putInt(ConstantUtils.REVERSAL_RETENTION_IN_DAYS, resendReversal);
+        mEditor.commit();
+    }
+    public int getReversalRetentionInDays() {
+        return mPrefs.getInt(ConstantUtils.REVERSAL_RETENTION_IN_DAYS, 3);
+    }
+
+
+    public void setTransactionNotificationRetryTimeInMin(int resendTransactionNotification) {
+        mEditor.putInt(ConstantUtils.RESEND_TRANSACTION_NOTIFICATION_TIME_IN_MINS, resendTransactionNotification);
+        mEditor.commit();
+    }
+    public int getTransactionNotificationRetryTimeInMin() {
+        return mPrefs.getInt(ConstantUtils.RESEND_TRANSACTION_NOTIFICATION_TIME_IN_MINS, 60);
     }
 
 
@@ -444,6 +471,25 @@ public class GlobalData {
         return mPrefs.getBoolean(ConstantUtils.USE_REMOTE_NETWORK_CONFIG, false);
     }
     */
+
+
+    public void setDemoMode(boolean demoMode) {
+        mEditor.putBoolean(ConstantUtils.DEMO_MODE, demoMode);
+        mEditor.commit();
+    }
+    public boolean isDemoMode() {
+        return mPrefs.getBoolean(ConstantUtils.DEMO_MODE, false);
+    }
+
+
+    public void setDemoResponseCode(String responseCode) {
+        mEditor.putString(ConstantUtils.DEMO_RESPONSE_CODE, responseCode);
+        mEditor.commit();
+    }
+    public String getDemoResponseCode() {
+        return mPrefs.getString(ConstantUtils.DEMO_RESPONSE_CODE, "00");
+    }
+
 
 
 }

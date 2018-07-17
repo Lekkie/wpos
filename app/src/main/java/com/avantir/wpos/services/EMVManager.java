@@ -444,10 +444,19 @@ public class EMVManager {
 
         emv.getTLV(0x5F20, outData, outDataLen);
         transInfo.setCardHolderName(new String(outData).trim());
-        emv.getTLV(0x5F30, outData, outDataLen); // 5F30 - service code
-        String src = ByteUtil.bytes2HexString(Arrays.copyOf(outData, outDataLen[0]));
-        src = (src == null) ? null : (src.length() > 3 ? src.substring(1) : StringUtil.leftPad(src, 3, '0'));
-        transInfo.setServiceRestrictionCode(src);
+        //emv.getTLV(0x5F30, outData, outDataLen); // 5F30 - service code
+        //String src= ByteUtil.bytes2HexString(Arrays.copyOf(outData, outDataLen[0]));
+        //src = (src == null) ? null : (src.length() > 3 ? src.substring(1) : StringUtil.leftPad(src, 3, '0'));
+        try{
+            // src = Integer.parseInt(src) > 0 ? src : null;
+            int len = cardNo.length() + 5;
+            String src = tagTLV57.substring(len, len + 3);
+            transInfo.setServiceRestrictionCode(src);
+        }
+        catch(Exception ex){}
+
+
+
         emv.getTLV(0x9F12, outData, outDataLen); // 9F 12 - Application Preferred Name
         transInfo.setCardTypeName(new String(outData).trim());
         transInfo.setMaskedPan(StringUtil.maskPan(transInfo.getCardNo()));

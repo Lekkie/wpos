@@ -36,13 +36,30 @@ public class ReversalInfoDao extends BaseDao<ReversalInfo, String> {
         return reversalInfoList;
     }
 
+    public List<ReversalInfo>  findAllCompletedUnNotifiedReversalTransaction() {
+        List<ReversalInfo> reversalInfoList = this.findBySQL("select * from " + TABLE_NAME + " where notified = 0" +
+                " AND completed = 1");
+        return reversalInfoList;
+    }
+
     public void updateRetryByRetRefNo(String retRefNo, int retry) {
         this.execute("update " + TABLE_NAME + " set retry_no = " + retry
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
 
-    public void  updateResponseCodeCompletionByRetRefNo(String retRefNo, String responseCode, int completed) {
-        this.execute("update " + TABLE_NAME + " set response_code = '" + responseCode + "', completed = " + completed
+    public void  updateResponseCodeCompletionByRetRefNo(String retRefNo, String responseCode, int completed, long latency) {
+        this.execute("update " + TABLE_NAME + " set response_code = '" + responseCode
+                + "', completed = " + completed + "', latency = " + latency
                 + " where ret_ref_no = '" + retRefNo + "'");
+    }
+
+    public void  updateNotificationByRetRefNo(String retRefNo, int notified) {
+        this.execute("update " + TABLE_NAME + " set notified = " + notified
+                + " where ret_ref_no = '" + retRefNo + "'");
+    }
+
+    public List<ReversalInfo>  findOlderThanDate(long date) {
+        List<ReversalInfo> reversalInfoList = this.findBySQL("select * from " + TABLE_NAME + " where created_on <= " + date);
+        return reversalInfoList;
     }
 }

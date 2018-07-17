@@ -8,17 +8,15 @@ import android.os.RemoteException;
 import android.view.View;
 import android.widget.Toast;
 import com.avantir.wpos.R;
-import com.avantir.wpos.dialog.SupervisorPINPadDialog;
+import com.avantir.wpos.activity.admin.AdminActivity;
+import com.avantir.wpos.activity.admin.AdminPasswordActivity;
+import com.avantir.wpos.activity.admin.SupervisorPinActivity;
+import com.avantir.wpos.activity.transactions.InsertCardActivity;
 import com.avantir.wpos.utils.ConstantUtils;
 import com.avantir.wpos.utils.GlobalData;
-import com.avantir.wpos.utils.TimeUtil;
 import wangpos.sdk4.libbasebinder.Core;
 import wangpos.sdk4.libbasebinder.Printer;
 import wangpos.sdk4.libkeymanagerbinder.Key;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by lekanomotayo on 28/02/2018.
@@ -27,7 +25,7 @@ public class MainMenuActivity extends BaseActivity {
 
     private Key mKey;
     private Printer mPrinter;
-    private Core mCore;
+//    private Core mCore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +43,6 @@ public class MainMenuActivity extends BaseActivity {
 
                 AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                 am.setTimeZone(ConstantUtils.TIMEZONE_LAGOS);
-
-                /*
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-                simpleDateFormat.setTimeZone(TimeZone.getTimeZone(ConstantUtils.TIMEZONE_LAGOS));
-                Date date1 = new Date(System.currentTimeMillis());
-                long epochTime = TimeUtil.getTimeInEpoch(date1);
-                Date date = new Date(epochTime * 1000);
-                String str = simpleDateFormat.format(date);// 1971 < year < 2099
-                try {
-                    mCore.setDateTime(str.getBytes("UTF-8"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                */
 
             }
         }.start();
@@ -152,6 +136,9 @@ public class MainMenuActivity extends BaseActivity {
     private boolean performTransactionChecks(){
         try{
             GlobalData globalData = GlobalData.getInstance();
+            if(globalData.isDemoMode())
+                return true;
+
             boolean success = performKeyChecks(globalData);
             if(!success)
                 return success;
@@ -172,6 +159,9 @@ public class MainMenuActivity extends BaseActivity {
     private boolean performKeyChecks(GlobalData globalData) {
         int ret = -1;
         try {
+            if(globalData.isDemoMode())
+                return true;
+
             // if keys are loaded (CTMK, TMK, TSK, TPK, IPEK Track 2, IPEK EMV)
             ret = mKey.checkKeyExist(ConstantUtils.APP_NAME, Key.KEY_REQUEST_TLK);
             if (ret != 0 || !globalData.getLocalMasterKeyLoadedFlag()) {
@@ -208,6 +198,10 @@ public class MainMenuActivity extends BaseActivity {
 
     private boolean performEMVParamChecks(GlobalData globalData){
         int ret = -1;
+
+        if(globalData.isDemoMode())
+            return true;
+
         // if EMV params are laoded (AID, CAPK, EMV, Term Params)
         if(!(globalData.getLogin() && globalData.getAIDLoadedFlag()
                 && globalData.getCAPKLoadedFlag() && globalData.getEMVParamsLoadedFlag()
@@ -222,6 +216,11 @@ public class MainMenuActivity extends BaseActivity {
     private boolean performPrinterChecks(){
 
         int ret = -1;
+
+        GlobalData globalData = GlobalData.getInstance();
+        if(globalData.isDemoMode())
+            return true;
+
         // if there is paper in printer
         int[] status = new int[1];
         ret = -1;

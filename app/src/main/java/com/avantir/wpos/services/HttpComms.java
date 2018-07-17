@@ -59,7 +59,7 @@ public class HttpComms {
                 this.notifyErrorCode(2, "The URL or http parameter hasn\'t been set. ");
                 return null;
             }
-            this.dataCommuHttp(uri, httpMethod, headers, senddata);
+            return this.dataCommuHttpBlocking(uri, httpMethod, headers, senddata).getBytes();
         }
         return null;
     }

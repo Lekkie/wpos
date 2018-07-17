@@ -54,10 +54,40 @@
                                 android:textSize="20sp"/>
                     </LinearLayout>
 
+                    <!--
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:orientation="horizontal" android:layout_weight="1" android:weightSum="1"/>
+                    -->
+
+                    <!-- Remove later-->
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal" android:layout_weight="1" android:weightSum="1">
+
+                        <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold|italic"
+                                android:gravity="center_vertical"
+                                android:text="Terminal ID:"
+                                android:textSize="20sp"/>
+
+                        <EditText
+                                android:id="@+id/terminalIdText"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="0dp"
+                                android:textSize="20sp"
+                                android:gravity="center_vertical"
+                                android:layout_marginRight="3dp"
+                                android:text=""/>
+                    </LinearLayout>
 
                     <LinearLayout
                             android:layout_width="match_parent"

@@ -50,6 +50,7 @@ public class PrintTransactionThread extends Thread {
                     receiptCopy += " (Reprint)";
 
                 receiptCopy = "* " + receiptCopy + " *";
+                String transactionTypeText = "* " + IsoMessageUtil.getTranTypeName(transInfo.getProcCode()) + " *";
 
                 String transDateTime = transInfo.getTransmissionDateTime();
                 String transMonth = transDateTime.substring(0, 2);
@@ -66,7 +67,10 @@ public class PrintTransactionThread extends Thread {
                 String amt = MoneyUtil.kobo2Naira(Long.parseLong(transInfo.getAmt()));
                 String authMethod = transInfo.getAuthenticationMethod();
                 String status = transInfo.getResponseCode();
-                String statusText = "00".equalsIgnoreCase(status) ?  ConstantUtils.TRANSACTION_APPROVED : ConstantUtils.TRANSACTION_DECLINED;
+                String statusText = IsoMessageUtil.responseMessageMap.containsKey(status) ? IsoMessageUtil.responseMessageMap.get(status) : ConstantUtils.TRANSACTION_DECLINED; //"00".equalsIgnoreCase(status) ?  ConstantUtils.TRANSACTION_APPROVED : ConstantUtils.TRANSACTION_DECLINED;
+
+                if("31".equalsIgnoreCase(transInfo.getProcCode().substring(0, 2)))
+                    statusText = transInfo.getPrinterMsg();
 
                 float lineSpacing = 1f;
                 int bodyFontSize = 24; // 24
@@ -75,6 +79,7 @@ public class PrintTransactionThread extends Thread {
                 mPrinter.setPrntString_TypeFace(Typeface.SANS_SERIF);
                 result = mPrinter.printString("------------------------------------------",30, Printer.Align.CENTER,true,false);
                 result = mPrinter.printString(receiptCopy, 26, Printer.Align.CENTER, false, false);
+                result = mPrinter.printString(transactionTypeText, 26, Printer.Align.CENTER, false, false);
                 result = mPrinter.printString("", 10, Printer.Align.LEFT, false, false);
                 result = mPrinter.printString("Terminal No: " + transInfo.getTerminalId() + "\n", bodyFontSize, Printer.Align.LEFT, false, false);
                 result = mPrinter.printString("Tran Date: " + transDate + "\n", bodyFontSize, Printer.Align.LEFT, false, false);

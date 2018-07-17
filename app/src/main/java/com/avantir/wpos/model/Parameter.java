@@ -39,6 +39,10 @@ public class Parameter {
     private String tmsHost;
     boolean useLocalNetworkConfig;
     String appname;
+    int reversalRetentionInDays;
+    int tranNotifyRetentionInDays;
+    int reversalRetryTimeInMin;
+    int transNotifyRetryTimeInMin;
 
     public String getName() {
         return name;
@@ -310,5 +314,38 @@ public class Parameter {
 
     public void setAppname(String appname) {
         this.appname = appname;
+    }
+
+
+    public int getReversalRetentionInDays() {
+        return reversalRetentionInDays;
+    }
+
+    public void setReversalRetentionInDays(int reversalRetentionInDays) {
+        this.reversalRetentionInDays = reversalRetentionInDays;
+    }
+
+    public int getTranNotifyRetentionInDays() {
+        return tranNotifyRetentionInDays;
+    }
+
+    public void setTranNotifyRetentionInDays(int tranNotifyRetentionInDays) {
+        this.tranNotifyRetentionInDays = tranNotifyRetentionInDays;
+    }
+
+    public int getReversalRetryTimeInMin() {
+        return reversalRetryTimeInMin;
+    }
+
+    public void setReversalRetryTimeInMin(int reversalRetryTimeInMin) {
+        this.reversalRetryTimeInMin = reversalRetryTimeInMin;
+    }
+
+    public int getTransNotifyRetryTimeInMin() {
+        return transNotifyRetryTimeInMin;
+    }
+
+    public void setTransNotifyRetryTimeInMin(int transNotifyRetryTimeInMin) {
+        this.transNotifyRetryTimeInMin = transNotifyRetryTimeInMin;
     }
 }

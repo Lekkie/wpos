@@ -71,6 +71,7 @@ public class CommsListener implements ICommsListener {
         Message msg = handler.obtainMessage(ConstantUtils.MSG_FINISH_ERROR_COMMS, paramInt);
         Bundle bundle = new Bundle();
         bundle.putInt(ConstantUtils.NETWORK_REQ_TYPE, requestType);
+        bundle.putString(String.valueOf(ConstantUtils.MSG_FINISH_ERROR_COMMS_MSG), paramString);
         msg.setData(bundle);
         msg.sendToTarget();
     }

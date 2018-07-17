@@ -2,8 +2,6 @@ package com.avantir.wpos.utils;
 
 import android.os.Handler;
 import com.avantir.wpos.WPOSApplication;
-import com.avantir.wpos.dao.ReversalInfoDao;
-import com.avantir.wpos.dao.TransInfoDao;
 import com.avantir.wpos.interfaces.ICommsListener;
 import com.avantir.wpos.listeners.CommsListener;
 import com.avantir.wpos.model.ReversalInfo;
@@ -70,7 +68,7 @@ public class NIBSSRequests {
     }
 
     public static String doPurchaseReversal(ReversalInfo reversalInfo, boolean isRepeat, TcpComms comms) throws Exception{
-        byte[] data = IsoMessageUtil.createPurchaseReversal(reversalInfo, isRepeat);
+        byte[] data = IsoMessageUtil.createRequestReversal(reversalInfo, isRepeat);
         GlobalData globalData = GlobalData.getInstance();
         byte[] respData = comms.dataCommuBlocking(WPOSApplication.app, data);
         IsoMessage isoMsgResponse = IsoMessageUtil.getInstance().decode(respData);

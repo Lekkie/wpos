@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Formatter;
 
@@ -368,12 +369,14 @@ public class KeyUtils {
         byte[] decodedBytes = null;
         try {
             PrivateKey privateKeyEntry = getPrivateKey();
+            System.out.println("PrivateKey: " + Arrays.toString(privateKeyEntry.getEncoded()));
             Cipher c = Cipher.getInstance("RSA/ECB/PKCS1Padding", "AndroidOpenSSL");
             c.init(Cipher.DECRYPT_MODE,  privateKeyEntry);
             // byte[] cipherBytes = BytesUtil.hexString2Bytes(cipherText);
+            System.out.println("Encrypted Key: " + Arrays.toString(Base64.decode(base64CipherText, Base64.NO_WRAP)));
             decodedBytes = c.doFinal(Base64.decode(base64CipherText, Base64.NO_WRAP));
-            //return BytesUtil.bytes2HexString(decodedBytes);
-            return new String(decodedBytes);
+            return BytesUtil.bytes2HexString(decodedBytes);
+            //return new String(decodedBytes);
         } catch (Exception e) {
             e.printStackTrace();
         }

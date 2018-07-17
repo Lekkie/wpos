@@ -77,6 +77,12 @@ public class ReversalInfo implements Serializable {
     private int completed = 0;
     @DatabaseField(unique=false, canBeNull = false, columnName = "created_on")
     private long createdOn = 0;
+    @DatabaseField(unique=false, canBeNull = false)
+    private int notified = 0;
+    @DatabaseField(unique=false, canBeNull = true)
+    private long latency = 0;
+    private long startTime = 0;
+    private long endTime = 0;
 
     public String getMsgType() {
         return msgType;
@@ -332,5 +338,37 @@ public class ReversalInfo implements Serializable {
 
     public void setCreatedOn(long createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public int getNotified() {
+        return notified;
+    }
+
+    public void setNotified(int notified) {
+        this.notified = notified;
+    }
+
+    public long getLatency() {
+        return latency;
+    }
+
+    public void setLatency(long latency) {
+        this.latency = latency;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 }

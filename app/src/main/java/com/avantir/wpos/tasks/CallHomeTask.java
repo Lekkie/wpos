@@ -57,6 +57,8 @@ public class CallHomeTask extends AsyncTask<Void, Void, Boolean> {
             String respCode  = callHomeIsoMsg.getObjectValue(39);
             //if("00".equalsIgnoreCase(respCode))
             // GlobalData.getInstance().setlastCallHomeTime(time);
+
+            // Also call Arca TMS Home
         }
         catch(Exception ex){
             ex.printStackTrace();

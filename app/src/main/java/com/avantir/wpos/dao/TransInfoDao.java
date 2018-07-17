@@ -48,6 +48,12 @@ public class TransInfoDao extends BaseDao<TransInfo, String> {
         return transInfoList;
     }
 
+    public List<TransInfo>  findAllCompletedUnNotifiedTransaction() {
+        List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " where notified = 0" +
+                " AND completed = 1");
+        return transInfoList;
+    }
+
     public List<TransInfo>  findByToday() {
         long nowEpochTime = TimeUtil.getTimeInEpoch(new Date());
         long startDate = TimeUtil.getStartOfDay(nowEpochTime);
@@ -60,25 +66,32 @@ public class TransInfoDao extends BaseDao<TransInfo, String> {
         return transInfoList;
     }
 
+    public List<TransInfo>  findOlderThanDate(long date) {
+        List<TransInfo> transInfoList = this.findBySQL("select * from " + TABLE_NAME + " where created_on <= " + date);
+        return transInfoList;
+    }
+
     public void updateReversalCompletionByRetRefNo(String retRefNo, int reversed, int completed) {
         this.execute("update " + TABLE_NAME + " set reversed = " + reversed + ", completed = " + completed
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
 
+    /*
     public void updateCompletionStatusByRetRefNo(String retRefNo, int completed) {
         this.execute("update " + TABLE_NAME + " set completed = " + completed
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
+    */
 
 
-    public void  updateResponseCodeByRetRefNo(String retRefNo, String responseCode) {
-        this.execute("update " + TABLE_NAME + " set response_code = '" + responseCode
-                + "' where ret_ref_no = '" + retRefNo + "'");
-    }
-
-    public void  updateResponseCodeAuthNumCompletedByRetRefNo(String retRefNo, String responseCode, String authNum, int completed) {
+    public void  updateResponseCodeAuthNumCompletedByRetRefNo(String retRefNo, String responseCode, String authNum, int completed, long latency) {
         this.execute("update " + TABLE_NAME + " set response_code = '" + responseCode
                 + "', auth_num = '" + authNum + "', completed = " + completed
+                + ", latency = " + latency + " where ret_ref_no = '" + retRefNo + "'");
+    }
+
+    public void  updateNotificationByRetRefNo(String retRefNo, int notified) {
+        this.execute("update " + TABLE_NAME + " set notified = " + notified
                 + " where ret_ref_no = '" + retRefNo + "'");
     }
 
