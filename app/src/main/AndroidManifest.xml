@@ -44,6 +44,8 @@
         <activity android:name=".activity.transactions.PayActivity" />
         <activity android:name=".activity.transactions.BalanceActivity" />
         <activity android:name=".activity.transactions.RefundActivity" />
+        <activity android:name=".activity.transactions.CashBackActivity" />
+        <activity android:name=".activity.transactions.CashAdvanceActivity" />
         <activity android:name=".activity.transactions.TranSequenceNrActivity" />
         <activity android:name=".activity.admin.ReprintActivity" />
         <activity android:name=".activity.admin.EoDActivity" />

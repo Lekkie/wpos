@@ -15,7 +15,7 @@ import com.solab.iso8583.IsoMessage;
 public class NIBSSRequests {
 
     //TMK
-    public static void downloadTMK(Handler handler, TcpComms comms) throws Exception{
+    public static void downloadTMK(Handler handler, TcpComms comms) throws Exception {
         IsoMessageUtil isoMessageUtil = IsoMessageUtil.getInstance();
         byte[] tmkReqBytes = isoMessageUtil.createTMKDownloadRequest();
         ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_TMK_DOWNLOAD_REQ_TYPE);
@@ -38,21 +38,21 @@ public class NIBSSRequests {
         comms.dataCommu(WPOSApplication.app, tpkReqBytes, commsListener);
     }
 
-    public static void downloadAID(Handler handler, TcpComms comms) throws Exception{
+    public static void downloadAID(Handler handler, TcpComms comms) throws Exception {
         IsoMessageUtil isoMessageUtil = IsoMessageUtil.getInstance();
         byte[] aidReqBytes = isoMessageUtil.createAIDDownloadRequest();
         ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_AID_DOWNLOAD_REQ_TYPE);
         comms.dataCommu(WPOSApplication.app, aidReqBytes, commsListener);
     }
 
-    public static void downloadCAPK(Handler handler, TcpComms comms) throws Exception{
+    public static void downloadCAPK(Handler handler, TcpComms comms) throws Exception {
         IsoMessageUtil isoMessageUtil = IsoMessageUtil.getInstance();
         byte[] capkReqBytes = isoMessageUtil.createCAPKDownloadRequest();
         ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_CAPK_DOWNLOAD_REQ_TYPE);
         comms.dataCommu(WPOSApplication.app, capkReqBytes, commsListener);
     }
 
-    public static void downloadTerminalParam(Handler handler, TcpComms comms) throws Exception{
+    public static void downloadTerminalParam(Handler handler, TcpComms comms) throws Exception {
         IsoMessageUtil isoMessageUtil = IsoMessageUtil.getInstance();
         byte[] tmkReqBytes = isoMessageUtil.createTermParamDownloadRequest();
         ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_NIBSS_TERM_PARAM_DOWNLOAD_REQ_TYPE);
@@ -60,25 +60,35 @@ public class NIBSSRequests {
     }
 
 
-    public static void doPurchase(TransInfo transInfo, TcpComms comms, Handler handler) throws Exception{
-        GlobalData globalData = GlobalData.getInstance();
+    public static void doPurchase(TransInfo transInfo, TcpComms comms, Handler handler) throws Exception {
         byte[] dataBytes = IsoMessageUtil.createRequest(transInfo);
         ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_PURCHASE_REQ_TYPE);
         comms.dataCommu(WPOSApplication.app, dataBytes, commsListener);
     }
 
-    public static String doPurchaseReversal(ReversalInfo reversalInfo, boolean isRepeat, TcpComms comms) throws Exception{
+    public static void doCashBack(TransInfo transInfo, TcpComms comms, Handler handler) throws Exception {
+        byte[] dataBytes = IsoMessageUtil.createRequest(transInfo);
+        ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_CASHBACK_REQ_TYPE);
+        comms.dataCommu(WPOSApplication.app, dataBytes, commsListener);
+    }
+
+    public static void doCashAdvance(TransInfo transInfo, TcpComms comms, Handler handler) throws Exception {
+        byte[] dataBytes = IsoMessageUtil.createRequest(transInfo);
+        ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_CASH_ADVANCE_REQ_TYPE);
+        comms.dataCommu(WPOSApplication.app, dataBytes, commsListener);
+    }
+
+    public static String doReversal(ReversalInfo reversalInfo, boolean isRepeat, TcpComms comms) throws Exception {
         byte[] data = IsoMessageUtil.createRequestReversal(reversalInfo, isRepeat);
-        GlobalData globalData = GlobalData.getInstance();
         byte[] respData = comms.dataCommuBlocking(WPOSApplication.app, data);
         IsoMessage isoMsgResponse = IsoMessageUtil.getInstance().decode(respData);
         System.out.println(isoMsgResponse.debugString());
         String responseCode = isoMsgResponse.getObjectValue(39);
-        return  responseCode;
+        return responseCode;
     }
 
     //EoD
-    public static void downloadEoD(Handler handler, TcpComms comms) throws Exception{
+    public static void downloadEoD(Handler handler, TcpComms comms) throws Exception {
         IsoMessageUtil isoMessageUtil = IsoMessageUtil.getInstance();
         byte[] eodReqBytes = isoMessageUtil.createDailyTransactionReportDownloadRequest();
         ICommsListener commsListener = new CommsListener(handler, ConstantUtils.NETWORK_EOD_DOWNLOAD_REQ_TYPE);

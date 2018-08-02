@@ -42,6 +42,20 @@
                 android:text="Refund"/>
 
         <Button
+                android:id="@+id/cashback_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="CashBack"/>
+
+        <Button
+                android:id="@+id/cash_advance_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Cash Advance"/>
+
+        <Button
                 android:id="@+id/reprint_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

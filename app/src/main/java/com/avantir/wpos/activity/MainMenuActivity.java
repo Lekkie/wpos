@@ -54,6 +54,8 @@ public class MainMenuActivity extends BaseActivity {
         this.findViewById(R.id.purchase_btn).setOnClickListener(this);
         this.findViewById(R.id.balance_btn).setOnClickListener(this);
         this.findViewById(R.id.refund_btn).setOnClickListener(this);
+        this.findViewById(R.id.cashback_btn).setOnClickListener(this);
+        this.findViewById(R.id.cash_advance_btn).setOnClickListener(this);
         this.findViewById(R.id.reprint_btn).setOnClickListener(this);
         this.findViewById(R.id.end_of_day_btn).setOnClickListener(this);
         this.findViewById(R.id.admin_btn).setOnClickListener(this);
@@ -97,6 +99,24 @@ public class MainMenuActivity extends BaseActivity {
                     Intent intent = new Intent(this, SupervisorPinActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt(ConstantUtils.NEXT_ACTIVITY, ConstantUtils.REFUND_ACTIVITY);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.cashback_btn:
+                if(performTransactionChecks()){
+                    Intent intent = new Intent(this, InsertCardActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.CASH_BACK);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.cash_advance_btn:
+                if(performTransactionChecks()){
+                    Intent intent = new Intent(this, InsertCardActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.CASH_ADVANCE);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }

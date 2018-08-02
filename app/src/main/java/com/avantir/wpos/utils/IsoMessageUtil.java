@@ -723,6 +723,7 @@ public class IsoMessageUtil {
     public IsoMessage decode(byte[] data) {
         try{
             IsoMessage isoMessageResponse = messageFactory.parseMessage(data, 0);
+            System.out.println(isoMessageResponse.debugString());
             return isoMessageResponse;
         }
         catch(Exception ex){

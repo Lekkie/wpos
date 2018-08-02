@@ -155,7 +155,7 @@ public class InputMoneyActivity extends BaseActivity {
         if (inputMoney > 0) {
             Intent intent = new Intent();
             bundle.putLong(ConstantUtils.TRAN_AMT, inputMoney);
-            String accountType = bundle.getString(ConstantUtils.ACCT_TYPE, "00");
+//            String accountType = bundle.getString(ConstantUtils.ACCT_TYPE, "00");
 
             if (tranTypeFlag == ConstantUtils.PURCHASE) {
                 bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.PURCHASE);
@@ -165,6 +165,16 @@ public class InputMoneyActivity extends BaseActivity {
             else if (tranTypeFlag == ConstantUtils.REFUND) {
                 bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.REFUND);
                 intent.setClass(this, RefundActivity.class);
+                countDownTimer.cancel();
+            }
+            else if (tranTypeFlag == ConstantUtils.CASH_BACK) {
+                bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.CASH_BACK);
+                intent.setClass(this, CashBackActivity.class);
+                countDownTimer.cancel();
+            }
+            else if (tranTypeFlag == ConstantUtils.CASH_ADVANCE) {
+                bundle.putInt(ConstantUtils.TRAN_TYPE, ConstantUtils.CASH_ADVANCE);
+                intent.setClass(this, CashAdvanceActivity.class);
                 countDownTimer.cancel();
             }
 

@@ -95,6 +95,10 @@ public class AccountTypeActivity extends BaseActivity {
             doBal(acctType);
         else if(ConstantUtils.REFUND == tranTypeFlag)
             doRefund(acctType);
+        if(ConstantUtils.CASH_BACK == tranTypeFlag)
+            doCashBack(acctType);
+        if(ConstantUtils.CASH_ADVANCE == tranTypeFlag)
+            doCashAdvance(acctType);
     }
 
     private void doPurchase(String acctType){
@@ -115,6 +119,22 @@ public class AccountTypeActivity extends BaseActivity {
 
     private void doBal(String acctType){
         Intent intent = new Intent(this, BalanceActivity.class);
+        bundle.putString(ConstantUtils.ACCT_TYPE, acctType);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    private void doCashBack(String acctType){
+        Intent intent = new Intent(this, InputMoneyActivity.class);
+        bundle.putString(ConstantUtils.ACCT_TYPE, acctType);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    private void doCashAdvance(String acctType){
+        Intent intent = new Intent(this, InputMoneyActivity.class);
         bundle.putString(ConstantUtils.ACCT_TYPE, acctType);
         intent.putExtras(bundle);
         startActivity(intent);

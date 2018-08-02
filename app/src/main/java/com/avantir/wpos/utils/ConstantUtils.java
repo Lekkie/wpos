@@ -125,6 +125,9 @@ public class ConstantUtils {
     public static final int PURCHASE = 1;
     public static final int BALANCE = 2;
     public static final int REFUND = 3;
+    public static final int CASH_BACK = 4;
+    public static final int CASH_ADVANCE = 5;
+
     public static final int BANK_CARD = 1;
 
     public static final String TRANS_INFO = "TRANS_INFO";
@@ -249,6 +252,9 @@ public class ConstantUtils {
     public static final int NETWORK_REFUND_REQ_REVERSAL_TYPE = 15;
     public static final int TRAN_NOTIFICATION_REQ_TYPE = 16;
     public static final int TRAN_NOTIFICATION_REVERSAL_REQ_TYPE = 17;
+    public static final int NETWORK_CASHBACK_REQ_TYPE = 18;
+    public static final int NETWORK_CASH_ADVANCE_REQ_TYPE = 19;
+
 
     public static final int INIT_COMMU = 0;
     public static final int CONNECTING = 1;
@@ -275,6 +281,9 @@ public class ConstantUtils {
     public static final String PURCHASE_PROC_CODE = "00";
     public static final String BALANCE_PROC_CODE = "31";
     public static final String REFUND_PROC_CODE = "20";
+    public static final String CASH_BACK_PROC_CODE = "09";
+    public static final String CASH_ADVANCE_PROC_CODE = "01";
+
     public static final String ACCEPT_PIN_MODE_CAPABILITY = "1";
     public static final String NORMAL_PRESENTMENT_POS_CONDITION_CODE = "00";
 

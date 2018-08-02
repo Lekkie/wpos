@@ -9,8 +9,6 @@ import com.avantir.wpos.model.ReversalInfo;
 import com.avantir.wpos.model.TransInfo;
 import com.avantir.wpos.services.TcpComms;
 import com.avantir.wpos.utils.*;
-import com.solab.iso8583.IsoMessage;
-import wangpos.sdk4.libkeymanagerbinder.Key;
 
 import java.util.Date;
 import java.util.List;
@@ -93,7 +91,7 @@ public class SendReversalRetryTask extends AsyncTask<Void, Void, Boolean> {
                         reversalInfoDao.updateRetryByRetRefNo(retRefNo, retry);
                         //TcpComms comms = new TcpComms(globalData.getCTMSIP(), globalData.getCTMSPort(), globalData.getCTMSTimeout(), globalData.getIfCTMSSSL(), null);
                         reversalInfo.setStartTime(System.currentTimeMillis());
-                        String responseCode = NIBSSRequests.doPurchaseReversal(reversalInfo, isRepeat, comms);
+                        String responseCode = NIBSSRequests.doReversal(reversalInfo, isRepeat, comms);
                         reversalInfo.setResponseCode(StringUtil.isEmpty(responseCode) ? "" : responseCode);
                         reversalInfo.setCompleted(1);
                         reversalInfo.setEndTime(System.currentTimeMillis());
