@@ -96,15 +96,7 @@ public class ReprintActivity extends BaseActivity {
                     printingInProgress = true;
                     print(false);
                 }
-                break;               /*
-            case R.id.done_btn:
-                goBack();
                 break;
-            case R.id.reprint_btn:
-                customerCopy = !customerCopy;
-                baseHandler.sendEmptyMessage(MSG_START_PRINT);
-                break;
-                */
             default:
                 break;
 
